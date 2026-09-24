@@ -8,7 +8,8 @@
 // placeholder text and file paths below with your own. You do not need
 // to touch anything inside src/components.
 //
-// Photos go in:      public/MyHeartGallery/  and  public/photos/
+// Gallery media is stored in: MyHeartGallery/ at the repository root.
+// The GitHub Pages workflow copies it into dist/MyHeartGallery/ during deployment.
 // Music goes in:      public/music/
 // Reference local media with a relative path such as "./MyHeartGallery/your-file.jpg".\n// Media currently lives in the repository-level MyHeartGallery/ folder.
 // If a photo or song file doesn't exist yet, the site will not crash — it
@@ -302,7 +303,7 @@ export const giftData = {
       title: "",
       date: "DATE",
       story: "Another exhibit. Delete or duplicate this block as needed.",
-      image: "./MyHeartGallery/FeltiWasInADream.jpeg",
+      image: "./MyHeartGallery/FeltIWasInADream.jpeg",
       location: "",
       song: "",
       mood: "",
