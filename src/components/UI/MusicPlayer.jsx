@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { giftData, settings } from '../../data/giftData'
 import { PlayIcon, PauseIcon } from './PlaybackIcons'
+import { assetUrl } from '../../utils/assetUrl'
 
 // Compact cinematic media object with progressive disclosure.
 // Collapsed into a minimal starlight pill by default; expands smoothly on hover or interaction.
@@ -48,7 +49,7 @@ export default function MusicPlayer() {
     >
       <audio
         ref={audioRef}
-        src={music.src}
+        src={assetUrl(music.src)}
         loop
         preload="none"
         onEnded={() => setPlaying(false)}
