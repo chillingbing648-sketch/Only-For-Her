@@ -50,15 +50,33 @@ export default function PhotoViewer({ images, index, onClose, onChange }) {
         </button>
       )}
       <figure className="photo-viewer__figure scale-in" key={index}>
-        {current.src ? (
-          <img src={current.src} alt={current.caption || ''} />
-        ) : (
-          <div className="image-placeholder" style={{ width: '70vw', maxWidth: 480, aspectRatio: '4/3' }}>
-            A photo goes here
-          </div>
-        )}
-        {current.caption && <figcaption>{current.caption}</figcaption>}
-      </figure>
+  {current.video ? (
+    <video
+      src={current.video}
+      controls
+      playsInline
+      preload="metadata"
+      style={{ width: '100%', height: 'auto', display: 'block' }}
+    />
+  ) : current.src ? (
+    <img
+      src={current.src}
+      alt={current.caption || ''}
+    />
+  ) : (
+    <div
+      className="image-placeholder"
+      style={{
+        width: '70vw',
+        maxWidth: 480,
+        aspectRatio: '4/3'
+      }}
+    >
+      A photo goes here
+    </div>
+  )}
+  {current.caption && <figcaption>{current.caption}</figcaption>}
+</figure>
       {images.length > 1 && (
         <button
           className="icon-btn photo-viewer__nav photo-viewer__nav--next"

@@ -126,7 +126,7 @@ function drawFourPointStar(ctx, x, y, size, alpha, color) {
   ctx.restore()
 }
 
-export default function HeartGalllery({
+export default function HeartGallery({
   revealed = true,
   respondToPointer = true,
   density = 1,
