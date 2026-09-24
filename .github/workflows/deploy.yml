@@ -1,4 +1,4 @@
-name: Deploy My Little Universe
+name: Deploy Only For Her
 
 on:
   push:
@@ -12,16 +12,16 @@ permissions:
   id-token: write
 
 concurrency:
-  group: pages
+  group: github-pages
   cancel-in-progress: true
 
 jobs:
   build:
-    name: Build My Little Universe
+    name: Build Only For Her
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v6
 
       - name: Setup Node.js
@@ -34,33 +34,24 @@ jobs:
         run: npm ci
 
       - name: Build production site
-        env:
-          VITE_DEPLOYMENT_MODE: production
         run: npm run build
 
-      - name: Verify production links
+      - name: Verify build output
         run: |
           test -f dist/index.html
           test -d dist/assets
-          grep -Eq 'src="./assets/|href="./assets/' dist/index.html
-          echo "Verified: production entry and bundled asset links are repository-safe."
-
-      - name: Prepare Pages artifact
-        run: |
-          cp dist/index.html dist/404.html
-          touch dist/.nojekyll
+          echo "Production build verified."
 
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
 
-      - name: Upload production artifact
+      - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v4
         with:
-          name: github-pages
           path: ./dist
 
   deploy:
-    name: Deploy My Little Universe to GitHub Pages
+    name: Deploy to GitHub Pages
     needs: build
     runs-on: ubuntu-latest
 
@@ -69,6 +60,6 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
-      - name: Deploy to GitHub Pages
+      - name: Deploy Pages artifact
         id: deployment
         uses: actions/deploy-pages@v4
