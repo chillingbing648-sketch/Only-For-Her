@@ -36,6 +36,7 @@ export default function MemoryMuseum() {
           <h2 className="heading-l">{exhibit.title}</h2>
           <PolaroidPhoto
             image={exhibit.image}
+            video={exhibit.video}
             alt={exhibit.title}
             rotate={rotate}
             onClick={() => setViewerOpen(true)}
@@ -74,7 +75,7 @@ export default function MemoryMuseum() {
   )
 }
 
-function PolaroidPhoto({ image, alt, rotate, onClick }) {
+function PolaroidPhoto({ image, video, alt, rotate, onClick }) {
   const ref = useRef(null)
   const reduced = useReducedMotion()
 
