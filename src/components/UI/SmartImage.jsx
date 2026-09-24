@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { assetUrl } from '../../utils/assetUrl'
 
 export default function SmartImage({ src, alt = '', label, className = '' }) {
   const [failed, setFailed] = useState(!src)
@@ -13,7 +14,7 @@ export default function SmartImage({ src, alt = '', label, className = '' }) {
 
   return (
     <div className={`image-frame ${className}`}>
-      <img src={src} alt={alt} loading="lazy" onError={() => setFailed(true)} />
+      <img src={assetUrl(src)} alt={alt} loading="lazy" onError={() => setFailed(true)} />
     </div>
   )
 }
