@@ -283,7 +283,7 @@ export const giftData = {
       title: "",
       date: "DATE",
       story: "Another exhibit. Delete or duplicate this block as needed.",
-      image: "./MyHeartGallery/TheUnexpectedKiss.jpeg",
+      image: "./MyHeartGallery/HoldMyHandForeverPlease.mp4",
       location: "",
       song: "",
       mood: "",
