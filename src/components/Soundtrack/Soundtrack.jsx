@@ -3,6 +3,7 @@ import { giftData } from '../../data/giftData'
 import SmartImage from '../UI/SmartImage'
 import { EmptySection } from '../Timeline/Timeline'
 import { PlayIcon, PauseIcon } from '../UI/PlaybackIcons'
+import { assetUrl } from '../../utils/assetUrl'
 
 export default function Soundtrack() {
   const songs = giftData.songs
@@ -77,7 +78,7 @@ function SongRow({ song, delay }) {
       style={{ '--enter-delay': `${delay}ms` }}
     >
       <span className="soundtrack__cover-ring">
-        <SmartImage src={song.cover} alt="" className="soundtrack__cover" label="♪" />
+        <SmartImage src={assetUrl(song.cover)} alt="" className="soundtrack__cover" label="♪" />
       </span>
       <div className="soundtrack__meta">
         <p className="soundtrack__title">{song.title}</p>
@@ -94,7 +95,7 @@ function SongRow({ song, delay }) {
           <div className="soundtrack__player">
             <audio
               ref={audioRef}
-              src={song.src}
+              src={assetUrl(song.src)}
               onEnded={() => setPlaying(false)}
               onError={() => setAvailable(false)}
               preload="metadata"
