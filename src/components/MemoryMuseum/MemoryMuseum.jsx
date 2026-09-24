@@ -13,7 +13,7 @@ export default function MemoryMuseum() {
   if (!exhibits?.length) return <EmptySection title="Our Memory Museum" />
 
   const exhibit = exhibits[index]
-  const images = exhibits.map((e) => ({ src: e.image, caption: e.title }))
+  const images = exhibits.map((e) => ({ src: e.image, video: e.video, caption: e.title }))
   const rotate = index % 2 === 0 ? -2.2 : 2.4
 
   function go(delta) {
