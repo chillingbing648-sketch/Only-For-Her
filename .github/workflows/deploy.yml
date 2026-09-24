@@ -40,10 +40,20 @@ jobs:
       - name: Build production site
         run: npm run build
 
+      - name: Copy gallery media into production output
+        run: |
+          test -d MyHeartGallery
+          cp -R MyHeartGallery dist/MyHeartGallery
+          test -f dist/MyHeartGallery/Adorable.jpeg
+          test -f dist/MyHeartGallery/NavratiLikeNever.mp4
+          test -f dist/MyHeartGallery/TheNonChalantInLove.mp4
+          echo "Gallery media copied successfully."
+
       - name: Verify production output
         run: |
           test -f dist/index.html
           test -d dist/assets
+          test -d dist/MyHeartGallery
           echo "Build verified successfully."
 
       - name: Setup GitHub Pages
