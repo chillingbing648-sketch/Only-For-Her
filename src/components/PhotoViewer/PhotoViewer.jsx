@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react'
+import { assetUrl } from '../../utils/assetUrl'
 
 export default function PhotoViewer({ images, index, onClose, onChange }) {
   const touchStart = useRef(null)
@@ -19,6 +20,7 @@ export default function PhotoViewer({ images, index, onClose, onChange }) {
   function onTouchStart(e) {
     touchStart.current = e.touches[0].clientX
   }
+
   function onTouchEnd(e) {
     if (touchStart.current == null) return
     const delta = e.changedTouches[0].clientX - touchStart.current
@@ -33,55 +35,51 @@ export default function PhotoViewer({ images, index, onClose, onChange }) {
       className="photo-viewer"
       role="dialog"
       aria-modal="true"
-      aria-label={current.caption || 'Photo'}
+      aria-label={current.caption || 'Media'}
       onTouchStart={onTouchStart}
       onTouchEnd={onTouchEnd}
     >
-      <button className="icon-btn photo-viewer__close" onClick={onClose} aria-label="Close photo">
+      <button className="icon-btn photo-viewer__close" onClick={onClose} aria-label="Close media">
         ✕
       </button>
+
       {images.length > 1 && (
         <button
           className="icon-btn photo-viewer__nav photo-viewer__nav--prev"
           onClick={() => onChange((index - 1 + images.length) % images.length)}
-          aria-label="Previous photo"
+          aria-label="Previous media"
         >
           ‹
         </button>
       )}
+
       <figure className="photo-viewer__figure scale-in" key={index}>
-  {current.video ? (
-    <video
-      src={current.video}
-      controls
-      playsInline
-      preload="metadata"
-      style={{ width: '100%', height: 'auto', display: 'block' }}
-    />
-  ) : current.src ? (
-    <img
-      src={current.src}
-      alt={current.caption || ''}
-    />
-  ) : (
-    <div
-      className="image-placeholder"
-      style={{
-        width: '70vw',
-        maxWidth: 480,
-        aspectRatio: '4/3'
-      }}
-    >
-      A photo goes here
-    </div>
-  )}
-  {current.caption && <figcaption>{current.caption}</figcaption>}
-</figure>
+        {current.video ? (
+          <video
+            src={assetUrl(current.video)}
+            controls
+            playsInline
+            preload="metadata"
+            style={{ width: '100%', height: 'auto', display: 'block' }}
+          />
+        ) : current.src ? (
+          <img src={assetUrl(current.src)} alt={current.caption || ''} />
+        ) : (
+          <div
+            className="image-placeholder"
+            style={{ width: '70vw', maxWidth: 480, aspectRatio: '4/3' }}
+          >
+            A photo goes here
+          </div>
+        )}
+        {current.caption && <figcaption>{current.caption}</figcaption>}
+      </figure>
+
       {images.length > 1 && (
         <button
           className="icon-btn photo-viewer__nav photo-viewer__nav--next"
           onClick={() => onChange((index + 1) % images.length)}
-          aria-label="Next photo"
+          aria-label="Next media"
         >
           ›
         </button>
