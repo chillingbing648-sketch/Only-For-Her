@@ -4,6 +4,7 @@ import SmartImage from '../UI/SmartImage'
 import PhotoViewer from '../PhotoViewer/PhotoViewer'
 import { EmptySection } from '../Timeline/Timeline'
 import { useReducedMotion } from '../../hooks/useReducedMotion'
+import { assetUrl } from '../../utils/assetUrl'
 
 export default function MemoryMuseum() {
   const exhibits = giftData.exhibits
