@@ -105,7 +105,21 @@ function PolaroidPhoto({ image, video, alt, rotate, onClick }) {
         onClick={onClick}
         aria-label={`View photo: ${alt}`}
       >
-        <SmartImage src={image} alt={alt} label="A photo from this exhibit" />
+        {video ? (
+          <video
+            controls
+            playsInline
+            preload="auto"
+            controlsList="nodownload"
+            aria-label={alt || 'Video from this exhibit'}
+            style={{ width: '100%', height: 'auto', display: 'block' }}
+          >
+            <source src={assetUrl(video)} type="video/mp4" />
+            Your browser does not support MP4 video playback.
+          </video>
+        ) : (
+          <SmartImage src={image} alt={alt} label="A photo from this exhibit" />
+        )}
       </button>
     </div>
   )
