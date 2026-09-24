@@ -10,7 +10,7 @@
 //
 // Photos go in:      public/MyHeartGallery/  and  public/photos/
 // Music goes in:      public/music/
-// Reference a file as "./MyHeartGallery/your-file.jpg" (the leading slash matters).
+// Reference local media with a relative path such as "./MyHeartGallery/your-file.jpg".\n// Media currently lives in the repository-level MyHeartGallery/ folder.
 // If a photo or song file doesn't exist yet, the site will not crash — it
 // will just show a soft placeholder or hide that control.
 // ============================================================================
