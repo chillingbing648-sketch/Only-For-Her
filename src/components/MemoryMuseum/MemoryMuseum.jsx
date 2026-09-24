@@ -14,7 +14,11 @@ export default function MemoryMuseum() {
   if (!exhibits?.length) return <EmptySection title="Our Memory Museum" />
 
   const exhibit = exhibits[index]
-  const images = exhibits.map((e) => ({ src: e.image, video: e.video, caption: e.title }))
+  const images = exhibits.map((e) => ({
+    src: e.image && !isVideoPath(e.image) ? e.image : undefined,
+    video: e.video || (isVideoPath(e.image) ? e.image : undefined),
+    caption: e.title,
+  }))
   const rotate = index % 2 === 0 ? -2.2 : 2.4
 
   function go(delta) {
@@ -37,7 +41,7 @@ export default function MemoryMuseum() {
           <h2 className="heading-l">{exhibit.title}</h2>
           <PolaroidPhoto
             image={exhibit.image}
-            video={exhibit.video}
+            video={exhibit.video || (isVideoPath(exhibit.image) ? exhibit.image : undefined)}
             alt={exhibit.title}
             rotate={rotate}
             onClick={() => setViewerOpen(true)}
@@ -74,6 +78,10 @@ export default function MemoryMuseum() {
       )}
     </div>
   )
+}
+
+function isVideoPath(path) {
+  return typeof path === 'string' && /\\.mp4(?:$|[?#])/i.test(path)
 }
 
 function PolaroidPhoto({ image, video, alt, rotate, onClick }) {
