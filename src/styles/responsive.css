@@ -1,0 +1,722 @@
+/* ==========================================================================
+   ONLY FOR HER — Responsive Architecture Layer
+   --------------------------------------------------------------------------
+   This file is intentionally loaded LAST.
+   It is a non-destructive hardening layer: existing visual language, JSX,
+   animations, routes and content remain intact while layout constraints become
+   fluid across phones, tablets, laptops, ultrawide displays and short viewports.
+
+   Principles:
+   - fluid sizing before breakpoint overrides
+   - safe-area aware fixed UI
+   - no horizontal overflow
+   - touch targets >= 44px
+   - media uses intrinsic sizing, never fixed viewport dimensions
+   - mobile reduces decoration, not information
+   - landscape/short-height devices get dedicated breathing room
+   ========================================================================== */
+
+:root {
+  --page-inline: clamp(16px, 4vw, 64px);
+  --page-block: clamp(20px, 5vw, 64px);
+  --content-max: min(100%, 760px);
+  --reading-max: 68ch;
+  --control-size: 44px;
+  --dock-height: 68px;
+  --media-max: min(100%, 720px);
+}
+
+/* --------------------------------------------------------------------------
+   Global layout invariants
+   -------------------------------------------------------------------------- */
+html,
+body,
+#root {
+  width: 100%;
+  min-width: 0;
+}
+
+body {
+  overflow-x: hidden;
+  overflow-x: clip;
+}
+
+.app-shell,
+.section-transition,
+.screen {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.screen {
+  padding-inline: max(var(--page-inline), env(safe-area-inset-left, 0px))
+    max(var(--page-inline), env(safe-area-inset-right, 0px));
+  padding-top: max(var(--page-block), env(safe-area-inset-top, 0px));
+  padding-bottom: max(var(--page-block), env(safe-area-inset-bottom, 0px));
+}
+
+.screen__inner {
+  width: min(100%, var(--content-max));
+  min-width: 0;
+}
+
+h1,
+h2,
+h3,
+p,
+button,
+a,
+figcaption {
+  overflow-wrap: anywhere;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+img,
+video,
+canvas,
+svg {
+  max-width: 100%;
+}
+
+video {
+  height: auto;
+}
+
+/* Prevent flex/grid children from forcing horizontal overflow. */
+.panel,
+.timeline__page,
+.museum__exhibit,
+.surprise__card,
+.letter__paper,
+.soundtrack__row,
+.openwhen__card,
+.unsaid__card,
+.quiz__card,
+.future__map-field,
+.photo-viewer__figure {
+  min-width: 0;
+}
+
+/* --------------------------------------------------------------------------
+   Type + reading measure
+   -------------------------------------------------------------------------- */
+.body-text,
+.timeline__desc,
+.letter__paragraph,
+.quiz__question,
+.quiz__option,
+.openwhen__modal,
+.surprise__card {
+  width: 100%;
+}
+
+.body-text,
+.timeline__desc,
+.letter__paragraph {
+  max-width: var(--reading-max);
+}
+
+/* --------------------------------------------------------------------------
+   Navigation / fixed controls
+   -------------------------------------------------------------------------- */
+.nav-corner {
+  padding-top: max(12px, env(safe-area-inset-top, 0px));
+  padding-inline: max(12px, env(safe-area-inset-left, 0px))
+    max(12px, env(safe-area-inset-right, 0px));
+}
+
+.nav-back,
+.nav-corner .icon-btn,
+.menu-panel > .icon-btn,
+.bottom-nav button,
+.music-player button,
+.secret-star {
+  min-width: var(--control-size);
+  min-height: var(--control-size);
+}
+
+.menu-panel {
+  padding:
+    max(16px, env(safe-area-inset-top, 0px))
+    max(16px, env(safe-area-inset-right, 0px))
+    max(16px, env(safe-area-inset-bottom, 0px))
+    max(16px, env(safe-area-inset-left, 0px));
+}
+
+.music-player {
+  right: max(14px, env(safe-area-inset-right, 0px));
+  bottom: max(14px, env(safe-area-inset-bottom, 0px));
+  max-width: min(420px, calc(100vw - 28px));
+}
+
+.secret-star {
+  left: max(12px, env(safe-area-inset-left, 0px));
+  bottom: max(12px, env(safe-area-inset-bottom, 0px));
+}
+
+/* --------------------------------------------------------------------------
+   Responsive media / gallery primitives
+   -------------------------------------------------------------------------- */
+.image-frame,
+.museum__photo-btn,
+.polaroid,
+.final__image {
+  max-width: 100%;
+}
+
+.image-frame img,
+.museum__photo-btn img,
+.polaroid img,
+.final__image {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+.polaroid {
+  width: min(100%, 380px);
+}
+
+.photo-viewer {
+  padding:
+    max(64px, env(safe-area-inset-top, 0px) + 52px)
+    max(16px, env(safe-area-inset-right, 0px) + 16px)
+    max(24px, env(safe-area-inset-bottom, 0px) + 16px)
+    max(16px, env(safe-area-inset-left, 0px) + 16px);
+}
+
+.photo-viewer__figure {
+  width: min(100%, 900px);
+  max-height: calc(100dvh - 110px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.photo-viewer__figure img,
+.photo-viewer__figure video {
+  width: auto;
+  max-width: 100%;
+  max-height: min(78dvh, 760px);
+  object-fit: contain;
+  border-radius: var(--radius-s);
+}
+
+.photo-viewer__close {
+  top: max(12px, env(safe-area-inset-top, 0px));
+  right: max(12px, env(safe-area-inset-right, 0px));
+}
+
+.photo-viewer__nav {
+  z-index: 2;
+}
+
+/* --------------------------------------------------------------------------
+   Universe — use available space rather than assuming desktop dimensions.
+   -------------------------------------------------------------------------- */
+.universe__field {
+  width: 100%;
+  min-width: 0;
+  min-height: clamp(520px, 66dvh, 780px);
+}
+
+.universe__node {
+  max-width: 150px;
+  touch-action: manipulation;
+}
+
+.universe__node-label {
+  overflow-wrap: normal;
+  word-break: normal;
+}
+
+@media (min-width: 1200px) {
+  .universe__field {
+    min-height: min(72dvh, 820px);
+  }
+}
+
+@media (max-width: 900px) {
+  .universe__field {
+    min-height: clamp(520px, 64dvh, 720px);
+  }
+
+  .universe__node {
+    max-width: 132px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Tablet / small laptop
+   -------------------------------------------------------------------------- */
+@media (max-width: 768px) {
+  :root {
+    --page-inline: clamp(16px, 4.5vw, 28px);
+    --page-block: clamp(18px, 4vw, 32px);
+  }
+
+  .screen:not(.opening) {
+    padding-top: calc(74px + env(safe-area-inset-top, 0px));
+  }
+
+  .screen__inner {
+    max-width: 680px;
+  }
+
+  .timeline__page,
+  .museum__exhibit,
+  .panel,
+  .letter__paper {
+    border-radius: clamp(14px, 3vw, 22px);
+  }
+
+  .unsaid__grid,
+  .openwhen__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .soundtrack__row {
+    gap: 12px;
+  }
+
+  .future__map-field {
+    height: clamp(220px, 35vw, 280px);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Phone layout
+   -------------------------------------------------------------------------- */
+@media (max-width: 640px) {
+  :root {
+    --page-inline: 16px;
+    --page-block: 20px;
+  }
+
+  html {
+    scroll-padding-top: 76px;
+  }
+
+  .screen {
+    padding-inline: max(16px, env(safe-area-inset-left, 0px))
+      max(16px, env(safe-area-inset-right, 0px));
+  }
+
+  .screen:not(.opening) {
+    padding-top: calc(72px + env(safe-area-inset-top, 0px));
+    padding-bottom: calc(
+      var(--dock-height) + 18px + env(safe-area-inset-bottom, 0px)
+    );
+  }
+
+  .heading-xl {
+    font-size: clamp(2rem, 9vw, 2.75rem);
+    line-height: 1.12;
+  }
+
+  .heading-l {
+    font-size: clamp(1.55rem, 7vw, 2.15rem);
+  }
+
+  .body-text {
+    font-size: 0.98rem;
+    line-height: 1.7;
+  }
+
+  .panel,
+  .timeline__page,
+  .museum__exhibit,
+  .surprise__card {
+    padding: clamp(18px, 5vw, 26px);
+  }
+
+  .unsaid__grid,
+  .openwhen__grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .unsaid__card {
+    height: 142px;
+  }
+
+  .openwhen__card {
+    min-height: 112px;
+    padding: 1.25em 1em;
+  }
+
+  .timeline__controls {
+    align-items: stretch;
+    padding-inline: 0;
+  }
+
+  .timeline__controls .btn {
+    flex: 1 1 140px;
+    justify-content: center;
+  }
+
+  .timeline__dots {
+    width: 100%;
+    justify-content: center;
+    order: -1;
+  }
+
+  .letter__paper-inner {
+    padding: clamp(22px, 7vw, 34px);
+  }
+
+  .letter__paragraph {
+    font-size: 1rem;
+    line-height: 1.78;
+  }
+
+  .envelope {
+    width: min(82vw, 300px);
+    height: min(55vw, 198px);
+  }
+
+  .soundtrack__row {
+    align-items: flex-start;
+    flex-wrap: wrap;
+    padding: 12px;
+  }
+
+  .soundtrack__cover {
+    width: 58px;
+    height: 58px;
+  }
+
+  .soundtrack__meta {
+    min-width: calc(100% - 78px);
+  }
+
+  .soundtrack__player {
+    width: 100%;
+    margin-top: 4px;
+  }
+
+  .soundtrack__seek {
+    min-width: 0;
+  }
+
+  .future__map-field {
+    height: clamp(220px, 62vw, 300px);
+  }
+
+  .future__pin-label {
+    max-width: 76px;
+    font-size: 0.68rem;
+  }
+
+  .final__image {
+    max-width: min(100%, 320px);
+  }
+
+  /* Mobile bottom navigation owns the lower safe area. */
+  .bottom-nav {
+    min-height: var(--dock-height);
+    padding:
+      8px
+      max(6px, env(safe-area-inset-left, 0px))
+      max(8px, env(safe-area-inset-bottom, 0px))
+      max(6px, env(safe-area-inset-right, 0px));
+  }
+
+  .bottom-nav button {
+    flex: 1 1 0;
+    min-width: 0;
+    max-width: 88px;
+  }
+
+  .music-player {
+    bottom: calc(var(--dock-height) + 8px + env(safe-area-inset-bottom, 0px));
+    right: max(12px, env(safe-area-inset-right, 0px));
+    max-width: calc(100vw - 24px);
+  }
+
+  .music-player__title {
+    max-width: clamp(90px, 32vw, 150px);
+  }
+
+  .secret-star {
+    bottom: calc(var(--dock-height) + 8px + env(safe-area-inset-bottom, 0px));
+  }
+
+  /* Full-screen dialogs should never sit under browser UI or the dock. */
+  .modal-backdrop {
+    padding:
+      max(16px, env(safe-area-inset-top, 0px))
+      max(16px, env(safe-area-inset-right, 0px))
+      max(16px, env(safe-area-inset-bottom, 0px))
+      max(16px, env(safe-area-inset-left, 0px));
+  }
+
+  .openwhen__modal {
+    max-height: min(78dvh, 620px);
+    padding: clamp(20px, 6vw, 28px);
+  }
+
+  .photo-viewer {
+    padding-bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .photo-viewer__figure {
+    max-height: calc(100dvh - 96px);
+  }
+
+  .photo-viewer__figure img,
+  .photo-viewer__figure video {
+    max-height: min(72dvh, 620px);
+  }
+
+  .photo-viewer__nav {
+    width: 44px;
+    height: 44px;
+  }
+
+  .photo-viewer__nav--prev {
+    left: max(6px, env(safe-area-inset-left, 0px));
+  }
+
+  .photo-viewer__nav--next {
+    right: max(6px, env(safe-area-inset-right, 0px));
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Very small phones (320–380px)
+   -------------------------------------------------------------------------- */
+@media (max-width: 380px) {
+  :root {
+    --page-inline: 12px;
+  }
+
+  .screen:not(.opening) {
+    padding-top: calc(68px + env(safe-area-inset-top, 0px));
+  }
+
+  .nav-back {
+    padding-inline: 0.75em;
+    font-size: 0.78rem;
+  }
+
+  .nav-corner .icon-btn {
+    width: 42px;
+    height: 42px;
+  }
+
+  .heading-xl {
+    font-size: 1.9rem;
+  }
+
+  .body-text {
+    font-size: 0.94rem;
+  }
+
+  .timeline__page,
+  .museum__exhibit,
+  .panel,
+  .surprise__card {
+    padding: 16px;
+  }
+
+  .quiz__option {
+    padding: 0.9em 0.95em;
+    font-size: 0.92rem;
+  }
+
+  .music-player {
+    left: 12px;
+    right: 12px;
+    width: auto;
+    justify-content: flex-start;
+  }
+
+  .music-player__body {
+    min-width: 0;
+    flex: 1;
+  }
+
+  .music-player input[type="range"] {
+    width: 56px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Landscape phones / short-height devices
+   -------------------------------------------------------------------------- */
+@media (max-height: 680px) and (orientation: landscape) {
+  .screen {
+    padding-block: 16px;
+  }
+
+  .screen:not(.opening) {
+    padding-top: calc(62px + env(safe-area-inset-top, 0px));
+    padding-bottom: calc(76px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .opening.screen--center {
+    justify-content: center;
+    padding-top: max(12px, env(safe-area-inset-top, 0px));
+  }
+
+  .opening__copy {
+    transform: translateY(-2vh);
+  }
+
+  .opening__enter {
+    margin-top: 1.3em;
+  }
+
+  .opening__cue {
+    margin-top: 1em;
+  }
+
+  .universe__field {
+    min-height: 460px;
+  }
+
+  .menu-list {
+    max-height: calc(100dvh - 24px);
+  }
+
+  .photo-viewer__figure img,
+  .photo-viewer__figure video {
+    max-height: 68dvh;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Large / ultrawide displays
+   -------------------------------------------------------------------------- */
+@media (min-width: 1440px) {
+  :root {
+    --page-inline: clamp(56px, 7vw, 112px);
+  }
+
+  .screen__inner {
+    max-width: 780px;
+  }
+
+  .universe__field {
+    max-width: 1180px;
+    margin-inline: auto;
+    min-height: 720px;
+  }
+
+  .universe__intro {
+    max-width: 780px;
+    margin-inline: auto;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Interaction policy
+   -------------------------------------------------------------------------- */
+@media (hover: none), (pointer: coarse) {
+  .btn:hover,
+  .icon-btn:hover,
+  .lift-on-hover:hover,
+  .polaroid:hover,
+  .openwhen__card:hover,
+  .quiz__option:hover,
+  .soundtrack__row:hover,
+  .universe__node:hover {
+    transform: none;
+  }
+
+  .btn:active,
+  .icon-btn:active {
+    transform: scale(0.97);
+  }
+
+  /* Remove expensive hover-only filters on touch hardware. */
+  .universe__node::before,
+  .universe__node-glow::before {
+    transition: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Accessibility / motion / contrast
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+  }
+
+  .photo-viewer,
+  .modal-backdrop,
+  .section-transition > .screen,
+  .fade-in,
+  .fade-up,
+  .scale-in,
+  .universe__node,
+  .soundtrack__row,
+  .openwhen__card,
+  .final__line {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+  }
+
+  .universe .starfield canvas {
+    animation: none !important;
+  }
+}
+
+@media (forced-colors: active) {
+  :focus-visible {
+    outline: 2px solid CanvasText;
+  }
+
+  button,
+  a {
+    forced-color-adjust: auto;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Defensive browser compatibility
+   -------------------------------------------------------------------------- */
+@supports not (height: 100dvh) {
+  .screen,
+  .opening,
+  .photo-viewer,
+  .modal-backdrop,
+  .menu-panel {
+    min-height: 100vh;
+  }
+}
+
+@supports not (overflow: clip) {
+  body,
+  #root,
+  .app-shell {
+    overflow-x: hidden;
+  }
+}
+
+@supports not (backdrop-filter: blur(1px)) {
+  .nav-back,
+  .nav-corner .icon-btn,
+  .menu-panel,
+  .music-player {
+    background-color: rgba(8, 10, 18, 0.94);
+  }
+}
