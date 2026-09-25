@@ -1,8 +1,7 @@
 # Only For Her
 
-> A private, interactive digital keepsake built around memories, photographs, letters, music, and shared moments.
-
-**Only For Her** is a handcrafted React experience designed as a personal digital universe rather than a conventional website. It brings memories, stories, media, and small interactive details together in one immersive experience.
+> **A little universe, made intentionally.**  
+> A handcrafted interactive React experience built from memories, photographs, letters, music, and small surprises.
 
 <p align="center">
   <a href="https://chillingbing648-sketch.github.io/Only-For-Her/"><strong>✦ Live Experience</strong></a>
@@ -12,96 +11,179 @@
 
 ---
 
-## Overview
+## ✦ What This Is
 
-The experience combines a constellation-inspired interface with a collection of personal experiences:
+**Only For Her** is a personal digital keepsake designed to feel more like a small interactive universe than a conventional website.
 
-- **Opening** — the entry point into the experience
-- **Universe** — central navigation between sections
-- **The Beginning** — a chronological memory timeline
-- **Memory Museum** — photographs and video exhibits with an interactive viewer
-- **Things I Don't Say Enough** — short personal notes
-- **A Letter For You** — a dedicated letter experience
-- **Open When…** — context-based letters with optional date locks
-- **How Well Do You Know Us** — an interactive memory quiz
-- **Our Soundtrack** — songs connected to memories
-- **Surprise Me** — randomized messages and moments
-- **The Future** — shared plans and places
-- **One Last Thing** — the final reveal
+The experience moves through memories, photographs, videos, letters, music, future plans, quizzes, hidden interactions, and a final reveal — all inside a responsive React application.
+
+<p align="center">
+  <img src="./assets/sections-preview.svg" alt="Only For Her experience sections" width="900">
+</p>
 
 ---
 
-## Technical Stack
+## 🌙 The Experience
 
-| Technology | Role |
+| Section | What it contains |
 |---|---|
-| **React** | Component-based UI and interaction |
-| **Vite** | Development and production build tooling |
-| **JavaScript** | Application and interaction logic |
-| **CSS** | Responsive layout, animation, and visual system |
-| **SVG** | Constellation and decorative graphics |
-| **GitHub Actions** | Continuous deployment |
-| **GitHub Pages** | Static hosting |
-
-The application is intentionally lightweight and requires no backend, database, authentication system, or application server.
+| **Opening** | The cinematic entry into the experience |
+| **Our Universe** | Central navigation through the memories |
+| **The Beginning** | A chronological relationship timeline |
+| **Memory Museum** | Photo and video memories with an interactive viewer |
+| **Things I Don't Say Enough** | Short personal messages |
+| **A Letter For You** | A dedicated letter experience |
+| **Open When…** | Context-based letters with optional date locks |
+| **How Well Do You Know Us** | An interactive memory quiz |
+| **Our Soundtrack** | Songs and music connected to memories |
+| **Surprise Me** | Randomized messages, memories, jokes, and ideas |
+| **The Future** | Things to do, places to visit, and future plans |
+| **One Last Thing** | The final emotional reveal |
+| **Secret Star** | A small hidden Easter egg |
 
 ---
 
-## Architecture
+## 🛠️ Built With
 
-Personal content is separated from the presentation layer wherever practical.
+- **React 18** — UI and component architecture
+- **Vite 6** — development and production builds
+- **JavaScript (ES Modules)** — application logic
+- **CSS** — responsive layout, visual system, transitions, and atmosphere
+- **SVG** — decorative and preview graphics
+- **GitHub Actions** — automated deployment
+- **GitHub Pages** — static hosting
+
+No backend, database, authentication service, or API keys are required.
+
+---
+
+## 🧩 Project Structure
 
 ```text
-src/
-├── components/        # Experience sections and reusable UI
-├── data/
-│   └── giftData.js    # Primary content/configuration
-├── hooks/             # Reusable React hooks
-├── styles/            # Global visual system
-├── App.jsx            # Application shell and navigation
-└── main.jsx           # React entry point
-
-MyHeartGallery/        # Personal gallery media
-public/                # Public static assets
-.github/workflows/     # GitHub Pages deployment
+Only-For-Her/
+│
+├── .github/
+│   └── workflows/
+│       └── deploy.yml
+│
+├── MyHeartGallery/          # Personal photos & videos
+├── assets/                  # README / static project visuals
+├── public/                  # Public static directories
+│
+├── src/
+│   ├── components/
+│   │   ├── Opening/
+│   │   ├── Universe/
+│   │   ├── Navigation/
+│   │   ├── Timeline/
+│   │   ├── MemoryMuseum/
+│   │   ├── PhotoViewer/
+│   │   ├── Unsaid/
+│   │   ├── Letter/
+│   │   ├── OpenWhen/
+│   │   ├── Quiz/
+│   │   ├── Soundtrack/
+│   │   ├── Surprise/
+│   │   ├── Future/
+│   │   ├── FinalReveal/
+│   │   └── UI/
+│   │
+│   ├── data/
+│   │   └── giftData.js      # Main personal content
+│   ├── hooks/               # Reusable React hooks
+│   ├── styles/              # Global & section styling
+│   ├── utils/               # Shared utilities
+│   ├── App.jsx              # Application shell & routing
+│   └── main.jsx             # React entry point
+│
+├── index.html
+├── package.json
+└── vite.config.js
 ```
 
-Most content changes can be made directly in `src/data/giftData.js`.
+---
 
-Gallery media is stored separately in `MyHeartGallery/` and copied into the production build by the deployment workflow.
+## 💌 Where To Edit The Experience
+
+The project is intentionally **content-driven**.
+
+### Main content
+
+Start with:
+
+```text
+src/data/giftData.js
+```
+
+This file contains the majority of the editable experience:
+
+- Names
+- Opening text
+- Timeline entries
+- Museum exhibits
+- Personal messages
+- Letter content
+- Open When letters
+- Quiz questions
+- Songs
+- Future plans
+- Destinations
+- Surprise messages
+- Final reveal
+- Secret Easter egg
+
+You should normally **not need to modify the React components** just to change personal content.
+
+### Media
+
+Personal gallery media lives in:
+
+```text
+MyHeartGallery/
+```
+
+The deployment workflow copies this directory into the production build automatically.
 
 ---
 
-## Design Principles
+## 🎨 Design Direction
 
-The interface is built around a few deliberate principles:
+The visual system is intentionally built around:
 
-- **Immersive, not overwhelming** — atmosphere without excessive effects
-- **Editorial typography** — strong hierarchy and readable content
-- **Subtle motion** — transitions support the experience rather than distract from it
-- **Responsive by default** — designed for mobile and desktop screens
-- **Accessible interaction** — semantic controls, labels, and reduced-motion support
-- **Content-first architecture** — personal content stays separate from UI implementation
+- Midnight-space atmosphere
+- Constellation-inspired navigation
+- Warm editorial typography
+- Soft translucent surfaces
+- Subtle motion
+- Focused transitions
+- Responsive layouts
+- Reduced-motion support
+- Small hidden interactions
 
-The visual language combines a midnight-space atmosphere, warm typography, constellation navigation, soft surfaces, and restrained animation.
+The goal is not to create another generic landing page.
 
-> **Built like software. Kept like a memory.**
+It is meant to feel **quiet, personal, cinematic, and discovered over time**.
 
 ---
 
-## Local Development
+## 🚀 Run Locally
 
 ### Requirements
 
 - Node.js 18+
 - npm
 
-### Installation
+### Install
 
 ```bash
 git clone https://github.com/chillingbing648-sketch/Only-For-Her.git
 cd Only-For-Her
 npm install
+```
+
+### Start development server
+
+```bash
 npm run dev
 ```
 
@@ -109,99 +191,83 @@ npm run dev
 
 ```bash
 npm run build
+```
+
+### Preview the production build
+
+```bash
 npm run preview
 ```
 
 ---
 
-## Deployment
+## ☁️ Deployment
 
-Production deployment is automated through **GitHub Actions** and **GitHub Pages**.
+The project automatically deploys to GitHub Pages whenever changes are pushed to `main`.
 
 ```text
 git push
-   ↓
+   │
+   ▼
 GitHub Actions
-   ↓
-Install dependencies
-   ↓
-Build with Vite
-   ↓
-Copy gallery media
-   ↓
-Verify production output
-   ↓
-Upload Pages artifact
-   ↓
-Deploy to GitHub Pages
+   │
+   ├── Install dependencies
+   ├── Build with Vite
+   ├── Copy MyHeartGallery/
+   ├── Verify production output
+   ├── Upload Pages artifact
+   └── Deploy
+   │
+   ▼
+GitHub Pages
 ```
 
-Deployment configuration:
+Deployment workflow:
 
 ```text
 .github/workflows/deploy.yml
 ```
 
-Live site:
+### Live
 
 **https://chillingbing648-sketch.github.io/Only-For-Her/**
 
 ---
 
-## Media Handling
+## 🖼️ Media
 
-The project supports both image and video memories.
+The project currently uses both images and videos inside `MyHeartGallery/`.
 
-Gallery assets are kept in:
+Examples include:
 
 ```text
-MyHeartGallery/
+.jpeg
+.mp4
 ```
 
-The application resolves media paths relative to the deployed Vite base path, allowing the same content to work locally and on the repository's GitHub Pages URL.
+The gallery is served as static content and does not require a media backend.
 
-Supported gallery formats currently include:
-
-- JPEG images
-- MP4 video
+> **Important:** Anything committed to a public GitHub repository should be considered publicly accessible. Personal photographs, videos, music, and writing should only be committed when you are comfortable hosting them publicly.
 
 ---
 
-## Privacy & Hosting
+## ♡ Project Philosophy
 
-The application is a static site and does not include:
+This project is deliberately more than a collection of pages.
 
-- a backend
-- a database
-- user accounts
-- authentication
-- analytics
+Every section is intended to represent a different way of remembering:
 
-The deployed experience is public at its GitHub Pages address. Although the project is intended as a personal keepsake, any content committed to the repository should be treated as publicly hosted content.
+**a moment → a photograph → a sentence → a song → a question → a surprise → a future → a final message**
+
+The technology is there to support the memory, not replace it.
 
 ---
 
-## Development Guide
+## 📌 Project Status
 
-| If you want to change… | Start here |
-|---|---|
-| Personal content | `src/data/giftData.js` |
-| Memory/gallery assets | `MyHeartGallery/` |
-| Navigation | `src/App.jsx` and navigation components |
-| Universe experience | `src/components/Universe/` |
-| Memory Museum | `src/components/MemoryMuseum/` |
-| Media viewer | `src/components/PhotoViewer/` |
-| Visual system | `src/styles/` |
-| GitHub Pages deployment | `.github/workflows/deploy.yml` |
-| Vite deployment path | `vite.config.js` |
+**Active personal project**
 
----
-
-## Project Status
-
-**Active personal project.**
-
-The architecture is intentionally modular so new memories, media, sections, and interactions can be added without rebuilding the experience from scratch.
+The architecture is modular so that new memories, media, sections, and interactions can be added without rebuilding the application from scratch.
 
 ---
 
@@ -209,11 +275,11 @@ The architecture is intentionally modular so new memories, media, sections, and 
 
 Personal project.
 
-The source code is shared for learning and experimentation. Personal writing, photographs, music, videos, and other media remain the property of their respective owners and should not be reused without permission.
+The source code is available for learning and experimentation. Personal writing, photographs, videos, music, and other media remain the property of their respective owners and should not be reused without permission.
 
 ---
 
 <p align="center">
   <strong>Only For Her</strong><br>
-  <sub>A little universe, made intentionally.</sub>
+  <sub>Built like software. Kept like a memory.</sub>
 </p>
