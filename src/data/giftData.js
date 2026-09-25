@@ -48,9 +48,9 @@ export const giftData = {
   // ---- Background music ---------------------------------------------------
   music: {
     enabled: true,
-    src: "./music/our-song.mp3",
-    title: "Our Song",
-    artist: "REPLACE_ARTIST",
+    src: "./MyHeartGallery/Sanam Re.mp3",
+    title: "Song",
+    artist: "US",
   },
 
   // ---- The Beginning: a chronological timeline ---------------------------
@@ -419,17 +419,17 @@ export const giftData = {
     {
       title: "Open when you miss me",
       unlockDate: "",
-      content: "Write what you'd want her to read in this moment.",
+      content: "Awww, My Babyyyy I Miss You moreeee alreadyyyy,Uk U might be missing me rn and im sorry that im just not there kissing or adoring you, but i am actuallyy missing you moreee, i miss your scent , i miss your smile , i miss your cutu harkatein , i miss those cutu angry bird vale face aapke , i miss your hugs , i miss those kissies , i miss those drowning in ur Armsss , i miss and regret each second that i am without youuuu, But Just Let me Know on text that you miss me babyy, ill get back to you asap till then don't forget that i love youu moreeeeeee, mwaahhhh my wifey.",
     },
     {
       title: "Open when you can't sleep",
       unlockDate: "",
-      content: "Write something calm here.",
+      content: "Babyyy, Cutuu Pie Kyu nahi so pa rahe aap, .",
     },
     {
       title: "Open when you're having a bad day",
       unlockDate: "",
-      content: "Write something steady and reassuring here.",
+      content: "Awwleee, Merii babyyy ka din bad kyu ja rha haiii, if its smthing chotu ya family ka please send me Voice Message i might listen thoda late but i need it more than you do, if its smthing srs why not just call me already , but know that ki you are my strong babyy and ik that this person/thing/incident is sooo shit legit akkal hi nahi hai unko, and im so pissed off knowing this whole thing happened to youuu, dww merii cutuuu im with youu do what you think is the best and im by your side theek hai dekh lenge dono sathmee isko/unko .",
     },
     {
       title: "Open when you need to laugh",
