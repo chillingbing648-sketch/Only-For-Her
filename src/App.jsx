@@ -16,6 +16,7 @@ import FinalReveal from './components/FinalReveal/FinalReveal'
 import MusicPlayer from './components/UI/MusicPlayer'
 import SecretStar from './components/UI/SecretStar'
 import SectionTransition from './components/UI/SectionTransition'
+import StarField from './components/UI/StarField'
 
 const SECTIONS = {
   universe: Universe,
@@ -48,9 +49,11 @@ export default function App() {
   }
 
   const Section = SECTIONS[route] || Universe
+  const hasOwnStarfield = route === 'universe' || route === 'final'
 
   return (
     <div className="app-shell">
+      {!hasOwnStarfield && <StarField density={0.35} respondToPointer={false} />}
       <div className="grain" aria-hidden="true" />
       <Navigation route={route} navigate={navigate} />
       <SectionTransition key={route}>

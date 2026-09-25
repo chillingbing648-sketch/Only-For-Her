@@ -2,30 +2,30 @@
    Design tokens
    ========================================================================== */
 :root {
-  /* Color: a deep, warm midnight rather than pure black or navy-blue */
-  --c-void: #080a12;
-  --c-bg: #0c0f1a;
-  --c-bg-soft: #131829;
-  --c-panel: #171d31;
-  --c-line: rgba(233, 235, 242, 0.09);
-  --c-line-strong: rgba(233, 235, 242, 0.16);
+  /* Color: deep near-black cosmic space void and dusty-blush nebula atmosphere */
+  --c-void: #050407;
+  --c-bg: #07060a;
+  --c-bg-soft: #0e0b12;
+  --c-panel: #15111b;
+  --c-line: rgba(242, 235, 238, 0.085);
+  --c-line-strong: rgba(242, 235, 238, 0.16);
 
-  --c-text: #e9ebf2;
-  --c-text-dim: #9aa1b8;
-  --c-text-faint: #6b7189;
+  --c-text: #eceef6;
+  --c-text-dim: #a6abbd;
+  --c-text-faint: #797f96;
 
   --c-star: #f2c883;
   --c-star-bright: #ffe3ad;
   --c-clay: #cf9a7c;
 
-  /* Cute-romantic accents — used sparingly, as light and glow, not fills */
-  --c-blush: #e3b3ae;
-  --c-blush-bright: #f0c9c3;
-  --c-lavender: #b7aed6;
-  --c-lavender-soft: #d8d2ec;
-  --c-rose-glow: rgba(227, 179, 174, 0.32);
-  --c-gold-glow: rgba(242, 200, 131, 0.38);
-  --c-lav-glow: rgba(183, 174, 214, 0.3);
+  /* Cosmic-nebula dusty blush accents — muted, ethereal, elegant, not neon */
+  --c-blush: #dca8b0;
+  --c-blush-bright: #f0c4cb;
+  --c-lavender: #bdaec6;
+  --c-lavender-soft: #dcd2e2;
+  --c-rose-glow: rgba(226, 168, 178, 0.32);
+  --c-gold-glow: rgba(242, 200, 131, 0.35);
+  --c-lav-glow: rgba(198, 178, 208, 0.28);
 
   --c-cream: #f2ecdc;
   --c-cream-soft: #ece3cd;
@@ -273,19 +273,120 @@ ul { margin: 0; padding: 0; list-style: none; }
 .glow-lavender { box-shadow: 0 0 0 1px rgba(183,174,214,0.4), 0 0 26px 4px var(--c-lav-glow); }
 
 /* ==========================================================================
-   Star field background
+   Star field background & Cosmic-Nebula Atmosphere
+   Layered depth inspired by the visual reference:
+     1. Deep near-black space base with substantial negative space
+     2. Soft, photographic dusty blush nebula clouds with fractal noise filaments
+     3. Localized brighter dusty-pink bloom and luminous starlit wave crests
+     4. Fine cosmic particulate field & blooming stars (Canvas)
+     5. Deep space perimeter vignette
    ========================================================================== */
 .starfield {
   position: fixed;
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  background:
-    radial-gradient(ellipse at 18% 8%, rgba(183, 174, 214, 0.05), transparent 40%),
-    radial-gradient(ellipse at 82% 12%, rgba(227, 179, 174, 0.05), transparent 42%),
-    radial-gradient(ellipse at 50% 0%, #141b2f 0%, var(--c-void) 68%);
+  overflow: hidden;
+  background-color: var(--c-void);
+  background-image:
+    /* Localized deep mauve undertone */
+    radial-gradient(ellipse 80% 60% at 48% 54%, rgba(var(--rgb-nebula-deep), 0.55) 0%, transparent 68%),
+    /* Substantial black negative space in the corners / perimeter */
+    radial-gradient(ellipse 95% 85% at 50% 50%, transparent 42%, rgba(var(--rgb-void), 0.72) 80%, rgba(var(--rgb-void), 0.95) 100%),
+    /* Base dark cosmic space gradient */
+    linear-gradient(180deg, #050407 0%, #07060a 48%, #040306 100%);
 }
-.starfield canvas { width: 100%; height: 100%; display: block; }
+
+.starfield canvas {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Layer 2: Ethereal Dusty-Pink Nebula Clouds
+   Undulating diagonal ribbon with low-frequency fractal noise mask for
+   authentic photographic interstellar gas clouds and filaments */
+.starfield::before {
+  content: '';
+  position: absolute;
+  inset: -24%;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    /* Upper diagonal billowing cloud */
+    radial-gradient(ellipse 52% 38% at 34% 28%, rgba(var(--rgb-nebula-blush), 0.32), rgba(var(--rgb-nebula-dust), 0.16) 48%, transparent 74%),
+    /* Central luminous nebula body */
+    radial-gradient(ellipse 58% 44% at 52% 52%, rgba(var(--rgb-nebula-glow), 0.36), rgba(var(--rgb-nebula-dust), 0.20) 48%, transparent 76%),
+    /* Lower diagonal sweeping cloud */
+    radial-gradient(ellipse 50% 36% at 68% 74%, rgba(var(--rgb-nebula-blush), 0.28), rgba(var(--rgb-nebula-deep), 0.16) 52%, transparent 75%),
+    /* Ethereal diagonal stream connecting the wave crests */
+    linear-gradient(132deg, transparent 20%, rgba(var(--rgb-nebula-blush), 0.08) 36%, rgba(var(--rgb-nebula-glow), 0.16) 50%, rgba(var(--rgb-nebula-dust), 0.09) 64%, transparent 80%),
+    /* Subtle warm starlight champagne warmth */
+    radial-gradient(ellipse 30% 24% at 44% 46%, rgba(var(--rgb-star-champagne), 0.11), transparent 72%);
+  opacity: 0.88;
+  animation: cosmicNebulaDrift 210s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+/* Layer 3: Localized Brighter Dusty-Pink Bloom & Luminous Wave Crests
+   Smooth additive falloff highlighting the luminous ridges seen in the reference */
+.starfield::after {
+  content: '';
+  position: absolute;
+  inset: -15%;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    /* Upper-mid luminous ridge */
+    radial-gradient(ellipse 46% 18% at 40% 36%, rgba(var(--rgb-nebula-core), 0.28) 0%, rgba(var(--rgb-nebula-glow), 0.14) 44%, transparent 72%),
+    /* Central core starlight bloom */
+    radial-gradient(ellipse 52% 22% at 54% 54%, rgba(var(--rgb-nebula-highlight), 0.34) 0%, rgba(var(--rgb-nebula-core), 0.20) 46%, transparent 75%),
+    /* Lower luminous ridge */
+    radial-gradient(ellipse 42% 16% at 64% 70%, rgba(var(--rgb-nebula-core), 0.24) 0%, rgba(var(--rgb-nebula-glow), 0.12) 42%, transparent 70%);
+  mix-blend-mode: screen;
+  opacity: 0.85;
+  transform: rotate(-14deg);
+  animation: cosmicBloomPulse 30s ease-in-out infinite alternate;
+  will-change: opacity, transform;
+}
+
+@keyframes cosmicNebulaDrift {
+  0%   { transform: scale(1) translate(0%, 0%) rotate(0deg); }
+  50%  { transform: scale(1.04) translate(-2.5%, 1.8%) rotate(1.2deg); }
+  100% { transform: scale(1.02) translate(2%, -2%) rotate(-0.8deg); }
+}
+
+@keyframes cosmicBloomPulse {
+  0%   { opacity: 0.78; transform: rotate(-14deg) scale(0.98); }
+  50%  { opacity: 0.95; transform: rotate(-13.5deg) scale(1.02); }
+  100% { opacity: 0.75; transform: rotate(-14.5deg) scale(0.97); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .starfield::before,
+  .starfield::after {
+    animation: none !important;
+    transform: none !important;
+  }
+}
+
+@media (max-width: 640px) {
+  .starfield::before {
+    inset: -8%;
+    opacity: 0.8;
+    animation: none;
+    will-change: auto;
+  }
+  .starfield::after {
+    inset: -6%;
+    animation: none;
+    will-change: auto;
+    opacity: 0.7;
+    transform: rotate(-12deg);
+  }
+}
 
 .grain {
   position: fixed;
@@ -542,17 +643,27 @@ ul { margin: 0; padding: 0; list-style: none; }
   /* Brand tones as RGB triplets, so any alpha is one rgba() away */
   --rgb-gold: 242, 200, 131;
   --rgb-gold-hi: 255, 227, 173;
-  --rgb-blush: 227, 179, 174;
-  --rgb-lav: 183, 174, 214;
+  --rgb-blush: 226, 168, 178;
+  --rgb-lav: 198, 176, 204;
   --rgb-cream: 242, 236, 220;
-  --rgb-indigo: 66, 82, 178;
-  --rgb-night: 5, 6, 12;
+  --rgb-indigo: 68, 36, 50;
+  --rgb-night: 5, 4, 8;
+
+  /* Dedicated Cinematic Cosmic-Nebula Tokens (matching the visual reference) */
+  --rgb-void: 4, 3, 6;
+  --rgb-nebula-deep: 38, 20, 28;       /* Deep dark smoky plum-rose undertone */
+  --rgb-nebula-dust: 92, 52, 64;       /* Muted dusty rose midtone */
+  --rgb-nebula-blush: 184, 122, 134;   /* Soft dusty blush clouds */
+  --rgb-nebula-glow: 224, 164, 176;    /* Luminous rose-blush gas */
+  --rgb-nebula-core: 248, 212, 218;    /* Ethereal starlit blush highlight */
+  --rgb-nebula-highlight: 255, 238, 242; /* Pure luminous core highlight */
+  --rgb-star-champagne: 246, 216, 196; /* Warm cosmic starlight */
 
   /* Existing tokens, refined (same names, so every consumer upgrades):
      cooler, more luminous hairlines; AA-safe secondary + faint text;
      two-part elevation for paper, polaroids and lifted cards. */
-  --c-line: rgba(214, 214, 240, 0.105);
-  --c-line-strong: rgba(214, 214, 240, 0.19);
+  --c-line: rgba(242, 235, 240, 0.09);
+  --c-line-strong: rgba(242, 235, 240, 0.17);
   --c-text-dim: #adb3c8;
   --c-text-faint: #858ca6;
   --shadow-soft: 0 2px 4px rgba(3, 4, 10, 0.38), 0 22px 48px -14px rgba(3, 4, 10, 0.66);
@@ -564,8 +675,8 @@ ul { margin: 0; padding: 0; list-style: none; }
   --text-3: var(--c-text-faint);
 
   /* Glass + edges */
-  --glass-fill: rgba(14, 18, 34, 0.58);
-  --glass-fill-strong: rgba(11, 14, 28, 0.8);
+  --glass-fill: rgba(14, 11, 18, 0.68);
+  --glass-fill-strong: rgba(11, 8, 15, 0.88);
   --glass-sheen: linear-gradient(180deg, rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0.014) 58%, rgba(255, 255, 255, 0));
   --glass-blur: blur(16px) saturate(1.35);
   --edge: rgba(214, 214, 240, 0.14);
@@ -628,22 +739,22 @@ a { text-underline-offset: 0.22em; text-decoration-thickness: 1px; }
 /* ==========================================================================
    03 · Atmosphere
    Quiet ambient light for every screen that does not have its own sky.
-   (Opening, Universe and Final paint an opaque starfield above this layer,
-   so their skies are untouched — and no stars, nebula or dust are repeated.)
+   (Opening, Universe and Final paint their custom cosmic skies, while content
+   rooms inherit this cohesive, serene ambient starlight & dusty-pink glow.)
    ========================================================================== */
 .app-shell {
-  --amb-top: var(--rgb-indigo);
-  --amb-low: var(--rgb-gold);
-  --amb-side: var(--rgb-blush);
-  --amb-mid: var(--rgb-lav);
+  --amb-top: var(--rgb-nebula-dust);
+  --amb-low: var(--rgb-nebula-deep);
+  --amb-side: var(--rgb-nebula-blush);
+  --amb-mid: var(--rgb-nebula-glow);
 }
-/* Each room keeps the same lighting rig, tinted for its mood */
+/* Each room keeps the same lighting rig, subtly tinted for its intimate mood */
 .app-shell:has(.letter),
-.app-shell:has(.openwhen) { --amb-top: 150, 96, 88; --amb-low: 242, 190, 120; --amb-side: 232, 166, 154; }
+.app-shell:has(.openwhen) { --amb-top: 140, 80, 92; --amb-low: 220, 160, 140; --amb-side: 226, 168, 178; }
 .app-shell:has(.soundtrack),
-.app-shell:has(.quiz)     { --amb-top: 98, 86, 190; --amb-side: 183, 174, 214; }
+.app-shell:has(.quiz)     { --amb-top: 104, 62, 90; --amb-side: 202, 158, 186; }
 .app-shell:has(.future),
-.app-shell:has(.museum)   { --amb-top: 70, 98, 192; --amb-low: 227, 179, 174; }
+.app-shell:has(.museum)   { --amb-top: 86, 50, 72; --amb-low: 226, 168, 178; }
 
 .app-shell::before {
   content: '';
@@ -652,25 +763,15 @@ a { text-underline-offset: 0.22em; text-decoration-thickness: 1px; }
   z-index: -1;
   pointer-events: none;
   background:
-    radial-gradient(ellipse 100% 90% at 50% 46%, transparent 54%, rgba(var(--rgb-night), 0.4) 100%),
-    radial-gradient(circle 260px at 90% 14%, rgba(var(--amb-side), 0.09), transparent 72%),
-    radial-gradient(circle 340px at 4% 88%, rgba(var(--amb-low), 0.075), transparent 72%),
-    radial-gradient(ellipse 74% 54% at 50% -8%, rgba(var(--amb-top), 0.21), transparent 72%),
-    radial-gradient(ellipse 52% 40% at 84% 64%, rgba(var(--amb-mid), 0.08), transparent 74%);
+    radial-gradient(ellipse 100% 90% at 50% 46%, transparent 54%, rgba(var(--rgb-void), 0.52) 100%),
+    radial-gradient(circle 320px at 88% 16%, rgba(var(--amb-side), 0.08), transparent 72%),
+    radial-gradient(circle 360px at 5% 86%, rgba(var(--amb-low), 0.07), transparent 72%),
+    radial-gradient(ellipse 74% 54% at 50% -8%, rgba(var(--amb-top), 0.16), transparent 72%),
+    radial-gradient(ellipse 56% 44% at 82% 64%, rgba(var(--amb-mid), 0.07), transparent 74%);
 }
 
 /* Film grain: screened (not overlaid) so it actually reads on near-black */
-.grain { opacity: 0.05; mix-blend-mode: screen; }
-
-/* The shared sky (Opening + Final): a touch more depth, still just gradients */
-.starfield {
-  background:
-    radial-gradient(ellipse 60% 40% at 14% 96%, rgba(var(--rgb-indigo), 0.16), transparent 70%),
-    radial-gradient(ellipse 50% 34% at 92% 92%, rgba(var(--rgb-gold), 0.06), transparent 70%),
-    radial-gradient(ellipse at 18% 8%, rgba(183, 174, 214, 0.07), transparent 40%),
-    radial-gradient(ellipse at 82% 12%, rgba(227, 179, 174, 0.07), transparent 42%),
-    radial-gradient(ellipse at 50% 0%, #161e36 0%, var(--c-void) 68%);
-}
+.grain { opacity: 0.045; mix-blend-mode: screen; }
 
 /* ==========================================================================
    04 · Typography

@@ -444,7 +444,7 @@ export const giftData = {
     {
       title: "Open on your birthday",
       unlockDate: "2026-10-13",
-      lockedMessage: "This one is waiting for the right day.",
+      lockedMessage: "Not Today Cutieee, Birthday ke Din Dekho Okay.",
       content: "Happy Birthday My Cutie Pie.",
     },
     {
@@ -565,7 +565,7 @@ export const giftData = {
   surprises: [
     {
       type: "memory",
-      title: "Remember this?",
+      title: "Do you remember the time when we almost broke up while i was in delhi and we fought so much like sooo soo much , im so sorrryy babyy for that but uske just bad when i came back and the first day i saw you i left all my friends and came and sat by you and then we slowly normally talked and then uske kuch din baad we were back to normal but i genuinely felt like my life was on line when i fought with you there were so many people taking you away from me and taking me away from you but we somehow stayed together and now no one can do tha touchwood Umwah",
       content: "Drop in a quick memory.",
     },
     {
@@ -589,7 +589,7 @@ export const giftData = {
   // ---- Final reveal -----------------------------------------------------------
   final: {
     line1: "If you ever wonder how much of you exists in my life...",
-    line2: "...the answer is probably somewhere in this little universe.",
+    line2: "...the answer is in this big world , Anything or Anyone Else than you doesn't exist For me.",
     line3: "You are my favourite part of it.",
     image: "MyHeartGallery/Adorable.jpeg",
   },
