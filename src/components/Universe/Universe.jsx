@@ -2,29 +2,62 @@ import { useEffect, useRef, useState } from 'react'
 import { useReducedMotion } from '../../hooks/useReducedMotion'
 import StarField from '../UI/StarField'
 
+// Spatial celestial nodes with curated coordinates for desktop and mobile aspect ratios.
+// Coordinates are carefully spaced to prevent edge collisions and overlapping labels.
 const NODES = [
-  { id: 'beginning', title: 'The Beginning', x: 18, y: 26, mx: 24, my: 12, icon: 'spark' },
-  { id: 'museum', title: 'Memory Museum', x: 62, y: 16, mx: 72, my: 20, icon: 'frame' },
-  { id: 'unsaid', title: "Things I Don't Say Enough", x: 82, y: 40, mx: 74, my: 38, icon: 'note' },
-  { id: 'letter', title: 'A Letter For You', x: 30, y: 52, mx: 28, my: 47, icon: 'envelope' },
-  { id: 'openwhen', title: 'Open When…', x: 70, y: 64, mx: 72, my: 56, icon: 'seal' },
-  { id: 'quiz', title: 'How Well Do You Know Us', x: 12, y: 70, mx: 24, my: 66, icon: 'question' },
-  { id: 'soundtrack', title: 'Our Soundtrack', x: 46, y: 78, mx: 70, my: 74, icon: 'wave' },
-  { id: 'surprise', title: 'Surprise Me', x: 90, y: 80, mx: 28, my: 83, icon: 'star4' },
-  { id: 'future', title: 'The Future', x: 50, y: 38, mx: 42, my: 30, icon: 'path' },
-  { id: 'final', title: 'One Last Thing', x: 22, y: 90, mx: 62, my: 92, icon: 'dot' },
+  { id: 'beginning', title: 'The Beginning', x: 18, y: 18, mx: 28, my: 7, icon: 'spark' },
+  { id: 'museum', title: 'Memory Museum', x: 48, y: 14, mx: 72, my: 16, icon: 'frame' },
+  { id: 'future', title: 'The Future', x: 78, y: 20, mx: 32, my: 26, icon: 'path' },
+  { id: 'unsaid', title: "Things I Don't Say Enough", x: 84, y: 44, mx: 74, my: 36, icon: 'note' },
+  { id: 'letter', title: 'A Letter For You', x: 28, y: 40, mx: 26, my: 46, icon: 'envelope' },
+  { id: 'openwhen', title: 'Open When…', x: 64, y: 52, mx: 72, my: 56, icon: 'seal' },
+  { id: 'quiz', title: 'How Well Do You Know Us', x: 16, y: 64, mx: 26, my: 66, icon: 'question' },
+  { id: 'soundtrack', title: 'Our Soundtrack', x: 46, y: 72, mx: 72, my: 76, icon: 'wave' },
+  { id: 'surprise', title: 'Surprise Me', x: 82, y: 76, mx: 28, my: 86, icon: 'star4' },
+  { id: 'final', title: 'One Last Thing', x: 38, y: 90, mx: 58, my: 95, icon: 'dot' },
 ]
 
-const CONNECTIONS = NODES.slice(0, -1).map((node, i) => [node, NODES[i + 1]])
+// Constellation graphs: intentionally arranged with zero line-crossings.
+const DESKTOP_CONNECTIONS = [
+  ['beginning', 'museum'],
+  ['museum', 'future'],
+  ['future', 'unsaid'],
+  ['beginning', 'letter'],
+  ['letter', 'openwhen'],
+  ['openwhen', 'unsaid'],
+  ['letter', 'quiz'],
+  ['quiz', 'soundtrack'],
+  ['openwhen', 'surprise'],
+  ['soundtrack', 'surprise'],
+  ['soundtrack', 'final'],
+]
 
-// Fast O(1) adjacency lookup for interaction-aware constellation lines and neighbor stars
-const ADJACENCY_MAP = {}
+const MOBILE_CONNECTIONS = [
+  ['beginning', 'museum'],
+  ['museum', 'future'],
+  ['future', 'unsaid'],
+  ['unsaid', 'letter'],
+  ['letter', 'openwhen'],
+  ['openwhen', 'quiz'],
+  ['quiz', 'soundtrack'],
+  ['soundtrack', 'surprise'],
+  ['surprise', 'final'],
+]
+
+// Fast O(1) adjacency lookup
+const DESKTOP_ADJACENCY = {}
+const MOBILE_ADJACENCY = {}
 NODES.forEach((node) => {
-  ADJACENCY_MAP[node.id] = new Set()
+  DESKTOP_ADJACENCY[node.id] = new Set()
+  MOBILE_ADJACENCY[node.id] = new Set()
 })
-CONNECTIONS.forEach(([a, b]) => {
-  ADJACENCY_MAP[a.id].add(b.id)
-  ADJACENCY_MAP[b.id].add(a.id)
+DESKTOP_CONNECTIONS.forEach(([a, b]) => {
+  DESKTOP_ADJACENCY[a]?.add(b)
+  DESKTOP_ADJACENCY[b]?.add(a)
+})
+MOBILE_CONNECTIONS.forEach(([a, b]) => {
+  MOBILE_ADJACENCY[a]?.add(b)
+  MOBILE_ADJACENCY[b]?.add(a)
 })
 
 export default function Universe({ navigate }) {
@@ -34,8 +67,53 @@ export default function Universe({ navigate }) {
   const [focusedId, setFocusedId] = useState(null)
   const timerRef = useRef(null)
 
+  const fieldRef = useRef(null)
+  const nodeRefs = useRef({})
+  const [fieldSize, setFieldSize] = useState({ width: 0, height: 0 })
+  const [nodePositions, setNodePositions] = useState({})
+  const [isMobile, setIsMobile] = useState(false)
+
+  // Measure actual node celestial centers relative to container
+  const measureNodes = () => {
+    if (!fieldRef.current) return
+    const fieldRect = fieldRef.current.getBoundingClientRect()
+    if (fieldRect.width === 0 || fieldRect.height === 0) return
+
+    const mobile = window.innerWidth <= 640
+    setIsMobile(mobile)
+    setFieldSize({ width: fieldRect.width, height: fieldRect.height })
+
+    const positions = {}
+    NODES.forEach((node) => {
+      const el = nodeRefs.current[node.id]
+      if (el) {
+        const glowEl = el.querySelector('.universe__node-glow') || el
+        const rect = glowEl.getBoundingClientRect()
+        positions[node.id] = {
+          x: rect.left + rect.width / 2 - fieldRect.left,
+          y: rect.top + rect.height / 2 - fieldRect.top,
+        }
+      }
+    })
+    setNodePositions(positions)
+  }
+
   useEffect(() => {
+    measureNodes()
+    window.addEventListener('resize', measureNodes)
+
+    let ro
+    if (typeof ResizeObserver !== 'undefined' && fieldRef.current) {
+      ro = new ResizeObserver(() => measureNodes())
+      ro.observe(fieldRef.current)
+    }
+
+    const t = setTimeout(measureNodes, 80)
+
     return () => {
+      clearTimeout(t)
+      window.removeEventListener('resize', measureNodes)
+      if (ro) ro.disconnect()
       if (timerRef.current) clearTimeout(timerRef.current)
     }
   }, [])
@@ -53,34 +131,50 @@ export default function Universe({ navigate }) {
   }
 
   const interactedId = activeId || hoveredId || focusedId
+  const activeConnections = isMobile ? MOBILE_CONNECTIONS : DESKTOP_CONNECTIONS
+  const activeAdjacency = isMobile ? MOBILE_ADJACENCY : DESKTOP_ADJACENCY
+  const hasMeasured = fieldSize.width > 0 && Object.keys(nodePositions).length === NODES.length
 
   return (
     <div className="screen universe">
       <StarField density={0.7} respondToPointer={!reduced} />
 
-      <div className="screen__inner universe__intro fade-in">
-        <p className="eyebrow">Our little universe</p>
-        <h1 className="heading-l">Wander wherever you like.</h1>
-        <p className="body-text body-text--soft">
+      <header className="screen__inner universe__intro fade-in">
+        <p className="eyebrow universe__eyebrow">Our Little Universe</p>
+        <h1 className="heading-l universe__heading">Wander wherever you like.</h1>
+        <p className="body-text body-text--soft universe__desc">
           Every star holds something. There's no right order.
         </p>
-      </div>
+      </header>
 
       <div
+        ref={fieldRef}
         className={`universe__field ${activeId ? 'is-traveling' : ''} ${interactedId ? 'has-interaction' : ''}`}
         role="navigation"
         aria-label="Sections of the universe"
       >
-        {/* Desktop constellation threads */}
+        {/* Constellation thread system dynamically rendered to exact node geometry */}
         <svg
-          className="universe__lines universe__lines--desktop"
-          viewBox="0 0 100 100"
-          preserveAspectRatio="none"
+          className="universe__lines"
+          viewBox={hasMeasured ? `0 0 ${fieldSize.width} ${fieldSize.height}` : '0 0 100 100'}
+          preserveAspectRatio={hasMeasured ? 'none' : 'none'}
           aria-hidden="true"
         >
-          {CONNECTIONS.map(([a, b], i) => {
-            const isLit = activeId && (a.id === activeId || b.id === activeId)
-            const isRelated = interactedId && (a.id === interactedId || b.id === interactedId)
+          <defs>
+            <linearGradient id="constellationGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="rgba(242, 200, 131, 0.45)" />
+              <stop offset="50%" stopColor="rgba(216, 208, 246, 0.35)" />
+              <stop offset="100%" stopColor="rgba(226, 168, 178, 0.4)" />
+            </linearGradient>
+            <filter id="threadGlow" x="-20%" y="-20%" width="140%" height="140%">
+              <feGaussianBlur stdDeviation="1.5" result="blur" />
+              <feComposite in="SourceGraphic" in2="blur" operator="over" />
+            </filter>
+          </defs>
+
+          {activeConnections.map(([aId, bId], i) => {
+            const isLit = activeId && (aId === activeId || bId === activeId)
+            const isRelated = interactedId && (aId === interactedId || bId === interactedId)
             const isDimmed = interactedId && !isRelated
 
             let lineClass = 'universe__line'
@@ -88,58 +182,44 @@ export default function Universe({ navigate }) {
             else if (isRelated) lineClass += ' universe__line--active'
             else if (isDimmed) lineClass += ' universe__line--dimmed'
 
+            let x1, y1, x2, y2
+            if (hasMeasured && nodePositions[aId] && nodePositions[bId]) {
+              x1 = nodePositions[aId].x
+              y1 = nodePositions[aId].y
+              x2 = nodePositions[bId].x
+              y2 = nodePositions[bId].y
+            } else {
+              const nodeA = NODES.find((n) => n.id === aId)
+              const nodeB = NODES.find((n) => n.id === bId)
+              x1 = isMobile ? nodeA.mx : nodeA.x
+              y1 = isMobile ? nodeA.my : nodeA.y
+              x2 = isMobile ? nodeB.mx : nodeB.x
+              y2 = isMobile ? nodeB.my : nodeB.y
+            }
+
             return (
               <line
-                key={`d-${i}`}
-                x1={a.x}
-                y1={a.y}
-                x2={b.x}
-                y2={b.y}
+                key={`line-${aId}-${bId}-${i}`}
+                x1={x1}
+                y1={y1}
+                x2={x2}
+                y2={y2}
                 className={lineClass}
               />
             )
           })}
         </svg>
 
-        {/* Mobile constellation threads */}
-        <svg
-          className="universe__lines universe__lines--mobile"
-          viewBox="0 0 100 100"
-          preserveAspectRatio="none"
-          aria-hidden="true"
-        >
-          {CONNECTIONS.map(([a, b], i) => {
-            const isLit = activeId && (a.id === activeId || b.id === activeId)
-            const isRelated = interactedId && (a.id === interactedId || b.id === interactedId)
-            const isDimmed = interactedId && !isRelated
-
-            let lineClass = 'universe__line'
-            if (isLit) lineClass += ' universe__line--lit'
-            else if (isRelated) lineClass += ' universe__line--active'
-            else if (isDimmed) lineClass += ' universe__line--dimmed'
-
-            return (
-              <line
-                key={`m-${i}`}
-                x1={a.mx}
-                y1={a.my}
-                x2={b.mx}
-                y2={b.my}
-                className={lineClass}
-              />
-            )
-          })}
-        </svg>
-
+        {/* Celestial Star Nodes */}
         {NODES.map((node, i) => {
           const isActive = activeId === node.id
           const isHovered = hoveredId === node.id
           const isFocused = focusedId === node.id
           const isConnected = Boolean(
-            interactedId && interactedId !== node.id && ADJACENCY_MAP[interactedId]?.has(node.id)
+            interactedId && interactedId !== node.id && activeAdjacency[interactedId]?.has(node.id)
           )
           const isDimmed = Boolean(
-            interactedId && interactedId !== node.id && !ADJACENCY_MAP[interactedId]?.has(node.id)
+            interactedId && interactedId !== node.id && !activeAdjacency[interactedId]?.has(node.id)
           )
 
           let nodeClasses = 'universe__node'
@@ -153,6 +233,7 @@ export default function Universe({ navigate }) {
           return (
             <button
               key={node.id}
+              ref={(el) => (nodeRefs.current[node.id] = el)}
               className={nodeClasses}
               style={{
                 '--x': `${node.x}%`,
@@ -161,8 +242,8 @@ export default function Universe({ navigate }) {
                 '--my': `${node.my}%`,
                 left: `${node.x}%`,
                 top: `${node.y}%`,
-                '--enter-delay': `${(i % 6) * 70}ms`,
-                '--float-delay': `${(i % 5) * 0.6}s`,
+                '--enter-delay': `${(i % 6) * 65}ms`,
+                '--float-delay': `${(i % 5) * 0.7}s`,
               }}
               onClick={() => selectNode(node.id)}
               onPointerEnter={(e) => {
@@ -371,108 +452,4 @@ function NodeIcon({ name }) {
         </svg>
       )
   }
-}
-
-const HEART_COLORS = {
-  core: '255, 244, 250',
-  blush: '227, 179, 174',
-  lav: '183, 174, 214',
-  gold: '242, 200, 131',
-}
-
-function insideHeart(x, y) {
-  const a = x * x + y * y - 1
-  return a * a * a - x * x * y * y * y <= 0
-}
-
-function heartOutline(t) {
-  const x = 16 * Math.pow(Math.sin(t), 3)
-  const y =
-    13 * Math.cos(t) -
-    5 * Math.cos(2 * t) -
-    2 * Math.cos(3 * t) -
-    Math.cos(4 * t)
-
-  return {
-    x: x / 16,
-    y: y / 16,
-  }
-}
-
-function buildHeartParticles({ fillCount, outlineCount, heroEvery = 11 }) {
-  const points = []
-
-  let guard = 0
-
-  while (points.length < fillCount && guard < fillCount * 40) {
-    guard++
-
-    const x = (Math.random() * 2 - 1) * 1.3
-    const y = (Math.random() * 2 - 1) * 1.25
-
-    if (insideHeart(x, y)) {
-      points.push({
-        x,
-        y,
-        r: Math.random() * 1.1 + 0.5,
-        alpha: Math.random() * 0.4 + 0.25,
-        hero: points.length % heroEvery === 0,
-        delay: Math.random() * 1.4,
-        tw: Math.random() * 0.5 + 0.15,
-        twOffset: Math.random() * Math.PI * 2,
-        color:
-          Math.random() < 0.72
-            ? 'blush'
-            : Math.random() < 0.5
-              ? 'lav'
-              : 'core',
-      })
-    }
-  }
-
-  for (let i = 0; i < outlineCount; i++) {
-    const t = (i / outlineCount) * Math.PI * 2
-    const { x, y } = heartOutline(t)
-    const jitter = 0.025
-
-    points.push({
-      x: x + (Math.random() * 2 - 1) * jitter,
-      y: y + (Math.random() * 2 - 1) * jitter,
-      r: Math.random() * 0.9 + 0.6,
-      alpha: Math.random() * 0.35 + 0.4,
-      hero: i % 14 === 0,
-      delay: Math.random() * 1.4,
-      tw: Math.random() * 0.5 + 0.15,
-      twOffset: Math.random() * Math.PI * 2,
-      color: 'blush',
-    })
-  }
-
-  return points
-}
-
-const TRAIL_CONTROL = [
-  { x: 0.06, y: 0.86 },
-  { x: 0.32, y: 0.5 },
-  { x: 0.62, y: 0.7 },
-  { x: 0.94, y: 0.16 },
-]
-
-function bezierPoint(t) {
-  const [p0, p1, p2, p3] = TRAIL_CONTROL
-  const u = 1 - t
-
-  const x =
-    u * u * u * p0.x +
-    3 * u * u * t * p1.x +
-    3 * u * t * t * p2.x +
-    t * t * t * p3.x
-
-  const y =
-    u * u * u * p0.y +
-    3 * u * u * t * p1.y +
-    3 * u * t * t * p2.y +
-    t * t * t * p3.y
-
-  return { x, y }
 }

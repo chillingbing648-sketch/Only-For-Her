@@ -224,38 +224,20 @@ video {
 }
 
 /* --------------------------------------------------------------------------
-   Universe — use available space rather than assuming desktop dimensions.
+   Universe — fluid layout invariants
    -------------------------------------------------------------------------- */
 .universe__field {
   width: 100%;
   min-width: 0;
-  min-height: clamp(520px, 66dvh, 780px);
 }
 
 .universe__node {
-  max-width: 150px;
   touch-action: manipulation;
 }
 
 .universe__node-label {
   overflow-wrap: normal;
   word-break: normal;
-}
-
-@media (min-width: 1200px) {
-  .universe__field {
-    min-height: min(72dvh, 820px);
-  }
-}
-
-@media (max-width: 900px) {
-  .universe__field {
-    min-height: clamp(520px, 64dvh, 720px);
-  }
-
-  .universe__node {
-    max-width: 132px;
-  }
 }
 
 /* --------------------------------------------------------------------------
@@ -317,9 +299,7 @@ video {
 
   .screen:not(.opening) {
     padding-top: calc(72px + env(safe-area-inset-top, 0px));
-    padding-bottom: calc(
-      var(--dock-height) + 18px + env(safe-area-inset-bottom, 0px)
-    );
+    padding-bottom: calc(64px + env(safe-area-inset-bottom, 0px));
   }
 
   .heading-xl {
@@ -425,35 +405,7 @@ video {
     max-width: min(100%, 320px);
   }
 
-  /* Mobile bottom navigation owns the lower safe area. */
-  .bottom-nav {
-    min-height: var(--dock-height);
-    padding:
-      8px
-      max(6px, env(safe-area-inset-left, 0px))
-      max(8px, env(safe-area-inset-bottom, 0px))
-      max(6px, env(safe-area-inset-right, 0px));
-  }
 
-  .bottom-nav button {
-    flex: 1 1 0;
-    min-width: 0;
-    max-width: 88px;
-  }
-
-  .music-player {
-    bottom: calc(var(--dock-height) + 8px + env(safe-area-inset-bottom, 0px));
-    right: max(12px, env(safe-area-inset-right, 0px));
-    max-width: calc(100vw - 24px);
-  }
-
-  .music-player__title {
-    max-width: clamp(90px, 32vw, 150px);
-  }
-
-  .secret-star {
-    bottom: calc(var(--dock-height) + 8px + env(safe-area-inset-bottom, 0px));
-  }
 
   /* Full-screen dialogs should never sit under browser UI or the dock. */
   .modal-backdrop {
@@ -539,10 +491,8 @@ video {
   }
 
   .music-player {
-    left: 12px;
-    right: 12px;
-    width: auto;
-    justify-content: flex-start;
+    right: 10px;
+    max-width: calc(100vw - 20px);
   }
 
   .music-player__body {

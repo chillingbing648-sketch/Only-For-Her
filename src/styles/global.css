@@ -462,27 +462,6 @@ ul { margin: 0; padding: 0; list-style: none; }
 
 .bottom-nav { display: none; }
 
-@media (max-width: 640px) {
-  .bottom-nav {
-    display: flex;
-    position: fixed;
-    bottom: 0; left: 0; right: 0;
-    z-index: 30;
-    display: flex;
-    justify-content: space-around;
-    padding: 10px calc(6px + env(safe-area-inset-left)) calc(10px + env(safe-area-inset-bottom));
-    background: linear-gradient(to top, rgba(8,10,18,0.95), rgba(8,10,18,0.7));
-    backdrop-filter: blur(8px);
-  }
-  .bottom-nav button {
-    font-size: 0.68rem;
-    color: var(--c-text-faint);
-    display: flex; flex-direction: column; align-items: center; gap: 4px;
-    min-width: 56px; min-height: 44px; justify-content: center;
-  }
-  .bottom-nav button[aria-current="true"] { color: var(--c-star); }
-}
-
 /* ==========================================================================
    Motion helpers
    ========================================================================== */

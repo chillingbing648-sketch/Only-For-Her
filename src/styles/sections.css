@@ -525,142 +525,30 @@
 
 
 /* ==========================================================================
-   Universe (constellation)
+   Timeline & Memory Museum (Editorial journal & exhibition stages)
    ========================================================================== */
-.universe__intro { position: relative; z-index: 2; margin-bottom: 1.5em; }
-.universe__field {
-  position: relative;
-  z-index: 2;
-  flex: 1;
-  min-height: 60vh;
-}
-.universe__lines {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  overflow: visible;
-}
-.universe__line {
-  stroke: var(--c-line-strong);
-  stroke-width: 0.18;
-  stroke-dasharray: 0.6 1.6;
-  transition: stroke var(--dur-m) var(--ease), opacity var(--dur-m) var(--ease);
-  opacity: 0.7;
-}
-.universe__line--lit {
-  stroke: var(--c-star);
-  opacity: 1;
-}
-.universe__field.is-traveling .universe__line:not(.universe__line--lit) { opacity: 0.25; }
-
-.universe__node {
-  position: absolute;
-  transform: translate(-50%, -50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  color: var(--c-text-dim);
-  padding: 10px;
-  border-radius: 50%;
-  animation: nodeEnter var(--dur-l) var(--ease) both;
-  animation-delay: var(--enter-delay, 0ms);
-  transition: color var(--dur-s) var(--ease), transform var(--dur-s) var(--ease), opacity var(--dur-m) var(--ease);
-}
-@keyframes nodeEnter {
-  from { opacity: 0; transform: translate(-50%, -50%) scale(0.7); }
-  to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-}
-.universe__node-glow {
-  position: absolute;
-  inset: -6px;
-  border-radius: 50%;
-  opacity: 0;
-  background: radial-gradient(circle, var(--c-gold-glow), transparent 70%);
-  transition: opacity var(--dur-m) var(--ease);
-  pointer-events: none;
-}
-.universe__node:hover .universe__node-glow,
-.universe__node:focus-visible .universe__node-glow { opacity: 1; }
-.universe__node:hover, .universe__node:focus-visible { color: var(--c-star); }
-.universe__node:hover:not(:disabled) { transform: translate(-50%, -50%) scale(1.08); }
-
-.universe__node.is-active { color: var(--c-star-bright); z-index: 3; }
-.universe__node.is-active .universe__node-glow {
-  opacity: 1;
-  animation: nodeGlowPulse 420ms ease-out;
-}
-.universe__node.is-active { animation: nodeEnter 640ms var(--ease) both, nodeActivate 420ms var(--ease) forwards; }
-@keyframes nodeActivate {
-  to { transform: translate(-50%, -50%) scale(1.24); }
-}
-@keyframes nodeGlowPulse {
-  from { box-shadow: 0 0 0 0 var(--c-gold-glow); }
-  to { box-shadow: 0 0 30px 10px var(--c-gold-glow); }
-}
-.universe__node.is-dimmed { opacity: 0.25; }
-.universe__node:disabled { cursor: default; }
-
-.universe__node-label {
-  font-size: 0.74rem;
-  white-space: nowrap;
-  max-width: 130px;
-  white-space: normal;
-  text-align: center;
-  line-height: 1.2;
-}
-.universe__node--float {
-  animation: nodeEnter var(--dur-l) var(--ease) both, nodeFloat 6s ease-in-out infinite;
-  animation-delay: var(--enter-delay, 0ms), var(--float-delay, 0s);
-}
-@keyframes nodeFloat {
-  0%, 100% { margin-top: 0; }
-  50% { margin-top: -8px; }
-}
-
-@media (max-width: 640px) {
-  .universe__lines { display: none; }
-  .universe__field {
-    position: static;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    min-height: 0;
-  }
-  .universe__node {
-    position: static;
-    transform: none;
-    flex-direction: row;
-    justify-content: flex-start;
-    gap: 12px;
-    width: 100%;
-    padding: 16px 10px;
-    border-bottom: 1px solid var(--c-line);
-    border-radius: 0;
-    animation: fadeUp var(--dur-l) var(--ease) both;
-    animation-delay: var(--enter-delay, 0ms);
-  }
-  .universe__node:hover:not(:disabled), .universe__node:focus-visible { transform: none; background: var(--c-line); border-radius: var(--radius-m); }
-  .universe__node-label { text-align: left; max-width: none; font-size: 0.95rem; }
-  .universe__node-glow { display: none; }
-  .universe__node.is-active { animation: fadeUp var(--dur-l) var(--ease) both; background: rgba(242,200,131,0.08); border-radius: var(--radius-m); }
-}
-
-/* ==========================================================================
-   Timeline / Memory Museum (shared journal-page look)
-   ========================================================================== */
-.timeline__page, .museum__exhibit {
+.timeline__page {
   margin-top: 1.8em;
   padding: clamp(22px, 4.5vw, 36px);
-  border-radius: var(--radius-l);
-  background: rgba(18, 23, 40, 0.72);
+  border-radius: var(--radius-m);
+  background: rgba(14, 18, 32, 0.42);
   background-image:
     radial-gradient(120% 90% at 0% 0%, rgba(var(--rgb-gold), 0.06), transparent 50%),
     radial-gradient(100% 80% at 100% 100%, rgba(var(--rgb-lav), 0.05), transparent 50%),
     var(--glass-sheen);
-  border: 1px solid var(--edge);
-  box-shadow: var(--rim-hi), var(--elev-2);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-top: 1px solid rgba(var(--rgb-gold-hi), 0.25);
+  box-shadow: 0 16px 40px -14px rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+}
+
+.museum__exhibit {
+  margin-top: 1.4em;
+  padding: 0;
+  background: none;
+  border: none;
+  box-shadow: none;
+  text-align: center;
 }
 .timeline__date {
   font-family: var(--font-sans);
@@ -1531,16 +1419,6 @@
   isolation: isolate;
 }
 
-/* Intro copy — kept crisp over the new atmosphere */
-.universe__intro { position: relative; z-index: 2; margin-bottom: 1.5em; }
-.universe__intro .heading-l {
-  text-shadow: 0 0 34px rgba(var(--u-blush), 0.25), 0 1px 14px rgba(4, 3, 7, 0.9);
-}
-.universe__intro .eyebrow,
-.universe__intro .body-text--soft {
-  color: #a4abbf;
-  text-shadow: 0 1px 12px rgba(4, 3, 7, 0.95);
-}
 
 /* --------------------------------------------------------------------------
    Deep field  (scoped to the universe so Opening / Final keep their sky)
@@ -1624,31 +1502,69 @@
    Typography Refinements (Universe Intro)
    Elegant, restrained layout for the headline and subtitle. 
    -------------------------------------------------------------------------- */
+/* --------------------------------------------------------------------------
+   Typography Refinements (Universe Intro)
+   Editorial hierarchy: tracked quiet eyebrow, Fraunces serif display heading,
+   and restrained sans-serif prose.
+   -------------------------------------------------------------------------- */
 .universe__intro {
-  margin-top: 4vh;
-  margin-bottom: -2vh;
   position: relative;
   z-index: 10;
+  text-align: center;
+  padding-top: max(1.2rem, env(safe-area-inset-top, 0px));
+  margin-bottom: 2rem;
 }
-.universe__intro .eyebrow {
-  margin-bottom: 1.2em;
-  color: rgba(220, 226, 248, 0.45);
+
+.universe__intro .eyebrow,
+.universe__intro .universe__eyebrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6em;
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
-  letter-spacing: 0.12em;
+  color: rgba(var(--rgb-lav), 0.8);
+  margin-bottom: 0.85em;
 }
-.universe__intro .heading-l {
-  font-size: clamp(1.8rem, 5vw, 2.7rem);
-  letter-spacing: -0.01em;
-  color: rgba(255, 255, 255, 0.94);
-  text-shadow: 0 0 24px rgba(255, 255, 255, 0.12);
-  margin-bottom: 0.4em;
+.universe__intro .eyebrow::before,
+.universe__intro .universe__eyebrow::before {
+  content: '';
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--c-star-bright);
+  box-shadow: 0 0 8px 1px rgba(var(--rgb-gold), 0.6);
 }
-.universe__intro .body-text {
-  font-size: 1.05rem;
-  color: rgba(220, 226, 248, 0.55);
+
+.universe__intro .heading-l,
+.universe__intro .universe__heading {
+  font-family: var(--font-serif);
+  font-size: clamp(2rem, 5.5vw, 3.2rem);
+  font-weight: 400;
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+  color: #faf7f0;
+  text-shadow:
+    0 0 40px rgba(var(--rgb-gold), 0.2),
+    0 2px 20px rgba(var(--rgb-night), 0.85);
+  margin: 0 auto 0.55em;
+  max-width: 20ch;
+  text-wrap: balance;
+}
+
+.universe__intro .body-text,
+.universe__intro .universe__desc {
+  font-family: var(--font-sans);
+  font-size: clamp(0.95rem, 0.9rem + 0.2vw, 1.05rem);
+  color: rgba(220, 226, 248, 0.62);
+  line-height: 1.65;
   letter-spacing: 0.015em;
-  max-width: 42ch;
+  max-width: 36ch;
   margin: 0 auto;
+  text-wrap: pretty;
 }
 
 /* --------------------------------------------------------------------------
@@ -1658,7 +1574,8 @@
   position: relative;
   z-index: 2;
   flex: 1;
-  min-height: 60vh;
+  width: 100%;
+  min-height: clamp(540px, 72dvh, 840px);
 }
 .universe__field::before {
   content: '';
@@ -1693,11 +1610,7 @@
 
 /* --------------------------------------------------------------------------
    Constellation paths
-   Round-capped micro-dashes read as stardust; three stacked drop-shadows
-   accumulate into a soft bloom. `non-scaling-stroke` keeps every thread the
-   same thickness and bead spacing regardless of the stretched viewBox.
-   The layer is nudged up ~13px so paths meet each star's icon instead of the
-   middle of its label (a purely visual offset; no coordinates change).
+   Dynamic hairline threads with soft stardust glow and responsive precision.
    -------------------------------------------------------------------------- */
 .universe__lines {
   position: absolute;
@@ -1705,59 +1618,42 @@
   width: 100%;
   height: 100%;
   overflow: visible;
-  transform: translateY(-13px);
-  filter: drop-shadow(0 0 5px rgba(var(--rgb-nebula-glow), 0.65));
   pointer-events: none;
 }
-.universe__lines--desktop { display: block; }
-.universe__lines--mobile { display: none; }
 
 .universe__line {
   vector-effect: non-scaling-stroke;
-  stroke: rgba(216, 208, 246, 0.45);
-  stroke-width: 1.5px;
+  stroke: rgba(216, 208, 246, 0.28);
+  stroke-width: 1px;
   stroke-linecap: round;
-  stroke-dasharray: 0.5px 5.5px;
+  stroke-dasharray: 1px 4.5px;
   transition: stroke var(--dur-m) var(--ease), opacity var(--dur-m) var(--ease), stroke-width var(--dur-m) var(--ease), filter var(--dur-m) var(--ease);
-  opacity: 0.75;
-  animation:
-    uLineFlow 140s linear infinite,
-    uLineWave 16s ease-in-out infinite;
+  opacity: 0.7;
 }
-/* A slow pulse of light hands off from thread to thread, node 1 → node 10. */
-.universe__line:nth-child(1) { animation-delay: 0s, 0s; }
-.universe__line:nth-child(2) { animation-delay: 0s, 1.2s; }
-.universe__line:nth-child(3) { animation-delay: 0s, 2.4s; }
-.universe__line:nth-child(4) { animation-delay: 0s, 3.6s; }
-.universe__line:nth-child(5) { animation-delay: 0s, 4.8s; }
-.universe__line:nth-child(6) { animation-delay: 0s, 6s; }
-.universe__line:nth-child(7) { animation-delay: 0s, 7.2s; }
-.universe__line:nth-child(8) { animation-delay: 0s, 8.4s; }
-.universe__line:nth-child(9) { animation-delay: 0s, 9.6s; }
 
 /* Connected thread response during hover/focus */
 .universe__line--active {
   stroke: rgba(255, 235, 195, 0.95);
-  stroke-width: 2px;
-  stroke-dasharray: 0.5px 4px;
+  stroke-width: 1.5px;
+  stroke-dasharray: none;
   opacity: 1;
-  filter: drop-shadow(0 0 5px rgba(242, 200, 131, 0.65));
+  filter: drop-shadow(0 0 6px rgba(242, 200, 131, 0.7));
 }
 
 .universe__line--dimmed {
-  opacity: 0.22;
-  stroke-width: 1.2px;
+  opacity: 0.1;
+  stroke-width: 0.8px;
 }
 
 .universe__line--lit {
   stroke: var(--c-star-bright);
-  stroke-width: 2.2px;
+  stroke-width: 1.8px;
   stroke-dasharray: none;
   opacity: 1;
   animation: none;
-  filter: drop-shadow(0 0 8px rgba(255, 227, 173, 0.8));
+  filter: drop-shadow(0 0 8px rgba(255, 227, 173, 0.85));
 }
-.universe__field.is-traveling .universe__line:not(.universe__line--lit) { opacity: 0.2; }
+.universe__field.is-traveling .universe__line:not(.universe__line--lit) { opacity: 0.15; }
 
 /* --------------------------------------------------------------------------
    Nodes — small worlds, not buttons
@@ -2138,16 +2034,11 @@
   .universe__field::before,
   .universe__field::after { display: none; }
 
-  /* Curated responsive constellation field on mobile */
-  .universe__lines--desktop { display: none; }
-  .universe__lines--mobile { display: block; }
-
   .universe__field {
     position: relative;
     width: 100%;
-    min-height: 86vh;
-    min-height: 86dvh;
-    padding: 10px 10px 80px;
+    min-height: clamp(660px, 86dvh, 920px);
+    padding: 10px 12px 90px;
     margin: 0 auto;
     display: block;
   }
@@ -2994,9 +2885,8 @@ a.pill-tag:active { scale: 0.95; transition-duration: var(--dur-xs); }
 .envelope .envelope__flap { background: linear-gradient(180deg, #262f52, #1a2140); }
 .envelope__seal { text-shadow: 0 0 18px rgba(var(--rgb-gold), 0.75); }
 
-/* Timeline + museum: a tapering hairline instead of a flat rule */
-.screen__inner > .timeline__page,
-.screen__inner > .museum__exhibit {
+/* Timeline: a tapering hairline instead of a flat rule */
+.screen__inner > .timeline__page {
   border-top-color: transparent;
   background-image: linear-gradient(90deg, rgba(var(--rgb-lav), 0.34), rgba(var(--rgb-lav), 0.06) 62%, transparent);
   background-size: 100% 1px;
@@ -3060,90 +2950,134 @@ a.pill-tag:active { scale: 0.95; transition-duration: var(--dur-xs); }
 }
 
 .bottom-nav {
-  display: none !important;
+  display: none;
 }
 
 @media (max-width: 640px) {
   .screen:not(.opening) {
     padding-left: max(var(--gap-page), var(--safe-l));
     padding-right: max(var(--gap-page), var(--safe-r));
-    padding-bottom: calc(var(--gap-page) + 96px + var(--safe-b));
+    padding-bottom: calc(var(--gap-page) + 68px + var(--safe-b));
   }
-  /* room for the mini-player above the dock, only when it exists */
+  /* room for the mini-player above the story navigation, only when it exists */
   .app-shell:has(.music-player) .screen:not(.opening) {
-    padding-bottom: calc(var(--gap-page) + 152px + var(--safe-b));
+    padding-bottom: calc(var(--gap-page) + 112px + var(--safe-b));
   }
 
-  /* Floating dock */
+  /* Cinematic Story Navigation Bar */
   .bottom-nav {
-    display: flex !important;
+    display: flex;
     position: fixed;
-    left: max(12px, var(--safe-l));
-    right: max(12px, var(--safe-r));
-    bottom: calc(8px + var(--safe-b));
+    left: 0;
+    right: 0;
+    bottom: 0;
     z-index: 32;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
-    gap: 2px;
-    padding: 6px;
-
-    border: 1px solid var(--edge);
-    border-radius: 24px;
-    background-color: rgba(12, 16, 30, 0.64);
-    background-image: var(--glass-sheen);
-    -webkit-backdrop-filter: blur(22px) saturate(1.45);
-    backdrop-filter: blur(22px) saturate(1.45);
-    box-shadow: var(--rim-hi), 0 1px 2px rgba(3, 4, 10, 0.5), 0 22px 44px -14px rgba(3, 4, 10, 0.85);
+    padding-top: 10px;
+    padding-bottom: max(10px, var(--safe-b));
+    padding-left: max(8px, var(--safe-l));
+    padding-right: max(8px, var(--safe-r));
+    background: linear-gradient(to top, rgba(5, 4, 8, 0.96) 0%, rgba(5, 4, 8, 0.76) 65%, transparent 100%);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    pointer-events: none;
+    border: none;
   }
-  .bottom-nav button {
+
+  .bottom-nav__container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 440px;
+    margin: 0 auto;
+    pointer-events: auto;
+    gap: 4px;
+  }
+
+  .bottom-nav__item {
     position: relative;
-    isolation: isolate;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
     flex: 1 1 0;
     min-width: 0;
-    min-height: 54px;
-    padding: 0 4px;
-    border-radius: 18px;
-    font-size: 0.7rem;
-    font-weight: 500;
-    letter-spacing: 0.015em;
-    color: var(--text-3);
-    transition:
-      color var(--dur-m) var(--ease-out),
-      background-color var(--dur-m) var(--ease-out),
-      box-shadow var(--dur-m) var(--ease-out),
-      scale var(--dur-m) var(--ease-spring);
+    min-height: 44px;
+    padding: 2px 2px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    touch-action: manipulation;
+    transition: transform var(--dur-s) var(--ease), opacity var(--dur-s) var(--ease);
   }
-  .bottom-nav button[aria-current="true"] {
-    color: var(--c-star-bright);
-    background-color: rgba(var(--rgb-gold), 0.07);
-    background-image: radial-gradient(70% 100% at 50% 0%, rgba(var(--rgb-gold), 0.22), transparent 75%);
-    box-shadow: inset 0 0 0 1px rgba(var(--rgb-gold), 0.2), 0 0 24px -6px rgba(var(--rgb-gold), 0.3);
-  }
-  /* a small lamp above the current place */
-  .bottom-nav button[aria-current="true"]::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 50%;
-    width: 16px;
-    height: 2px;
-    margin-left: -8px;
-    border-radius: 0 0 2px 2px;
-    background: var(--c-star-bright);
-    box-shadow: 0 0 10px 1px rgba(var(--rgb-gold-hi), 0.7);
-  }
-  .bottom-nav button:active { scale: 0.94; transition-duration: var(--dur-xs); }
-  .bottom-nav button:focus-visible { outline-offset: -3px; }
 
-  /* Mini-player rides just above the dock; the easter-egg star mirrors it */
-  .music-player {
-    bottom: calc(86px + var(--safe-b));
-    right: max(12px, var(--safe-r));
-    max-width: calc(100vw - 24px - var(--safe-l) - var(--safe-r));
+  .bottom-nav__dot {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: transparent;
+    transition: background var(--dur-s) var(--ease), box-shadow var(--dur-s) var(--ease), transform var(--dur-s) var(--ease);
   }
+
+  .bottom-nav__label {
+    font-family: var(--font-sans);
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(183, 174, 214, 0.55);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    transition: color var(--dur-s) var(--ease), text-shadow var(--dur-s) var(--ease);
+  }
+
+  .bottom-nav__item:hover .bottom-nav__label,
+  .bottom-nav__item:focus-visible .bottom-nav__label {
+    color: rgba(242, 235, 240, 0.9);
+  }
+
+  .bottom-nav__item.is-active .bottom-nav__dot,
+  .bottom-nav__item[aria-current="page"] .bottom-nav__dot {
+    background: var(--c-star-bright);
+    box-shadow: 0 0 8px 2px rgba(var(--rgb-gold), 0.7);
+    transform: scale(1.3);
+  }
+
+  .bottom-nav__item.is-active .bottom-nav__label,
+  .bottom-nav__item[aria-current="page"] .bottom-nav__label {
+    color: var(--c-star-bright);
+    text-shadow: 0 0 12px rgba(var(--rgb-gold), 0.4);
+  }
+
+  .bottom-nav__item:active {
+    transform: scale(0.94);
+  }
+
+  /* Compact Ambient Soundtrack Pill */
+  .music-player {
+    bottom: calc(56px + var(--safe-b));
+    right: max(14px, var(--safe-r));
+    height: 36px;
+    padding: 3px 12px 3px 4px;
+    max-width: calc(100vw - 28px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background-color: rgba(12, 10, 20, 0.82);
+    box-shadow: 0 6px 20px -4px rgba(0, 0, 0, 0.65);
+  }
+
+  .music-player__title {
+    max-width: clamp(90px, 30vw, 140px);
+    font-size: 0.74rem;
+  }
+
   .app-shell > .secret-star {
-    bottom: calc(92px + var(--safe-b));
-    left: max(12px, var(--safe-l));
+    bottom: calc(60px + var(--safe-b));
+    left: max(14px, var(--safe-l));
   }
 
   /* Section mobile adjustments */
@@ -3170,7 +3104,7 @@ a.pill-tag:active { scale: 0.95; transition-duration: var(--dur-xs); }
     padding: 10px 12px;
     gap: 12px;
   }
-  .timeline__page, .museum__exhibit {
+  .timeline__page {
     padding: 18px 16px;
     border-radius: var(--radius-m);
   }
@@ -3180,22 +3114,18 @@ a.pill-tag:active { scale: 0.95; transition-duration: var(--dur-xs); }
 }
 
 @media (max-width: 380px) {
-  .bottom-nav {
-    padding: 4px 2px;
+  .bottom-nav__container {
     gap: 1px;
   }
-  .bottom-nav button {
+  .bottom-nav__label {
     font-size: 0.62rem;
-    padding: 0 2px;
-    min-height: 48px;
-    letter-spacing: 0;
+    letter-spacing: 0.04em;
   }
   .music-player {
-    max-width: calc(100vw - 16px);
-    right: 8px;
+    right: 10px;
   }
   .music-player__title {
-    max-width: 70px;
+    max-width: 76px;
   }
   .heading-xl {
     font-size: 1.95rem;

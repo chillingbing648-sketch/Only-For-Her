@@ -17,10 +17,11 @@ const MENU_ITEMS = [
 
 const BOTTOM_ITEMS = [
   { id: 'universe', label: 'Universe' },
+  { id: 'beginning', label: 'Beginning' },
   { id: 'museum', label: 'Memories' },
   { id: 'letter', label: 'Letter' },
   { id: 'future', label: 'Future' },
-  { id: 'final', label: 'The End' },
+  { id: 'final', label: 'Final' },
 ]
 
 export default function Navigation({ route, navigate }) {
@@ -87,16 +88,24 @@ export default function Navigation({ route, navigate }) {
         </div>
       )}
 
-      <nav className="bottom-nav" aria-label="Quick navigation">
-        {BOTTOM_ITEMS.map((item) => (
-          <button
-            key={item.id}
-            onClick={() => navigate(item.id)}
-            aria-current={route === item.id}
-          >
-            {item.label}
-          </button>
-        ))}
+      {/* Cinematic Story Navigation */}
+      <nav className="bottom-nav" aria-label="Story chapters">
+        <div className="bottom-nav__container">
+          {BOTTOM_ITEMS.map((item) => {
+            const isActive = route === item.id
+            return (
+              <button
+                key={item.id}
+                className={`bottom-nav__item ${isActive ? 'is-active' : ''}`}
+                onClick={() => navigate(item.id)}
+                aria-current={isActive ? 'page' : undefined}
+              >
+                <span className="bottom-nav__dot" aria-hidden="true" />
+                <span className="bottom-nav__label">{item.label}</span>
+              </button>
+            )
+          })}
+        </div>
       </nav>
     </>
   )
