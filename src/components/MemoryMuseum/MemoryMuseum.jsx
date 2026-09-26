@@ -37,22 +37,27 @@ export default function MemoryMuseum() {
         <h1 className="heading-l">Our Memory Museum</h1>
 
         <div className="museum__exhibit fade-up" key={exhibit.id}>
-          <p className="museum__number">Exhibit {String(index + 1).padStart(3, '0')}</p>
-          <h2 className="heading-l">{exhibit.title}</h2>
+          <p className="museum__number">
+            Exhibit {String(index + 1).padStart(3, '0')}
+            {exhibit.date ? ` · ${exhibit.date}` : ''}
+            {exhibit.location ? ` · ${exhibit.location}` : ''}
+          </p>
+          <h2 className="heading-l museum__title">{exhibit.title}</h2>
           <PolaroidPhoto
             image={exhibit.image}
             video={exhibit.video || (isVideoPath(exhibit.image) ? exhibit.image : undefined)}
             alt={exhibit.title}
+            caption={exhibit.date || exhibit.location}
             rotate={rotate}
             onClick={() => setViewerOpen(true)}
           />
-          <p className="body-text body-text--soft">{exhibit.date}</p>
-          <p className="body-text">{exhibit.story}</p>
-          <div className="stack gap-s" style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
-            {exhibit.location && <span className="pill-tag">📍 {exhibit.location}</span>}
-            {exhibit.song && <span className="pill-tag">🎵 {exhibit.song}</span>}
-            {exhibit.mood && <span className="pill-tag">☁️ {exhibit.mood}</span>}
-          </div>
+          <p className="body-text museum__story">{exhibit.story}</p>
+          {(exhibit.song || exhibit.mood) && (
+            <div className="museum__meta">
+              {exhibit.song && <span className="museum__meta-item">🎵 {exhibit.song}</span>}
+              {exhibit.mood && <span className="museum__meta-item">☁️ {exhibit.mood}</span>}
+            </div>
+          )}
         </div>
 
         <div className="timeline__controls">
@@ -84,7 +89,7 @@ function isVideoPath(path) {
   return typeof path === 'string' && /\\.mp4(?:$|[?#])/i.test(path)
 }
 
-function PolaroidPhoto({ image, video, alt, rotate, onClick }) {
+function PolaroidPhoto({ image, video, alt, caption, rotate, onClick }) {
   const ref = useRef(null)
   const reduced = useReducedMotion()
 
@@ -128,6 +133,7 @@ function PolaroidPhoto({ image, video, alt, rotate, onClick }) {
         ) : (
           <SmartImage src={image} alt={alt} label="A photo from this exhibit" />
         )}
+        {caption && <span className="polaroid__caption">{caption}</span>}
       </button>
     </div>
   )

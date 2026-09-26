@@ -982,100 +982,6 @@ video {
 }
 
 /* --------------------------------------------------------------------------
-   Universe: desktop = spatial constellation, mobile = intentional list.
-   Do not allow the desktop field height contract to leak into the list.
-   -------------------------------------------------------------------------- */
-@media (max-width: 640px) {
-  .universe__intro {
-    width: 100%;
-    max-width: 680px;
-    margin-inline: auto;
-    margin-bottom: 1.25rem;
-  }
-
-  .universe__field {
-    width: 100%;
-    max-width: 680px;
-    min-height: 0 !important;
-    height: auto;
-    margin-inline: auto;
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-  }
-
-  .universe__lines,
-  .universe__lines--desktop,
-  .universe__lines--mobile {
-    display: none !important;
-  }
-
-  .universe__node {
-    position: relative;
-    inset: auto !important;
-    left: auto !important;
-    top: auto !important;
-    width: 100%;
-    max-width: none;
-    min-height: 60px;
-    padding: 14px 12px;
-    margin: 0;
-    display: grid;
-    grid-template-columns: 32px minmax(0, 1fr);
-    align-items: center;
-    justify-content: initial;
-    gap: 12px;
-    transform: none !important;
-    border-bottom: 1px solid var(--c-line);
-    border-radius: 0;
-    text-align: left;
-  }
-
-  .universe__node:first-child {
-    border-top: 1px solid var(--c-line);
-  }
-
-  .universe__node svg {
-    width: 24px;
-    height: 24px;
-    justify-self: center;
-  }
-
-  .universe__node-label {
-    min-width: 0;
-    max-width: none;
-    margin: 0;
-    text-align: left;
-    font-size: 0.94rem;
-    line-height: 1.35;
-    white-space: normal;
-    overflow-wrap: break-word;
-  }
-
-  .universe__node.is-active,
-  .universe__node.is-connected {
-    background: rgba(var(--rgb-gold), 0.07);
-    border-radius: var(--radius-m);
-  }
-
-  .universe__node.is-active {
-    transform: none !important;
-  }
-
-  .universe__node-glow {
-    display: none;
-  }
-
-  .universe__node--float {
-    animation: fadeUp var(--dur-l) var(--ease) both;
-  }
-
-  .universe__node--float.is-active {
-    animation: fadeUp var(--dur-l) var(--ease) both;
-  }
-}
-
-/* --------------------------------------------------------------------------
    Narrow phones: reduce geometry, never content
    -------------------------------------------------------------------------- */
 @media (max-width: 380px) {
@@ -1097,16 +1003,5 @@ video {
   .photo-viewer__figure video {
     max-width: 100%;
     max-height: calc(100dvh - 148px);
-  }
-
-  .universe__node {
-    min-height: 56px;
-    grid-template-columns: 30px minmax(0, 1fr);
-    gap: 10px;
-    padding-inline: 8px;
-  }
-
-  .universe__node-label {
-    font-size: 0.9rem;
   }
 }

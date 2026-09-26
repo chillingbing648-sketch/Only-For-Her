@@ -136,7 +136,7 @@ export default function Universe({ navigate }) {
   const hasMeasured = fieldSize.width > 0 && Object.keys(nodePositions).length === NODES.length
 
   return (
-    <div className="screen universe">
+    <div className={`screen universe ${interactedId ? 'has-active' : ''}`}>
       <StarField density={0.7} respondToPointer={!reduced} />
 
       <header className="screen__inner universe__intro fade-in">
@@ -178,8 +178,8 @@ export default function Universe({ navigate }) {
             const isDimmed = interactedId && !isRelated
 
             let lineClass = 'universe__line'
-            if (isLit) lineClass += ' universe__line--lit'
-            else if (isRelated) lineClass += ' universe__line--active'
+            if (isLit) lineClass += ' universe__line--lit is-connected'
+            else if (isRelated) lineClass += ' universe__line--active is-connected'
             else if (isDimmed) lineClass += ' universe__line--dimmed'
 
             let x1, y1, x2, y2

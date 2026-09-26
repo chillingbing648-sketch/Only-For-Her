@@ -73,17 +73,17 @@ function StarField({ density = 1, respondToPointer = true }) {
 
       const generated = []
 
-      // Composition balance inspired by References 2 + 3:
-      // ~52% Fine cosmic dust
-      // ~28% Small normal stars
-      // ~13% Medium 4-point cross twinkles
-      // ~2% Large luminous starbursts
-      // ~5% Glowing outlined celestial hearts
-      const burstCount = Math.max(isLowPower ? 2 : 4, Math.min(isLowPower ? 3 : 7, Math.round(totalCount * 0.022)))
-      const heartCount = Math.max(isLowPower ? 4 : 8, Math.min(isLowPower ? 6 : 14, Math.round(totalCount * 0.045)))
-      const crossCount = Math.max(isLowPower ? 10 : 20, Math.round(totalCount * 0.13))
-      const starCount = Math.round(totalCount * 0.28)
-      const dustCount = Math.max(30, totalCount - burstCount - heartCount - crossCount - starCount)
+      // Composition balance:
+      // ~54% Fine cosmic dust motes
+      // ~32% Small normal stars
+      // ~11% Medium 4-point cross twinkles
+      // ~1.5% Luminous starbursts (delicate optical spikes)
+      // ~1.5% Rare ethereal celestial hearts
+      const burstCount = Math.max(isLowPower ? 1 : 2, Math.min(isLowPower ? 2 : 4, Math.round(totalCount * 0.015)))
+      const heartCount = Math.max(isLowPower ? 1 : 2, Math.min(isLowPower ? 2 : 4, Math.round(totalCount * 0.015)))
+      const crossCount = Math.max(isLowPower ? 8 : 16, Math.round(totalCount * 0.11))
+      const starCount = Math.round(totalCount * 0.32)
+      const dustCount = Math.max(40, totalCount - burstCount - heartCount - crossCount - starCount)
 
       // 1. Fine cosmic dust motes (micro-particulates)
       for (let i = 0; i < dustCount; i++) {
@@ -102,8 +102,8 @@ function StarField({ density = 1, respondToPointer = true }) {
           type: TYPE_DUST,
           x,
           y,
-          r: Math.random() * 0.5 + 0.35, // 0.35px - 0.85px micro dust
-          baseAlpha: Math.random() * 0.35 + 0.12,
+          r: Math.random() * 0.45 + 0.3, // 0.3px - 0.75px micro dust
+          baseAlpha: Math.random() * 0.32 + 0.1,
           twinkleAmp: Math.random() * 0.12 + 0.05,
           twinkleSpeed: Math.random() * 0.4 + 0.15,
           twinkleOffset: Math.random() * Math.PI * 2,
@@ -120,12 +120,12 @@ function StarField({ density = 1, respondToPointer = true }) {
           type: TYPE_STAR,
           x: Math.random(),
           y: Math.random(),
-          r: Math.random() * 0.6 + 0.9, // 0.9px - 1.5px
-          baseAlpha: Math.random() * 0.45 + 0.42,
-          twinkleAmp: Math.random() * 0.22 + 0.12,
-          twinkleSpeed: Math.random() * 0.8 + 0.3,
+          r: Math.random() * 0.5 + 0.8, // 0.8px - 1.3px
+          baseAlpha: Math.random() * 0.42 + 0.38,
+          twinkleAmp: Math.random() * 0.2 + 0.1,
+          twinkleSpeed: Math.random() * 0.75 + 0.3,
           twinkleOffset: Math.random() * Math.PI * 2,
-          parallax: Math.random() * 0.18 + 0.08,
+          parallax: Math.random() * 0.16 + 0.07,
           colorIdx: Math.random() < 0.5 ? 0 : (Math.random() < 0.75 ? 1 : 3),
           driftX: (Math.random() - 0.5) * 0.00003,
           driftY: (Math.random() - 0.5) * 0.00003,
@@ -138,13 +138,13 @@ function StarField({ density = 1, respondToPointer = true }) {
           type: TYPE_CROSS,
           x: Math.random(),
           y: Math.random(),
-          r: Math.random() * 0.5 + 1.2, // 1.2px - 1.7px core
-          flare: Math.random() * 7 + 7, // 7px - 14px 4-point ray
-          baseAlpha: Math.random() * 0.3 + 0.65,
-          twinkleAmp: Math.random() * 0.25 + 0.18,
-          twinkleSpeed: Math.random() * 0.7 + 0.35,
+          r: Math.random() * 0.4 + 1.1, // 1.1px - 1.5px core
+          flare: Math.random() * 5 + 6, // 6px - 11px 4-point ray
+          baseAlpha: Math.random() * 0.25 + 0.6,
+          twinkleAmp: Math.random() * 0.22 + 0.15,
+          twinkleSpeed: Math.random() * 0.65 + 0.3,
           twinkleOffset: Math.random() * Math.PI * 2,
-          parallax: Math.random() * 0.25 + 0.18,
+          parallax: Math.random() * 0.22 + 0.15,
           colorIdx: Math.random() < 0.55 ? 0 : (Math.random() < 0.85 ? 1 : 2),
           driftX: (Math.random() - 0.5) * 0.000035,
           driftY: (Math.random() - 0.5) * 0.000035,
@@ -157,36 +157,36 @@ function StarField({ density = 1, respondToPointer = true }) {
           type: TYPE_BURST,
           x: Math.random() * 0.88 + 0.06,
           y: Math.random() * 0.88 + 0.06,
-          r: Math.random() * 0.8 + 2.2, // 2.2px - 3.0px core
-          spikeH: Math.random() * 22 + 28, // 28px - 50px horizontal spike
-          spikeV: Math.random() * 28 + 34, // 34px - 62px vertical spike
-          diagSpike: Math.random() * 8 + 12, // 12px - 20px 45-deg rays
-          baseAlpha: Math.random() * 0.2 + 0.8,
+          r: Math.random() * 0.5 + 1.4, // 1.4px - 1.9px core
+          spikeH: Math.random() * 14 + 18, // 18px - 32px horizontal spike
+          spikeV: Math.random() * 16 + 22, // 22px - 38px vertical spike
+          diagSpike: Math.random() * 5 + 7, // 7px - 12px 45-deg rays
+          baseAlpha: Math.random() * 0.2 + 0.55,
           twinkleAmp: Math.random() * 0.15 + 0.1,
           twinkleSpeed: Math.random() * 0.35 + 0.18,
           twinkleOffset: Math.random() * Math.PI * 2,
-          parallax: Math.random() * 0.3 + 0.32,
+          parallax: Math.random() * 0.2 + 0.2,
           colorIdx: Math.random() < 0.6 ? 1 : 3,
           driftX: (Math.random() - 0.5) * 0.00004,
           driftY: (Math.random() - 0.5) * 0.00004,
         })
       }
 
-      // 5. Glowing outlined celestial hearts (Ref 2)
+      // 5. Glowing outlined celestial hearts (rare easter egg)
       for (let i = 0; i < heartCount; i++) {
         generated.push({
           type: TYPE_HEART,
-          x: Math.random() * 0.88 + 0.06,
-          y: Math.random() * 0.88 + 0.06,
-          size: Math.random() * 7 + (i % 2 === 0 ? 8 : 14), // 8px - 21px
-          rotation: (Math.random() - 0.5) * 0.52, // Subtle celestial tilt
-          baseAlpha: Math.random() * 0.35 + 0.5,
-          twinkleAmp: Math.random() * 0.2 + 0.12,
-          twinkleSpeed: Math.random() * 0.45 + 0.2,
+          x: Math.random() * 0.84 + 0.08,
+          y: Math.random() * 0.84 + 0.08,
+          size: Math.random() * 5 + 9, // 9px - 14px delicate size
+          rotation: (Math.random() - 0.5) * 0.45, // Subtle celestial tilt
+          baseAlpha: Math.random() * 0.2 + 0.36,
+          twinkleAmp: Math.random() * 0.16 + 0.1,
+          twinkleSpeed: Math.random() * 0.35 + 0.15,
           twinkleOffset: Math.random() * Math.PI * 2,
-          parallax: Math.random() * 0.2 + 0.14,
-          driftX: (Math.random() - 0.5) * 0.00003,
-          driftY: (Math.random() - 0.5) * 0.00003,
+          parallax: Math.random() * 0.15 + 0.1,
+          driftX: (Math.random() - 0.5) * 0.000025,
+          driftY: (Math.random() - 0.5) * 0.000025,
         })
       }
 
