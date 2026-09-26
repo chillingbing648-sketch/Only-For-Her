@@ -720,3 +720,218 @@ video {
     background-color: rgba(8, 10, 18, 0.94);
   }
 }
+
+/* ==========================================================================
+   Mobile polish hardening
+   --------------------------------------------------------------------------
+   Final mobile-only pass. Keeps the existing visual language intact while
+   preventing common phone collisions, clipped controls, and viewport-height
+   issues on modern iOS/Android browsers.
+   ========================================================================== */
+
+@media (max-width: 640px) {
+  html,
+  body {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  body {
+    overscroll-behavior-x: none;
+  }
+
+  .screen {
+    min-height: 100svh;
+    min-height: 100dvh;
+  }
+
+  /* Keep the cinematic opening centered without allowing tall copy to
+     collide with browser chrome on short phones. */
+  .opening {
+    min-height: 100svh;
+    min-height: 100dvh;
+    padding-top: max(20px, env(safe-area-inset-top, 0px));
+    padding-bottom: max(20px, env(safe-area-inset-bottom, 0px));
+  }
+
+  .opening__copy {
+    width: min(100%, 420px);
+    padding-inline: 0;
+  }
+
+  .opening__copy > .heading-xl {
+    width: 100%;
+    max-width: 13ch;
+    font-size: clamp(2rem, 9vw, 2.8rem);
+    text-wrap: balance;
+  }
+
+  .opening__subline {
+    width: 100%;
+    max-width: 31ch;
+    text-wrap: balance;
+  }
+
+  .opening__you-star {
+    max-width: 90px;
+  }
+
+  .opening__enter {
+    min-width: 148px;
+  }
+
+  /* Long menu labels must scroll instead of overflowing the viewport. */
+  .menu-panel {
+    overflow: hidden;
+    align-items: flex-start;
+    justify-content: center;
+  }
+
+  .menu-list {
+    width: min(100%, 360px);
+    max-height: calc(100dvh - 104px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding-block: 48px 24px;
+    scrollbar-width: none;
+  }
+
+  .menu-list::-webkit-scrollbar {
+    display: none;
+  }
+
+  .menu-list button {
+    width: 100%;
+    padding-inline: 12px;
+    text-wrap: balance;
+  }
+
+  /* Never let fixed utilities sit wider than a narrow phone. */
+  .music-player {
+    min-width: 0;
+    width: auto;
+    max-width: calc(100vw - 24px);
+  }
+
+  .music-player__body {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .music-player__title {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Dense content becomes single-column and readable. */
+  .unsaid__grid,
+  .openwhen__grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .unsaid__card,
+  .openwhen__card,
+  .quiz__option,
+  .soundtrack__row {
+    max-width: 100%;
+  }
+
+  .letter__paper,
+  .timeline__page,
+  .museum__exhibit,
+  .surprise__card,
+  .panel {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .letter__paper-inner {
+    overflow-wrap: anywhere;
+  }
+
+  /* Media stays inside the viewport even when source dimensions are odd. */
+  .image-frame,
+  .museum__photo-btn,
+  .polaroid,
+  .final__image,
+  .photo-viewer__figure {
+    min-width: 0;
+  }
+
+  .photo-viewer__figure {
+    max-width: 100%;
+  }
+
+  .photo-viewer__figure img,
+  .photo-viewer__figure video {
+    width: auto;
+    max-width: calc(100vw - 56px);
+  }
+
+  /* Touch devices should not inherit desktop hover movement. */
+  .opening__enter,
+  .btn,
+  .icon-btn,
+  .nav-back,
+  .bottom-nav button,
+  .quiz__option,
+  .openwhen__card,
+  .soundtrack__row {
+    touch-action: manipulation;
+  }
+}
+
+@media (max-width: 380px) {
+  .screen {
+    padding-inline: 12px;
+  }
+
+  .opening__copy > .heading-xl {
+    font-size: clamp(1.82rem, 9.5vw, 2.25rem);
+    max-width: 14ch;
+  }
+
+  .opening__subline {
+    font-size: 0.94rem;
+    line-height: 1.65;
+  }
+
+  .opening__you-star {
+    top: 9%;
+    left: 78%;
+  }
+
+  .bottom-nav {
+    left: 8px;
+    right: 8px;
+  }
+
+  .bottom-nav button {
+    font-size: 0.62rem;
+  }
+}
+
+@media (max-height: 680px) and (max-width: 640px) {
+  .opening.screen--center {
+    padding-top: max(12px, env(safe-area-inset-top, 0px));
+    padding-bottom: max(12px, env(safe-area-inset-bottom, 0px));
+  }
+
+  .opening__copy > .heading-xl {
+    font-size: clamp(1.8rem, 7.5vw, 2.35rem);
+  }
+
+  .opening__enter {
+    margin-top: 1.4em;
+  }
+
+  .opening__cue {
+    margin-top: 1.1em;
+  }
+
+  .opening__you-star {
+    top: 8%;
+  }
+}
