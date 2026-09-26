@@ -65,6 +65,7 @@ export default function Universe({ navigate }) {
   const [activeId, setActiveId] = useState(null)
   const [hoveredId, setHoveredId] = useState(null)
   const [focusedId, setFocusedId] = useState(null)
+  const [seekingId, setSeekingId] = useState(null)
   const timerRef = useRef(null)
 
   const fieldRef = useRef(null)
@@ -119,10 +120,23 @@ export default function Universe({ navigate }) {
   }, [])
 
   function selectNode(id) {
-    if (activeId) return
+    if (activeId || seekingId) return
 
     if (reduced) {
       navigate(id)
+      return
+    }
+
+    if (id === 'surprise') {
+      // Cosmic seeking anticipation: traverse constellation before revealing surprise
+      setSeekingId('beginning')
+      setTimeout(() => setSeekingId('unsaid'), 220)
+      setTimeout(() => setSeekingId('letter'), 440)
+      setTimeout(() => {
+        setSeekingId(null)
+        setActiveId('surprise')
+        setTimeout(() => navigate('surprise'), 380)
+      }, 660)
       return
     }
 
@@ -225,10 +239,11 @@ export default function Universe({ navigate }) {
           let nodeClasses = 'universe__node'
           if (!reduced) nodeClasses += ' universe__node--float'
           if (isActive) nodeClasses += ' is-active'
+          if (seekingId === node.id) nodeClasses += ' is-seeking is-active'
           if (isHovered) nodeClasses += ' is-hovered'
           if (isFocused) nodeClasses += ' is-focused'
           if (isConnected) nodeClasses += ' is-connected'
-          if (isDimmed) nodeClasses += ' is-dimmed'
+          if (isDimmed && seekingId !== node.id) nodeClasses += ' is-dimmed'
 
           return (
             <button

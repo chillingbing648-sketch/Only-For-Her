@@ -7,17 +7,34 @@ import { assetUrl } from '../../utils/assetUrl'
 
 export default function Soundtrack() {
   const songs = giftData.songs
+  const [playingId, setPlayingId] = useState(null)
+
   if (!songs?.length) return <EmptySection title="Songs That Feel Like Us" />
 
   return (
-    <div className="screen soundtrack">
+    <div className={`screen soundtrack ${playingId !== null ? 'soundtrack--resonating' : ''}`}>
+      {/* Environmental acoustic starlight resonance */}
+      <div className="soundtrack__ambient-aura" aria-hidden="true" />
+
       <div className="screen__inner">
-        <p className="eyebrow">Our soundtrack</p>
-        <h1 className="heading-l">Songs That Feel Like Us</h1>
+        <header className="soundtrack__header">
+          <p className="eyebrow soundtrack__eyebrow">Resonance</p>
+          <h1 className="heading-l soundtrack__main-heading">Songs That Feel Like Us</h1>
+          <p className="body-text body-text--soft soundtrack__sub">
+            The melodies tied to our time together. Touch a disc to listen.
+          </p>
+        </header>
 
         <ul className="soundtrack__list">
           {songs.map((song, i) => (
-            <SongRow key={i} song={song} delay={i * 70} />
+            <SongRow
+              key={i}
+              index={i}
+              song={song}
+              delay={i * 70}
+              isPlayingGlobal={playingId === i}
+              onPlayStateChange={(isPlaying) => setPlayingId(isPlaying ? i : null)}
+            />
           ))}
         </ul>
       </div>
@@ -32,9 +49,8 @@ function formatTime(seconds) {
   return `${m}:${String(s).padStart(2, '0')}`
 }
 
-function SongRow({ song, delay }) {
+function SongRow({ song, delay, isPlayingGlobal, onPlayStateChange }) {
   const audioRef = useRef(null)
-  const [playing, setPlaying] = useState(false)
   const [currentTime, setCurrentTime] = useState(0)
   const [duration, setDuration] = useState(0)
   const [available, setAvailable] = useState(true)
@@ -52,14 +68,25 @@ function SongRow({ song, delay }) {
     }
   }, [])
 
+  useEffect(() => {
+    const audio = audioRef.current
+    if (!audio) return
+    if (!isPlayingGlobal && !audio.paused) {
+      audio.pause()
+    }
+  }, [isPlayingGlobal])
+
   function toggle() {
     const audio = audioRef.current
     if (!audio) return
-    if (playing) {
+    if (isPlayingGlobal) {
       audio.pause()
-      setPlaying(false)
+      onPlayStateChange(false)
     } else {
-      audio.play().then(() => setPlaying(true)).catch(() => setAvailable(false))
+      audio
+        .play()
+        .then(() => onPlayStateChange(true))
+        .catch(() => setAvailable(false))
     }
   }
 
@@ -74,34 +101,43 @@ function SongRow({ song, delay }) {
 
   return (
     <li
-      className={`soundtrack__row ${playing ? 'is-playing' : ''}`}
+      className={`soundtrack__row ${isPlayingGlobal ? 'is-playing' : ''}`}
       style={{ '--enter-delay': `${delay}ms` }}
     >
-      <span className="soundtrack__cover-ring">
-        <SmartImage src={assetUrl(song.cover)} alt="" className="soundtrack__cover" label="♪" />
-      </span>
+      <button
+        className={`soundtrack__disc-btn ${isPlayingGlobal ? 'is-spinning' : ''}`}
+        onClick={toggle}
+        aria-label={isPlayingGlobal ? `Pause ${song.title}` : `Play ${song.title}`}
+      >
+        <span className="soundtrack__disc-groove">
+          <SmartImage src={assetUrl(song.cover)} alt="" className="soundtrack__cover" label="♪" />
+        </span>
+        <span className="soundtrack__disc-center" aria-hidden="true" />
+      </button>
+
       <div className="soundtrack__meta">
-        <p className="soundtrack__title">{song.title}</p>
-        <p className="body-text--soft">{song.artist}</p>
-        <p className="body-text body-text--soft">{song.why}</p>
-        <div className="soundtrack__meta-row">
-          {song.link && (
-            <a className="pill-tag" href={song.link} target="_blank" rel="noreferrer">
-              Listen ↗
-            </a>
-          )}
+        <div className="soundtrack__title-row">
+          <p className="soundtrack__title">{song.title}</p>
+          <span className="soundtrack__artist">{song.artist}</span>
         </div>
+
+        {song.why && <p className="soundtrack__why">"{song.why}"</p>}
+
         {song.src && available && (
           <div className="soundtrack__player">
             <audio
               ref={audioRef}
               src={assetUrl(song.src)}
-              onEnded={() => setPlaying(false)}
+              onEnded={() => onPlayStateChange(false)}
               onError={() => setAvailable(false)}
               preload="metadata"
             />
-            <button className="icon-btn soundtrack__toggle" onClick={toggle} aria-label={playing ? 'Pause' : 'Play'}>
-              {playing ? <PauseIcon size={13} /> : <PlayIcon size={13} />}
+            <button
+              className="icon-btn soundtrack__toggle"
+              onClick={toggle}
+              aria-label={isPlayingGlobal ? 'Pause' : 'Play'}
+            >
+              {isPlayingGlobal ? <PauseIcon size={13} /> : <PlayIcon size={13} />}
             </button>
             <span className="soundtrack__time">{formatTime(currentTime)}</span>
             <input
@@ -116,6 +152,14 @@ function SongRow({ song, delay }) {
               style={{ '--progress': `${progress}%` }}
             />
             <span className="soundtrack__time">{formatTime(duration)}</span>
+          </div>
+        )}
+
+        {song.link && (
+          <div className="soundtrack__meta-row">
+            <a className="soundtrack__external-link" href={song.link} target="_blank" rel="noreferrer">
+              Listen on streaming ↗
+            </a>
           </div>
         )}
       </div>

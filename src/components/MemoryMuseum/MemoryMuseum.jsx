@@ -60,17 +60,36 @@ export default function MemoryMuseum() {
           )}
         </div>
 
-        <div className="timeline__controls">
-          <button className="btn btn--ghost" onClick={() => go(-1)}>
-            ‹ Previous
+        <nav className="museum__constellation-nav" aria-label="Discovered memories">
+          <button
+            className="museum__nav-arrow"
+            onClick={() => go(-1)}
+            aria-label="Previous memory"
+          >
+            ‹
           </button>
-          <span className="body-text--soft">
-            {index + 1} / {exhibits.length}
-          </span>
-          <button className="btn btn--ghost" onClick={() => go(1)}>
-            Next ›
+          <div className="museum__tokens" role="tablist">
+            {exhibits.map((ex, i) => (
+              <button
+                key={ex.id || i}
+                className={`museum__token ${i === index ? 'is-active' : ''}`}
+                onClick={() => setIndex(i)}
+                aria-label={`Memory ${i + 1}: ${ex.title || 'Found moment'}`}
+                aria-current={i === index ? 'true' : undefined}
+              >
+                <span className="museum__token-dot" />
+                <span className="museum__token-num">{String(i + 1).padStart(2, '0')}</span>
+              </button>
+            ))}
+          </div>
+          <button
+            className="museum__nav-arrow"
+            onClick={() => go(1)}
+            aria-label="Next memory"
+          >
+            ›
           </button>
-        </div>
+        </nav>
       </div>
 
       {viewerOpen && (

@@ -497,20 +497,20 @@ export const giftData = {
   // "src" is optional — leave blank to just show the card without a player.
   songs: [
     {
-      title: "SONG TITLE",
-      artist: "ARTIST",
+      title: "Zaalima",
+      artist: "Arijit Singh",
       cover: "./photos/song-01.jpg",
-      why: "Why this one reminds you of her.",
-      src: "",
-      link: "",
+      why: "Wasn't this Your Schooltime Fav Song, and it resembles Us ; ) .",
+      src: "./MyHeartGallery/Zaalima.mp3",
+      link: "https://open.spotify.com/track/1J9vyEntJ79CppvgUxJs75?si=510edca8198e4d54",
     },
     {
-      title: "SONG TITLE",
-      artist: "ARTIST",
-      cover: "./photos/song-02.jpg",
-      why: "Why this one reminds you of her.",
-      src: "",
-      link: "",
+      title: "Mahi Aaja",
+      artist: "Manj Musk",
+      cover: "./MyHeartGallery/TheGirliFellinLoveWith.jpeg",
+      why: "Because it Resembles our Situation , and ofc Aaja Mahi Aake Gale Lag ja Tuuuu.... .",
+      src: "./MyHeartGallery/Mahi Aaja.mp3",
+      link: "https://open.spotify.com/track/67kncjHVEBrYg6iVuqaS5W?si=0d1a41737c1b4c53",
     },
   ],
 
