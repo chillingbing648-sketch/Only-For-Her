@@ -103,7 +103,6 @@ video {
 .openwhen__card,
 .unsaid__card,
 .quiz__card,
-.future__map-field,
 .photo-viewer__figure {
   min-width: 0;
 }
@@ -274,9 +273,6 @@ video {
     gap: 12px;
   }
 
-  .future__map-field {
-    height: clamp(220px, 35vw, 280px);
-  }
 }
 
 /* --------------------------------------------------------------------------
@@ -392,14 +388,6 @@ video {
     min-width: 0;
   }
 
-  .future__map-field {
-    height: clamp(220px, 62vw, 300px);
-  }
-
-  .future__pin-label {
-    max-width: 76px;
-    font-size: 0.68rem;
-  }
 
   .final__image {
     max-width: min(100%, 320px);
