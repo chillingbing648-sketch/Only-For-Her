@@ -410,28 +410,162 @@
   50% { opacity: 0.95; transform: translateY(4px); }
 }
 
-/* "You" star marker */
-.opening__you-star {
+/* ==========================================================================
+   Opening — "You + Me → Us" Celestial Convergence
+   ========================================================================== */
+
+/* ── Base Celestial Star Button Reset ────────────────────────────── */
+.opening__star {
   position: absolute;
-  top: 26%;
-  left: 64%;
-  z-index: 1;
+  top: var(--star-station-y, 20%);
+  z-index: 4;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
+  gap: 7px;
+  background: none;
+  border: none;
+  padding: 16px;
+  margin: -16px;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
   opacity: 0;
-  transition: opacity 1600ms var(--ease), transform 400ms var(--ease);
   pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+  transition:
+    opacity 1600ms var(--ease),
+    transform 1600ms cubic-bezier(0.25, 0.1, 0.25, 1),
+    filter 400ms var(--ease);
 }
-.opening__you-star.is-visible { opacity: 1; }
+.opening__star.is-visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+.opening__star:focus-visible {
+  outline: 2px solid rgba(var(--rgb-gold-hi), 0.92);
+  outline-offset: 6px;
+  border-radius: 50%;
+}
 
-.opening__you-star-glow {
+/* ── "Me" Star: Lower-Left diagonal quadrant ────────────────────── */
+.opening__star--me {
+  left: var(--me-x, 18%);
+  top: var(--me-y, 78%);
+  transform: translate(-50%, -50%) translate3d(
+    calc(var(--px, 0) * 5px),
+    calc(var(--py, 0) * 5px),
+    0
+  );
+}
+
+/* ── "You" Star: Upper-Right diagonal quadrant ───────────────────── */
+.opening__star--you {
+  left: var(--you-x, 82%);
+  top: var(--you-y, 18%);
+  transform: translate(-50%, -50%) translate3d(
+    calc(var(--px, 0) * 7px),
+    calc(var(--py, 0) * 7px),
+    0
+  );
+}
+
+/* ── Star Atmospheric Halos, Orbits & Glows ──────────────────────── */
+.opening__star-halo {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 72px;
+  height: 72px;
+  margin: -36px 0 0 -36px;
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0.35;
+  transition:
+    transform 1200ms var(--ease),
+    opacity 1200ms var(--ease);
+}
+.opening__star-halo--you {
+  background: radial-gradient(circle, rgba(242, 200, 131, 0.28) 0%, rgba(242, 200, 131, 0.08) 50%, transparent 72%);
+  animation: youHaloBreathe 4.6s ease-in-out infinite;
+}
+.opening__star-halo--me {
+  background: radial-gradient(circle, rgba(216, 204, 238, 0.3) 0%, rgba(198, 176, 204, 0.08) 50%, transparent 72%);
+  animation: meHaloBreathe 5.2s ease-in-out infinite;
+  animation-delay: -1.8s;
+}
+
+@keyframes youHaloBreathe {
+  0%, 100% { transform: scale(1); opacity: 0.3; }
+  50% { transform: scale(1.2); opacity: 0.58; }
+}
+@keyframes meHaloBreathe {
+  0%, 100% { transform: scale(1); opacity: 0.3; }
+  50% { transform: scale(1.18); opacity: 0.55; }
+}
+
+.opening__star-orbit {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 38px;
+  height: 38px;
+  margin: -19px 0 0 -19px;
+  border-radius: 50%;
+  border: 1px solid rgba(var(--rgb-gold), 0.12);
+  opacity: 0.35;
+  animation: starOrbitPulse 6s ease-in-out infinite;
+  pointer-events: none;
+  transition: transform 600ms var(--ease), opacity 600ms var(--ease), border-color 600ms var(--ease);
+}
+.opening__star--me .opening__star-orbit {
+  border-color: rgba(var(--rgb-lav), 0.15);
+  animation-duration: 5.4s;
+  animation-delay: -2s;
+}
+
+@keyframes starOrbitPulse {
+  0%, 100% { transform: scale(1); opacity: 0.25; }
+  50% { transform: scale(1.22); opacity: 0.5; }
+}
+
+/* Hover/Focus Acknowledgements */
+.opening__star:hover .opening__star-orbit,
+.opening__star:focus-visible .opening__star-orbit {
+  transform: scale(1.4);
+  opacity: 0.7;
+}
+.opening__star:hover .opening__star-halo,
+.opening__star:focus-visible .opening__star-halo {
+  transform: scale(1.3);
+  opacity: 0.65;
+}
+
+/* ── Star Cores & Glows ─────────────────────────────────────────── */
+.opening__star-glow {
   width: 9px;
   height: 9px;
   border-radius: 50%;
   background: #ffffff;
   position: relative;
+  transition: box-shadow 400ms var(--ease), transform 400ms var(--ease);
+}
+.opening__star-glow::before,
+.opening__star-glow::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 999px;
+  pointer-events: none;
+}
+.opening__star-glow::before { width: 24px; height: 1px; }
+.opening__star-glow::after { width: 1px; height: 24px; }
+
+/* "You" Star Warm Golden Glow */
+.opening__star-glow--you {
   box-shadow:
     0 0 6px 2px rgba(255, 235, 190, 0.95),
     0 0 22px 7px rgba(242, 200, 131, 0.58),
@@ -439,24 +573,9 @@
     0 0 88px 36px rgba(242, 200, 131, 0.07);
   animation: youStarPulse 4.2s ease-in-out infinite;
 }
-.opening__you-star-glow::before,
-.opening__you-star-glow::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+.opening__star-glow--you::before,
+.opening__star-glow--you::after {
   background: linear-gradient(90deg, transparent, rgba(255, 248, 225, 0.8) 50%, transparent);
-  border-radius: 999px;
-  pointer-events: none;
-}
-.opening__you-star-glow::before {
-  width: 24px;
-  height: 1px;
-}
-.opening__you-star-glow::after {
-  width: 1px;
-  height: 24px;
 }
 
 @keyframes youStarPulse {
@@ -470,56 +589,536 @@
   50% {
     box-shadow:
       0 0 8px 3px rgba(255, 245, 215, 1),
-      0 0 26px 9px rgba(242, 200, 131, 0.7),
-      0 0 60px 22px rgba(183, 174, 214, 0.28),
+      0 0 28px 9px rgba(242, 200, 131, 0.72),
+      0 0 62px 22px rgba(183, 174, 214, 0.28),
       0 0 96px 42px rgba(242, 200, 131, 0.09);
   }
 }
 
-.opening__you-star-label {
+/* "Me" Star Cool Lavender-Silver Glow */
+.opening__star-glow--me {
+  width: 8px;
+  height: 8px;
+  box-shadow:
+    0 0 6px 2px rgba(224, 214, 242, 0.95),
+    0 0 18px 6px rgba(198, 176, 204, 0.52),
+    0 0 42px 14px rgba(198, 176, 204, 0.18);
+  animation: meStarPulse 4.8s ease-in-out infinite;
+}
+.opening__star-glow--me::before,
+.opening__star-glow--me::after {
+  background: linear-gradient(90deg, transparent, rgba(230, 220, 245, 0.75) 50%, transparent);
+}
+.opening__star-glow--me::before { width: 20px; }
+.opening__star-glow--me::after { height: 20px; }
+
+@keyframes meStarPulse {
+  0%, 100% {
+    box-shadow:
+      0 0 5px 2px rgba(220, 210, 238, 0.85),
+      0 0 16px 5px rgba(198, 176, 204, 0.45),
+      0 0 36px 12px rgba(198, 176, 204, 0.14);
+  }
+  50% {
+    box-shadow:
+      0 0 8px 3px rgba(235, 225, 250, 0.95),
+      0 0 24px 8px rgba(198, 176, 204, 0.65),
+      0 0 54px 18px rgba(198, 176, 204, 0.22);
+  }
+}
+
+/* ── Star Labels ────────────────────────────────────────────────── */
+.opening__star-label {
   font-family: var(--font-serif);
   font-style: italic;
   font-size: 0.82rem;
   letter-spacing: 0.04em;
+  user-select: none;
+  transition: opacity 600ms var(--ease), transform 600ms var(--ease);
+}
+.opening__star-label--you {
   color: rgba(var(--rgb-gold-hi), 0.9);
   text-shadow:
     0 0 16px rgba(var(--rgb-gold), 0.55),
     0 1px 8px rgba(var(--rgb-night), 0.95);
 }
+.opening__star-label--me {
+  color: rgba(var(--rgb-lav), 0.85);
+  text-shadow:
+    0 0 16px rgba(var(--rgb-lav), 0.5),
+    0 1px 8px rgba(var(--rgb-night), 0.95);
+}
 
-/* Responsive */
+/* ── CONVERGENCE MOTION: Step 1 (Waking) ─────────────────────────── */
+.opening__star.is-waking .opening__star-glow--you {
+  box-shadow:
+    0 0 10px 4px rgba(255, 245, 215, 0.95),
+    0 0 26px 9px rgba(242, 200, 131, 0.65),
+    0 0 54px 20px rgba(183, 174, 214, 0.25);
+  transform: scale(1.15);
+}
+.opening__star.is-waking .opening__star-glow--me {
+  box-shadow:
+    0 0 10px 4px rgba(235, 225, 250, 0.95),
+    0 0 24px 8px rgba(198, 176, 204, 0.6),
+    0 0 48px 16px rgba(198, 176, 204, 0.22);
+  transform: scale(1.15);
+}
+.opening__star.is-waking .opening__star-orbit {
+  transform: scale(1.32);
+  opacity: 0.6;
+  border-color: rgba(var(--rgb-gold-hi), 0.32);
+}
+.opening__star.is-waking .opening__star-halo {
+  transform: scale(1.28);
+  opacity: 0.58;
+}
+
+/* ── CONVERGENCE MOTION: Step 2 (Traveling diagonally to 50%, 22%) ── */
+/* Unified 1500ms silky celestial easing: smooth departure, steady glide, gentle arrival */
+.opening__star--me.is-traveling {
+  transform: translate(-50%, -50%) translate3d(calc(32vw), calc(-56vh), 0);
+  transition: transform 1500ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.opening__star--you.is-traveling {
+  transform: translate(-50%, -50%) translate3d(calc(-32vw), calc(4vh), 0);
+  transition: transform 1500ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Halos gently swell without blinding glare */
+.opening__star.is-traveling .opening__star-halo {
+  transform: scale(1.25);
+  opacity: 0.52;
+}
+
+/* ── Moving Star Motion Trails ────────────────────────────────────
+   Subtle, short, tapered starlight comet tails.
+   Originates directly at the star core center and points backwards
+   along the star's actual velocity vector.
+─────────────────────────────────────────────────────────────────── */
+.opening__star-trail {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 30px;
+  height: 3.5px;
+  margin-top: -1.75px;
+  transform-origin: 0% 50%;
+  clip-path: polygon(0% 12%, 100% 48%, 100% 52%, 0% 88%);
+  pointer-events: none;
+  opacity: 0;
+  z-index: -1;
+  transition: opacity 220ms var(--ease);
+}
+
+/* Me travels up-right (+32vw, -56vh) → trail points down-left behind it */
+.opening__star-trail--me {
+  transform: rotate(var(--trail-angle-me, 133deg));
+  background: linear-gradient(
+    90deg,
+    rgba(224, 214, 242, 0.72) 0%,
+    rgba(198, 176, 204, 0.3) 45%,
+    rgba(198, 176, 204, 0) 100%
+  );
+  filter: drop-shadow(0 0 2px rgba(198, 176, 204, 0.35));
+}
+
+/* You travels left-down (-32vw, +4vh) → trail points right-up behind it */
+.opening__star-trail--you {
+  transform: rotate(var(--trail-angle-you, -6deg));
+  background: linear-gradient(
+    90deg,
+    rgba(255, 245, 215, 0.78) 0%,
+    rgba(242, 200, 131, 0.32) 45%,
+    rgba(242, 200, 131, 0) 100%
+  );
+  filter: drop-shadow(0 0 2px rgba(242, 200, 131, 0.35));
+}
+
+/* Fade in only during active flight */
+.opening__star.is-traveling .opening__star-trail {
+  opacity: 0.65;
+}
+
+/* Hide labels during the glide */
+.opening__star.is-traveling .opening__star-label {
+  opacity: 0;
+  transform: translateY(4px);
+}
+
+/* ── CONVERGENCE MOTION: Step 3 (Merged into Us) ─────────────────── */
+/* Guaranteed clean vanish with ZERO leftover or detached lines */
+.opening__star.is-merged {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transition: opacity 250ms var(--ease) !important;
+}
+.opening__star.is-merged .opening__star-trail,
+.opening__star:not(.is-traveling) .opening__star-trail {
+  opacity: 0 !important;
+}
+
+/* ── "US" STAR (Emerges at 50%, 22%) ────────────────────────────── */
+.opening__us-star {
+  position: absolute;
+  top: var(--us-y, 22%);
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  pointer-events: none;
+  opacity: 0;
+  scale: 0.4;
+  transition:
+    opacity 600ms var(--ease),
+    scale 800ms var(--ease-spring);
+}
+.opening__us-star.is-visible {
+  opacity: 1;
+  scale: 1;
+}
+
+.opening__us-glow {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #ffffff;
+  position: relative;
+  box-shadow:
+    0 0 12px 5px rgba(255, 255, 255, 1),
+    0 0 32px 12px rgba(255, 238, 200, 0.9),
+    0 0 68px 24px rgba(242, 200, 131, 0.6),
+    0 0 120px 48px rgba(183, 174, 214, 0.35);
+  animation: usStarBreathe 3.6s ease-in-out infinite;
+}
+.opening__us-glow::before,
+.opening__us-glow::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 999px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.95) 50%, transparent);
+}
+.opening__us-glow::before { width: 44px; height: 2px; }
+.opening__us-glow::after { width: 2px; height: 44px; }
+
+@keyframes usStarBreathe {
+  0%, 100% {
+    box-shadow:
+      0 0 12px 5px rgba(255, 255, 255, 1),
+      0 0 32px 12px rgba(255, 238, 200, 0.85),
+      0 0 68px 24px rgba(242, 200, 131, 0.55),
+      0 0 110px 44px rgba(183, 174, 214, 0.3);
+  }
+  50% {
+    box-shadow:
+      0 0 16px 7px rgba(255, 255, 255, 1),
+      0 0 44px 16px rgba(255, 238, 200, 1),
+      0 0 84px 32px rgba(242, 200, 131, 0.75),
+      0 0 140px 56px rgba(183, 174, 214, 0.45);
+  }
+}
+
+/* Radiant orbit aura for Us */
+.opening__us-halo {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 52px;
+  height: 52px;
+  margin: -26px 0 0 -26px;
+  border-radius: 50%;
+  border: 1px solid rgba(var(--rgb-gold-hi), 0.35);
+  animation: usHaloPulse 4s ease-in-out infinite;
+}
+@keyframes usHaloPulse {
+  0%, 100% { transform: scale(1); opacity: 0.4; }
+  50% { transform: scale(1.25); opacity: 0.8; }
+}
+
+/* Expanding ripple waves on convergence contact */
+.opening__us-ripple {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border-radius: 50%;
+  border: 1px solid rgba(var(--rgb-gold-hi), 0.45);
+  pointer-events: none;
+  transform: translate(-50%, -50%) scale(0.2);
+  opacity: 0;
+}
+.opening__us-star.is-visible .opening__us-ripple--1 {
+  animation: usRipple 1400ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+.opening__us-star.is-visible .opening__us-ripple--2 {
+  animation: usRipple 1400ms cubic-bezier(0.22, 1, 0.36, 1) 220ms forwards;
+}
+
+@keyframes usRipple {
+  0% { transform: translate(-50%, -50%) scale(0.2); opacity: 0.8; border-color: rgba(255, 255, 255, 0.8); }
+  50% { opacity: 0.35; border-color: rgba(var(--rgb-gold-hi), 0.35); }
+  100% { transform: translate(-50%, -50%) scale(2.8); opacity: 0; border-color: transparent; }
+}
+
+/* Luminous "✦ Us ✦" Label */
+.opening__us-label {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 0.96rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  color: #fff9ea;
+  text-shadow:
+    0 0 16px rgba(var(--rgb-gold-hi), 0.85),
+    0 0 32px rgba(var(--rgb-gold), 0.5),
+    0 2px 10px rgba(var(--rgb-night), 0.95);
+  animation: usLabelFadeIn 800ms var(--ease) both;
+}
+@keyframes usLabelFadeIn {
+  from { opacity: 0; transform: translateY(6px); filter: blur(3px); }
+  to { opacity: 1; transform: translateY(0); filter: blur(0); }
+}
+
+/* ── Very Minute Heart Shimmer Glow Elements ─────────────────────── */
+.opening__minute-heart-shimmer {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 58px;
+  height: 52px;
+  margin: -26px 0 0 -29px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 600ms var(--ease);
+}
+.opening__us-star.is-visible .opening__minute-heart-shimmer {
+  opacity: 1;
+}
+
+.opening__heart-spark {
+  position: absolute;
+  width: 2.5px;
+  height: 2.5px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow:
+    0 0 4px 1.5px rgba(255, 242, 215, 0.9),
+    0 0 10px 3px rgba(242, 200, 131, 0.45);
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.5);
+  pointer-events: none;
+}
+
+/* Minute heart contour positions around Us */
+.opening__heart-spark--1 { left: 50%; top: 12%; animation-delay: 150ms; }  /* Top cleft */
+.opening__heart-spark--2 { left: 24%; top: 6%;  animation-delay: 250ms; }  /* Top-left lobe */
+.opening__heart-spark--3 { left: 76%; top: 6%;  animation-delay: 200ms; }  /* Top-right lobe */
+.opening__heart-spark--4 { left: 10%; top: 38%; animation-delay: 350ms; }  /* Mid-left curve */
+.opening__heart-spark--5 { left: 90%; top: 38%; animation-delay: 300ms; }  /* Mid-right curve */
+.opening__heart-spark--6 { left: 50%; top: 88%; animation-delay: 420ms; }  /* Bottom tip */
+
+.opening__us-star.is-visible .opening__heart-spark {
+  animation: minuteSparkShimmer 2200ms cubic-bezier(0.25, 0.1, 0.25, 1) both;
+}
+
+@keyframes minuteSparkShimmer {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.3);
+  }
+  25% {
+    opacity: 0.85;
+    transform: translate(-50%, -50%) scale(1.15);
+  }
+  65% {
+    opacity: 0.7;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.4);
+  }
+}
+
+/* Convergence bloom flash — soft, warm starlight breath */
+.opening__convergence-bloom {
+  position: absolute;
+  top: var(--us-y, 22%);
+  left: 50%;
+  width: 150px;
+  height: 150px;
+  margin: -75px 0 0 -75px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 6;
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.65) 0%,
+    rgba(255, 238, 200, 0.35) 30%,
+    rgba(216, 204, 238, 0.12) 60%,
+    transparent 72%
+  );
+  animation: convergenceBloom 900ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@keyframes convergenceBloom {
+  0% { transform: scale(0.3); opacity: 0; }
+  22% { transform: scale(1); opacity: 0.7; }
+  100% { transform: scale(1.35); opacity: 0; }
+}
+
+/* ── Copy softening during convergence ──────────────────────────── */
+.opening__copy--softened {
+  opacity: 0.32;
+  transform: translateY(4px);
+  transition: opacity 1200ms var(--ease), transform 1200ms var(--ease);
+}
+
+/* ── CTA Portal acknowledgment ───────────────────────────────────── */
+.opening__enter--engaged {
+  scale: 0.96;
+  box-shadow:
+    inset 0 2px 6px rgba(122, 74, 22, 0.42),
+    0 0 36px 4px rgba(var(--rgb-gold), 0.7) !important;
+}
+
+/* ── Portal expansion departure ─────────────────────────────────── */
+.opening__nebula--expand {
+  transform: scale(1.4) !important;
+  opacity: 1.3 !important;
+  transition: transform 1200ms var(--ease), opacity 1200ms var(--ease) !important;
+}
+
+/* ── Shooting star across horizon ────────────────────────────────── */
+.opening__shooting-star {
+  position: absolute;
+  z-index: 1;
+  width: 2px;
+  height: 2px;
+  border-radius: 50%;
+  background: #fff;
+  pointer-events: none;
+  animation: shootingStar 1.4s ease-out forwards;
+}
+.opening__shooting-star::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 55px;
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.75),
+    rgba(255, 235, 190, 0.3) 35%,
+    transparent
+  );
+  transform-origin: top left;
+  transform: rotate(215deg);
+  border-radius: 1px;
+}
+@keyframes shootingStar {
+  0% { opacity: 0; transform: translate(0, 0); }
+  12% { opacity: 1; }
+  85% { opacity: 0.4; }
+  100% { opacity: 0; transform: translate(160px, 110px); }
+}
+
+/* ── Responsive adjustments ─────────────────────────────────────── */
 @media (max-width: 640px) {
-  .opening__you-star { top: 14%; left: 74%; }
-  .opening__subline { margin-top: 0.4em; max-width: 30ch; }
-  .opening__enter { margin-top: 2.2em; }
-  .opening__cue { margin-top: 2em; }
-  .opening__horizon { top: 40%; }
-}
-@media (max-height: 680px) {
-  .opening__enter { margin-top: 1.6em; }
-  .opening__cue { margin-top: 1.4em; }
-  .opening__you-star { top: 10%; }
-  .opening__horizon { display: none; }
-}
-@media (max-width: 640px) and (min-height: 800px) {
-  .opening.screen--center { padding-top: 18vh; justify-content: flex-start; }
+  :root {
+    --us-y: 18%;
+    --you-x: 82%;
+    --you-y: 14%;
+    --me-x: 18%;
+    --me-y: 82%;
+    --trail-angle-me: 108deg;
+    --trail-angle-you: -8deg;
+  }
+  .opening__star-trail {
+    width: 22px;
+    height: 3px;
+    margin-top: -1.5px;
+  }
+  /* On mobile, Me moves diagonally from lower-left (18%, 82%) to (50%, 18%) */
+  .opening__star--me.is-traveling {
+    transform: translate(-50%, -50%) translate3d(calc(32vw), calc(-64vh), 0);
+    transition: transform 1500ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  /* On mobile, You moves diagonally from upper-right (82%, 14%) to (50%, 18%) */
+  .opening__star--you.is-traveling {
+    transform: translate(-50%, -50%) translate3d(calc(-32vw), calc(4vh), 0);
+    transition: transform 1500ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .opening__star-label {
+    font-size: 0.74rem;
+  }
+  .opening__us-label {
+    font-size: 0.88rem;
+  }
+  .opening__subline {
+    margin-top: 0.4em;
+    max-width: 30ch;
+  }
+  .opening__enter {
+    margin-top: 2.2em;
+  }
+  .opening__cue {
+    margin-top: 2em;
+  }
+  .opening__horizon {
+    top: 40%;
+  }
 }
 
-/* Reduced motion */
+@media (max-height: 680px) {
+  :root {
+    --star-station-y: 13%;
+  }
+  .opening__enter {
+    margin-top: 1.6em;
+  }
+  .opening__cue {
+    margin-top: 1.4em;
+  }
+  .opening__horizon {
+    display: none;
+  }
+}
+
+@media (max-width: 640px) and (min-height: 800px) {
+  .opening.screen--center {
+    padding-top: 18vh;
+    justify-content: flex-start;
+  }
+}
+
+/* ── Reduced motion ─────────────────────────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   .opening__horizon { animation: none; opacity: 0.7; transform: none; }
   .opening__nebula { transition: none; }
   .opening__cue::before { opacity: 0.4; }
   .opening__cue-dot { animation: none; opacity: 0.7; }
-  .opening__you-star-glow { animation: none; }
-  .opening__you-star-glow::before,
-  .opening__you-star-glow::after { display: none; }
+  .opening__star-glow { animation: none; }
+  .opening__star-orbit { animation: none; }
+  .opening__star-trail { display: none !important; }
+  .opening__us-glow { animation: none; }
+  .opening__us-halo { animation: none; }
+  .opening__shooting-star { display: none; }
+  .opening__star { transition: opacity 1ms !important; }
+  .opening__us-star { transition: opacity 1ms, scale 1ms !important; }
+  .opening__copy { transition: none !important; }
   .opening__line { transition-duration: 1ms; }
   .opening__enter { transition-duration: 1ms; }
   .opening__cue { transition-duration: 1ms; }
   .opening--leaving { transition-duration: 1ms; }
   .opening--leaving .opening__copy,
-  .opening--leaving .opening__you-star,
+  .opening--leaving .opening__star,
+  .opening--leaving .opening__us-star,
   .opening--leaving .opening__horizon { transition-duration: 1ms; }
 }
 
