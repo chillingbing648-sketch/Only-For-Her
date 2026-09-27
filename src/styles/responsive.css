@@ -571,9 +571,12 @@ video {
   .polaroid:hover,
   .openwhen__card:hover,
   .quiz__option:hover,
-  .soundtrack__row:hover,
-  .universe__node:hover {
+  .soundtrack__row:hover {
     transform: none;
+  }
+
+  .universe__node:hover {
+    transform: translate(-50%, -50%);
   }
 
   .btn:active,
@@ -583,7 +586,8 @@ video {
 
   /* Remove expensive hover-only filters on touch hardware. */
   .universe__node::before,
-  .universe__node-glow::before {
+  .universe__node-halo,
+  .universe__node-orbit {
     transition: none;
   }
 }

@@ -88,8 +88,8 @@ export default function Universe({ navigate }) {
     NODES.forEach((node) => {
       const el = nodeRefs.current[node.id]
       if (el) {
-        const glowEl = el.querySelector('.universe__node-glow') || el
-        const rect = glowEl.getBoundingClientRect()
+        const coreEl = el.querySelector('.universe__node-core') || el
+        const rect = coreEl.getBoundingClientRect()
         positions[node.id] = {
           x: rect.left + rect.width / 2 - fieldRect.left,
           y: rect.top + rect.height / 2 - fieldRect.top,
@@ -135,16 +135,16 @@ export default function Universe({ navigate }) {
       setTimeout(() => {
         setSeekingId(null)
         setActiveId('surprise')
-        setTimeout(() => navigate('surprise'), 380)
+        setTimeout(() => navigate('surprise'), 460)
       }, 660)
       return
     }
 
     setActiveId(id)
-    timerRef.current = setTimeout(() => navigate(id), 420)
+    timerRef.current = setTimeout(() => navigate(id), 460)
   }
 
-  const interactedId = activeId || hoveredId || focusedId
+  const interactedId = activeId || seekingId || hoveredId || focusedId
   const activeConnections = isMobile ? MOBILE_CONNECTIONS : DESKTOP_CONNECTIONS
   const activeAdjacency = isMobile ? MOBILE_ADJACENCY : DESKTOP_ADJACENCY
   const hasMeasured = fieldSize.width > 0 && Object.keys(nodePositions).length === NODES.length
@@ -236,7 +236,7 @@ export default function Universe({ navigate }) {
             interactedId && interactedId !== node.id && !activeAdjacency[interactedId]?.has(node.id)
           )
 
-          let nodeClasses = 'universe__node'
+          let nodeClasses = `universe__node universe__node--${node.id}`
           if (!reduced) nodeClasses += ' universe__node--float'
           if (isActive) nodeClasses += ' is-active'
           if (seekingId === node.id) nodeClasses += ' is-seeking is-active'
@@ -255,8 +255,6 @@ export default function Universe({ navigate }) {
                 '--y': `${node.y}%`,
                 '--mx': `${node.mx}%`,
                 '--my': `${node.my}%`,
-                left: `${node.x}%`,
-                top: `${node.y}%`,
                 '--enter-delay': `${(i % 6) * 65}ms`,
                 '--float-delay': `${(i % 5) * 0.7}s`,
               }}
@@ -270,8 +268,11 @@ export default function Universe({ navigate }) {
               disabled={!!activeId}
               aria-label={node.title}
             >
-              <span className="universe__node-glow" aria-hidden="true" />
-              <NodeIcon name={node.icon} />
+              <span className="universe__node-halo" aria-hidden="true" />
+              <span className="universe__node-orbit" aria-hidden="true" />
+              <span className="universe__node-core" aria-hidden="true">
+                <NodeIcon name={node.icon} />
+              </span>
               <span className="universe__node-label">{node.title}</span>
             </button>
           )
@@ -283,8 +284,8 @@ export default function Universe({ navigate }) {
 
 function NodeIcon({ name }) {
   const props = {
-    width: 20,
-    height: 20,
+    width: 16,
+    height: 16,
     viewBox: '0 0 20 20',
     'aria-hidden': true,
     fill: 'none',

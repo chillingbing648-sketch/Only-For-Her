@@ -3200,26 +3200,26 @@
 
 .universe__line {
   vector-effect: non-scaling-stroke;
-  stroke: rgba(216, 208, 246, 0.28);
-  stroke-width: 1px;
+  stroke: rgba(216, 206, 238, 0.18);
+  stroke-width: 0.85px;
   stroke-linecap: round;
-  stroke-dasharray: 1px 4.5px;
+  stroke-dasharray: 1.5px 6px;
   transition: stroke var(--dur-m) var(--ease), opacity var(--dur-m) var(--ease), stroke-width var(--dur-m) var(--ease), filter var(--dur-m) var(--ease);
-  opacity: 0.7;
+  opacity: 0.48;
 }
 
-/* Connected thread response during hover/focus */
+/* Connected thread response during hover/focus/seeking */
 .universe__line--active {
-  stroke: rgba(255, 235, 195, 0.95);
-  stroke-width: 1.5px;
-  stroke-dasharray: none;
-  opacity: 1;
-  filter: drop-shadow(0 0 6px rgba(242, 200, 131, 0.7));
+  stroke: rgba(255, 238, 205, 0.9);
+  stroke-width: 1.4px;
+  stroke-dasharray: 2px 4px;
+  opacity: 0.95;
+  filter: drop-shadow(0 0 5px rgba(242, 200, 131, 0.65));
 }
 
 .universe__line--dimmed {
-  opacity: 0.1;
-  stroke-width: 0.8px;
+  opacity: 0.08;
+  stroke-width: 0.75px;
 }
 
 .universe__line--lit {
@@ -3228,314 +3228,516 @@
   stroke-dasharray: none;
   opacity: 1;
   animation: none;
-  filter: drop-shadow(0 0 8px rgba(255, 227, 173, 0.85));
+  filter: drop-shadow(0 0 8px rgba(255, 227, 173, 0.9));
 }
-.universe__field.is-traveling .universe__line:not(.universe__line--lit) { opacity: 0.15; }
+.universe__field.is-traveling .universe__line:not(.universe__line--lit) { opacity: 0.06; }
 
 /* --------------------------------------------------------------------------
-   Nodes — small worlds, not buttons
-   Anatomy, all centred on the icon (20px icon + 10px padding ⇒ 20px down):
-     glow            wide atmospheric halo (breathes)
-     glow::before    tilted orbit ring with a tiny moon
-     glow::after     rim-lit core the icon sits in
-     ::before        diffraction flare (hover / focus / active)
-     ::after         ignition ring (active only)
-   Each star takes a tint from --node-rgb; nth-of-type follows the order the
-   stars are rendered in.
+   Nodes — small celestial worlds, not buttons
+   Centered exactly on (x, y) coordinates with independent, breathing halos.
    -------------------------------------------------------------------------- */
 .universe__node {
   --node-rgb: var(--u-gold);
-  --halo: 112px;
-  --core: 38px;
-  --ring: 76px;
-  --ring-tilt: 72deg;
-  --ring-roll: -16deg;
+  --core-size: 32px;
+  --halo-size: 54px;
+  --orbit-size: 46px;
+  --ring-tilt: 70deg;
+  --ring-roll: -18deg;
   --ring-dur: 34s;
   --float-dur: 9.5s;
 
   position: absolute;
+  left: var(--x);
+  top: var(--y);
   transform: translate(-50%, -50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  border-radius: 50%;
+  cursor: pointer;
+  outline: none;
+  touch-action: manipulation;
   color: #c7ccdf;
-  padding: 10px;
-  border-radius: 50%;
-  animation: nodeEnter var(--dur-l) var(--ease) both;
-  animation-delay: var(--enter-delay, 0ms);
-  transition:
-    color var(--dur-s) var(--ease),
-    transform var(--dur-s) var(--ease),
-    opacity var(--dur-m) var(--ease),
-    scale 520ms var(--ease),
-    translate var(--dur-m) var(--ease),
-    filter var(--dur-m) var(--ease);
-}
-.universe__node:nth-of-type(1)  { --node-rgb: var(--u-gold);  --ring-roll: -22deg; --ring-tilt: 71deg; --ring-dur: 36s; --float-dur: 9.2s; }
-.universe__node:nth-of-type(2)  { --node-rgb: var(--u-lav);   --ring-roll: 14deg;  --ring-tilt: 74deg; --ring-dur: 41s; --float-dur: 10.4s; }
-.universe__node:nth-of-type(3)  { --node-rgb: var(--u-blush); --ring-roll: -8deg;  --ring-tilt: 70deg; --ring-dur: 33s; --float-dur: 8.7s; }
-.universe__node:nth-of-type(4)  { --node-rgb: var(--u-gold);  --ring-roll: 24deg;  --ring-tilt: 73deg; --ring-dur: 38s; --float-dur: 11.2s; }
-.universe__node:nth-of-type(5)  { --node-rgb: var(--u-lav);   --ring-roll: -30deg; --ring-tilt: 69deg; --ring-dur: 30s; --float-dur: 9.0s; }
-.universe__node:nth-of-type(6)  { --node-rgb: var(--u-blush); --ring-roll: 6deg;   --ring-tilt: 75deg; --ring-dur: 44s; --float-dur: 10.1s; }
-.universe__node:nth-of-type(7)  { --node-rgb: var(--u-lav);   --ring-roll: -12deg; --ring-tilt: 71deg; --ring-dur: 35s; --float-dur: 9.8s; }
-.universe__node:nth-of-type(8)  { --node-rgb: var(--u-gold);  --ring-roll: 28deg;  --ring-tilt: 72deg; --ring-dur: 39s; --float-dur: 8.9s; }
-.universe__node:nth-of-type(9)  { --node-rgb: var(--u-lav);   --ring-roll: -4deg;  --ring-tilt: 68deg; --ring-dur: 31s; --float-dur: 10.8s; }
-/* "One Last Thing": the warmest, slightly larger beacon at the end of the path */
-.universe__node:nth-of-type(10) { --node-rgb: 255, 224, 170; --halo: 128px; --core: 42px; --ring: 88px; --ring-roll: -18deg; --ring-tilt: 70deg; --ring-dur: 46s; --float-dur: 11.6s; }
-
-@keyframes nodeEnter {
-  from { opacity: 0; transform: translate(-50%, -50%) scale(0.7); }
-  to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  transform-origin: center center;
+  transition: opacity var(--dur-m) var(--ease), filter var(--dur-m) var(--ease), scale var(--dur-m) var(--ease-spring);
 }
 
-/* Icon: a soft-lit glyph rather than a UI pictogram */
-.universe__node > svg {
-  filter: drop-shadow(0 0 3px rgba(var(--node-rgb), 0.55));
-  transition: filter var(--dur-m) var(--ease);
-}
-
-/* Halo */
-.universe__node-glow {
+/* 1. Atmospheric Halo — subtle, soft, perfectly centered */
+.universe__node-halo {
   position: absolute;
-  z-index: -1;
-  inset: auto;
   left: 50%;
-  top: 20px;
-  width: var(--halo);
-  height: var(--halo);
-  margin: calc(var(--halo) / -2) 0 0 calc(var(--halo) / -2);
+  top: 50%;
+  width: var(--halo-size);
+  height: var(--halo-size);
+  transform: translate(-50%, -50%);
+  transform-origin: center center;
   border-radius: 50%;
-  opacity: 0.8;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.65;
   background: radial-gradient(
     circle,
-    rgba(var(--node-rgb), 0.42) 0,
-    rgba(var(--node-rgb), 0.2) 20%,
-    rgba(var(--node-rgb), 0.075) 42%,
-    transparent 68%
+    rgba(var(--node-rgb), 0.24) 0%,
+    rgba(var(--node-rgb), 0.08) 42%,
+    transparent 70%
   );
-  transition: opacity var(--dur-m) var(--ease), scale 620ms var(--ease);
-  animation: uHalo 9s ease-in-out infinite;
-  animation-delay: calc(var(--float-delay, 0s) * -1.7);
-  pointer-events: none;
-}
-/* Orbit ring + moon */
-.universe__node-glow::before {
-  content: '';
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: var(--ring);
-  height: var(--ring);
-  margin: calc(var(--ring) / -2) 0 0 calc(var(--ring) / -2);
-  border-radius: 50%;
-  border: 1px solid rgba(var(--node-rgb), 0.24);
-  background: radial-gradient(circle at 50% 1px, rgba(var(--node-rgb), 0.95) 0, rgba(var(--node-rgb), 0.95) 1.5px, rgba(var(--node-rgb), 0.25) 3px, transparent 4.5px);
-  transform: rotate(var(--ring-roll)) rotateX(var(--ring-tilt)) rotate(0deg);
-  transition: border-color var(--dur-m) var(--ease);
-  animation: uOrbit var(--ring-dur) linear infinite;
-  pointer-events: none;
-}
-/* Rim-lit core */
-.universe__node-glow::after {
-  content: '';
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: var(--core);
-  height: var(--core);
-  margin: calc(var(--core) / -2) 0 0 calc(var(--core) / -2);
-  border-radius: 50%;
-  background:
-    radial-gradient(circle at 31% 27%, rgba(255, 255, 255, 0.26), transparent 36%),
-    radial-gradient(circle, rgba(var(--node-rgb), 0.1) 0, rgba(var(--node-rgb), 0.06) 50%, rgba(var(--node-rgb), 0.24) 88%, transparent 100%),
-    radial-gradient(circle, rgba(10, 13, 34, 0.62) 0, rgba(10, 13, 34, 0.5) 100%);
-  box-shadow:
-    inset 0 0 9px rgba(var(--node-rgb), 0.42),
-    0 0 22px rgba(var(--node-rgb), 0.28);
-  transition: box-shadow var(--dur-m) var(--ease);
-  pointer-events: none;
+  transition: opacity var(--dur-m) var(--ease), filter var(--dur-m) var(--ease), transform var(--dur-m) var(--ease);
+  animation: uHalo 8s ease-in-out infinite alternate;
+  animation-delay: calc(var(--float-delay, 0s) * -1.5);
 }
 
-/* Flare + ignition ring (dormant until hover / focus / active) */
+@keyframes uHalo {
+  0%, 100% {
+    opacity: 0.55;
+    transform: translate(-50%, -50%) scale(0.96);
+  }
+  50% {
+    opacity: 0.78;
+    transform: translate(-50%, -50%) scale(1.04);
+  }
+}
+
+/* 2. Planetary Orbit — thin, subtle, physically hugging the core */
+.universe__node-orbit {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: var(--orbit-size);
+  height: var(--orbit-size);
+  transform: translate(-50%, -50%) rotate(var(--ring-roll)) rotateX(var(--ring-tilt));
+  transform-origin: center center;
+  border-radius: 50%;
+  border: 1px solid rgba(var(--node-rgb), 0.24);
+  background: radial-gradient(
+    circle at 50% 0px,
+    rgba(var(--node-rgb), 0.95) 0px,
+    rgba(var(--node-rgb), 0.8) 1.2px,
+    transparent 2.4px
+  );
+  pointer-events: none;
+  z-index: 1;
+  transition: border-color var(--dur-m) var(--ease), opacity var(--dur-m) var(--ease);
+  animation: uOrbit var(--ring-dur) linear infinite;
+}
+
+@keyframes uOrbit {
+  to {
+    transform: translate(-50%, -50%) rotate(var(--ring-roll)) rotateX(var(--ring-tilt)) rotate(360deg);
+  }
+}
+
+/* 3. Star Diffraction Flare (dormant until hover / focus / active / seeking) */
 .universe__node::before {
   content: '';
   position: absolute;
-  z-index: -1;
   left: 50%;
-  top: 20px;
+  top: 50%;
   width: 116px;
   height: 116px;
-  margin: -58px 0 0 -58px;
+  transform: translate(-50%, -50%) scale(0.5) rotate(0deg);
+  transform-origin: center center;
   background:
-    linear-gradient(90deg, transparent 0, rgba(var(--node-rgb), 0.9) 50%, transparent 100%) center / 100% 1px no-repeat,
-    linear-gradient(0deg, transparent 0, rgba(var(--node-rgb), 0.9) 50%, transparent 100%) center / 1px 100% no-repeat;
+    linear-gradient(90deg, transparent 0, rgba(var(--node-rgb), 0.92) 50%, transparent 100%) center / 100% 1px no-repeat,
+    linear-gradient(0deg, transparent 0, rgba(var(--node-rgb), 0.92) 50%, transparent 100%) center / 1px 100% no-repeat;
   opacity: 0;
-  transform: scale(0.5) rotate(0deg);
   transition: opacity var(--dur-m) var(--ease), transform 760ms var(--ease);
   pointer-events: none;
+  z-index: 1;
 }
+
+/* 4. Celestial Ignition Ring (triggers on click/active) */
 .universe__node::after {
   content: '';
   position: absolute;
-  z-index: -1;
   left: 50%;
-  top: 20px;
+  top: 50%;
   width: 40px;
   height: 40px;
-  margin: -20px 0 0 -20px;
+  transform: translate(-50%, -50%) scale(0.6);
+  transform-origin: center center;
   border-radius: 50%;
-  border: 1px solid rgba(255, 227, 173, 0.85);
+  border: 1px solid rgba(255, 227, 173, 0.9);
+  box-shadow: 0 0 10px rgba(var(--node-rgb), 0.6);
   opacity: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* 5. Celestial Core — translucent starlight body, crystalline & radiant */
+.universe__node-core {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: var(--core-size);
+  height: var(--core-size);
+  transform: translate(-50%, -50%);
+  transform-origin: center center;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 2;
+
+  background: radial-gradient(
+    circle at 45% 40%,
+    rgba(255, 255, 255, 0.35) 0%,
+    rgba(var(--node-rgb), 0.28) 40%,
+    rgba(20, 18, 30, 0.55) 100%
+  );
+  border: 1px solid rgba(var(--node-rgb), 0.45);
+  box-shadow:
+    0 0 10px rgba(var(--node-rgb), 0.3),
+    inset 0 0 6px rgba(var(--node-rgb), 0.25);
+  transition:
+    border-color var(--dur-m) var(--ease),
+    box-shadow var(--dur-m) var(--ease),
+    background var(--dur-m) var(--ease),
+    transform var(--dur-m) var(--ease);
+}
+
+/* 4. Starlight SVG Glyph — centered mathematically in the core */
+.universe__node-core > svg {
+  width: 16px;
+  height: 16px;
+  display: block;
+  flex-shrink: 0;
+  color: #fffaf0;
+  stroke: currentColor;
+  filter: drop-shadow(0 0 3px rgba(var(--node-rgb), 0.65));
+  transition: filter var(--dur-m) var(--ease), color var(--dur-s) var(--ease), transform var(--dur-m) var(--ease);
   pointer-events: none;
 }
 
-/* Hover & focus-visible — the star wakes with controlled emphasis */
-.universe__node:hover .universe__node-glow,
-.universe__node:focus-visible .universe__node-glow,
-.universe__node.is-hovered .universe__node-glow,
-.universe__node.is-focused .universe__node-glow {
-  opacity: 1;
-  scale: 1.2;
+/* 5. Editorial Star Label — anchored cleanly below the core */
+.universe__node-label {
+  position: absolute;
+  left: 50%;
+  top: calc(50% + 22px);
+  transform: translateX(-50%);
+  width: max-content;
+  max-width: 120px;
+  font-family: var(--font-serif);
+  font-size: 0.78rem;
+  letter-spacing: 0.02em;
+  font-weight: 400;
+  color: rgba(234, 230, 244, 0.85);
+  white-space: normal;
+  text-align: center;
+  line-height: 1.22;
+  pointer-events: none;
+  z-index: 3;
+  font-feature-settings: 'cv01', 'liga';
+  font-optical-sizing: auto;
+  text-shadow:
+    0 1px 3px rgba(4, 5, 12, 0.98),
+    0 0 10px rgba(4, 5, 12, 0.92);
+  transition: color var(--dur-m) var(--ease), text-shadow var(--dur-m) var(--ease);
 }
-.universe__node:hover .universe__node-glow::before,
-.universe__node:focus-visible .universe__node-glow::before,
-.universe__node.is-hovered .universe__node-glow::before,
-.universe__node.is-focused .universe__node-glow::before {
-  border-color: rgba(var(--node-rgb), 0.65);
-}
-.universe__node:hover .universe__node-glow::after,
-.universe__node:focus-visible .universe__node-glow::after,
-.universe__node.is-hovered .universe__node-glow::after,
-.universe__node.is-focused .universe__node-glow::after {
-  box-shadow: inset 0 0 11px rgba(var(--node-rgb), 0.65), 0 0 28px 3px rgba(var(--node-rgb), 0.5);
-}
-.universe__node:hover > svg,
-.universe__node:focus-visible > svg,
-.universe__node.is-hovered > svg,
-.universe__node.is-focused > svg {
-  filter: drop-shadow(0 0 6px rgba(var(--node-rgb), 0.95));
-}
-.universe__node:hover:not(:disabled)::before,
-.universe__node:focus-visible::before,
-.universe__node.is-hovered:not(:disabled)::before,
-.universe__node.is-focused::before {
-  opacity: 0.6;
-  transform: scale(1) rotate(0deg);
-}
-.universe__node:hover,
+
+/* Hover & Focus — Star Awakens with Diffraction Flare */
+.universe__node:hover:not(:disabled),
 .universe__node:focus-visible,
 .universe__node.is-hovered,
 .universe__node.is-focused {
-  color: var(--c-star-bright);
-}
-.universe__node:hover:not(:disabled),
-.universe__node.is-hovered:not(:disabled) {
   scale: 1.08;
+  z-index: 5;
 }
 
-/* Keyboard focus — elegant celestial concentric ring */
-.universe__node:focus-visible {
-  outline: none;
-}
-.universe__node:focus-visible .universe__node-glow::after {
-  box-shadow:
-    inset 0 0 11px rgba(var(--node-rgb), 0.7),
-    0 0 0 2px rgba(8, 10, 18, 0.95),
-    0 0 0 4px rgba(var(--node-rgb), 0.85),
-    0 0 22px 4px rgba(var(--node-rgb), 0.5);
+.universe__node:hover:not(:disabled)::before,
+.universe__node:focus-visible::before,
+.universe__node.is-hovered::before,
+.universe__node.is-focused::before {
+  opacity: 0.85;
+  transform: translate(-50%, -50%) scale(1) rotate(0deg);
 }
 
-/* Nearby / Connected node state — subtle starlight awakening */
-.universe__node.is-connected {
-  color: #f0e6d2;
-}
-.universe__node.is-connected .universe__node-glow {
-  opacity: 0.92;
-  scale: 1.1;
-}
-.universe__node.is-connected .universe__node-glow::before {
-  border-color: rgba(var(--node-rgb), 0.45);
-}
-.universe__node.is-connected .universe__node-glow::after {
-  box-shadow: inset 0 0 9px rgba(var(--node-rgb), 0.5), 0 0 24px 2px rgba(var(--node-rgb), 0.35);
-}
-.universe__node.is-connected .universe__node-label {
-  color: #f0e6d2;
-  text-shadow: 0 1px 3px rgba(4, 5, 12, 0.95), 0 0 12px rgba(var(--node-rgb), 0.4);
-}
-
-/* Dimmed state — surrounding elements gracefully recede without disappearing */
-.universe__node.is-dimmed {
-  filter: opacity(0.4) saturate(0.7);
-}
-
-/* Active — the chosen star briefly becomes the focal point */
-.universe__node.is-active { color: var(--c-star-bright); z-index: 5; }
-.universe__node.is-active .universe__node-glow {
+.universe__node:hover .universe__node-halo,
+.universe__node:focus-visible .universe__node-halo,
+.universe__node.is-hovered .universe__node-halo,
+.universe__node.is-focused .universe__node-halo {
   opacity: 1;
-  scale: 1.7;
-  animation: nodeGlowPulse 420ms ease-out;
+  filter: brightness(1.35);
+  transform: translate(-50%, -50%) scale(1.18);
 }
-.universe__node.is-active .universe__node-glow::before { border-color: rgba(255, 227, 173, 0.75); }
-.universe__node.is-active .universe__node-glow::after {
-  box-shadow: inset 0 0 12px rgba(255, 227, 173, 0.8), 0 0 30px 6px rgba(255, 227, 173, 0.6), 0 0 84px 26px rgba(var(--node-rgb), 0.34);
+
+.universe__node:hover .universe__node-core,
+.universe__node:focus-visible .universe__node-core,
+.universe__node.is-hovered .universe__node-core,
+.universe__node.is-focused .universe__node-core {
+  border-color: rgba(var(--node-rgb), 0.85);
+  box-shadow:
+    0 0 16px 3px rgba(var(--node-rgb), 0.55),
+    inset 0 0 8px rgba(var(--node-rgb), 0.4);
+  background: radial-gradient(
+    circle at 45% 40%,
+    rgba(255, 255, 255, 0.45) 0%,
+    rgba(var(--node-rgb), 0.35) 45%,
+    rgba(22, 18, 34, 0.7) 100%
+  );
 }
-.universe__node.is-active > svg { filter: drop-shadow(0 0 8px rgba(255, 227, 173, 1)) drop-shadow(0 0 22px rgba(255, 227, 173, 0.55)); }
-.universe__node.is-active::before { opacity: 1; transform: scale(1.4) rotate(45deg); }
-.universe__node.is-active::after { animation: uIgnite 640ms cubic-bezier(0.2, 0.7, 0.2, 1) forwards; }
-.universe__node.is-active .universe__node-label { text-shadow: 0 0 14px rgba(255, 227, 173, 0.5), 0 0 3px rgba(4, 5, 12, 0.9); }
-.universe__node.is-active { animation: nodeEnter 640ms var(--ease) both, nodeActivate 420ms var(--ease) forwards; }
-@keyframes nodeActivate {
-  to { transform: translate(-50%, -50%) scale(1.24); }
+
+.universe__node:hover .universe__node-orbit,
+.universe__node:focus-visible .universe__node-orbit,
+.universe__node.is-hovered .universe__node-orbit,
+.universe__node.is-focused .universe__node-orbit {
+  border-color: rgba(var(--node-rgb), 0.55);
 }
+
+.universe__node:hover .universe__node-core > svg,
+.universe__node:focus-visible .universe__node-core > svg,
+.universe__node.is-hovered .universe__node-core > svg,
+.universe__node.is-focused .universe__node-core > svg {
+  color: #ffffff;
+  filter: drop-shadow(0 0 6px rgba(var(--node-rgb), 0.95)) drop-shadow(0 0 12px rgba(var(--node-rgb), 0.45));
+}
+
+.universe__node:hover .universe__node-label,
+.universe__node:focus-visible .universe__node-label,
+.universe__node.is-hovered .universe__node-label,
+.universe__node.is-focused .universe__node-label {
+  color: #ffffff;
+  text-shadow:
+    0 1px 4px rgba(4, 5, 12, 0.98),
+    0 0 14px rgba(var(--node-rgb), 0.7);
+}
+
+/* Keyboard focus concentric ring on the core */
+.universe__node:focus-visible .universe__node-core {
+  box-shadow:
+    0 0 0 2px rgba(5, 4, 8, 0.95),
+    0 0 0 4px rgba(var(--node-rgb), 0.85),
+    0 0 16px rgba(var(--node-rgb), 0.5);
+}
+
+/* Active State — Selected Node Ignites as the Focal Star */
+.universe__node.is-active {
+  z-index: 10;
+  scale: 1.15;
+  color: var(--c-star-bright);
+  animation: nodeGlowPulse 460ms ease-out forwards;
+}
+
+.universe__node.is-active::before {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1.4) rotate(45deg);
+  transition-duration: 420ms;
+}
+
+.universe__node.is-active::after {
+  animation: uIgnite 640ms cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+}
+
+.universe__node.is-active .universe__node-core {
+  border-color: rgba(255, 232, 185, 0.95);
+  box-shadow:
+    0 0 24px 6px rgba(255, 232, 185, 0.75),
+    0 0 44px 12px rgba(var(--node-rgb), 0.45),
+    inset 0 0 12px rgba(255, 232, 185, 0.8);
+}
+
+.universe__node.is-active .universe__node-halo {
+  opacity: 1;
+  filter: brightness(1.5);
+  transform: translate(-50%, -50%) scale(1.3);
+}
+
+.universe__node.is-active .universe__node-core > svg {
+  color: #ffffff;
+  filter: drop-shadow(0 0 10px rgba(255, 232, 185, 1)) drop-shadow(0 0 20px rgba(255, 232, 185, 0.6));
+}
+
+.universe__node.is-active .universe__node-label {
+  color: #ffffff;
+  text-shadow: 0 0 16px rgba(255, 232, 185, 0.75), 0 1px 3px rgba(4, 5, 12, 0.98);
+}
+
 @keyframes nodeGlowPulse {
   from { filter: brightness(1); }
-  55% { filter: brightness(1.75); }
+  50% { filter: brightness(1.85); }
   to { filter: brightness(1.25); }
 }
 
-.universe__node:disabled { cursor: default; }
-
-/* Labels — delicate editorial starlight captions with a protective dark halo
-   so threads and cosmic dust never obscure the letterforms. */
-.universe__node-label {
-  font-family: var(--font-serif);
-  font-size: 0.78rem;
-  letter-spacing: 0.015em;
-  font-weight: 400;
-  color: rgba(228, 224, 238, 0.78);
-  white-space: normal;
-  max-width: 120px;
-  text-align: center;
-  line-height: 1.25;
-  text-shadow:
-    0 0 3px rgba(4, 5, 12, 0.98),
-    0 0 8px rgba(4, 5, 12, 0.92),
-    0 0 16px rgba(4, 5, 12, 0.8);
-  transition: color var(--dur-m) var(--ease), text-shadow var(--dur-m) var(--ease);
-}
-.universe__node:hover .universe__node-label,
-.universe__node:focus-visible .universe__node-label {
-  color: #fff;
-  text-shadow:
-    0 0 3px rgba(4, 5, 12, 0.98),
-    0 0 14px rgba(var(--node-rgb), 0.55),
-    0 0 24px rgba(var(--node-rgb), 0.25);
+@keyframes uIgnite {
+  0% {
+    opacity: 0.95;
+    transform: translate(-50%, -50%) scale(0.6);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(5.5);
+  }
 }
 
-/* Float — softer, slower, and drifting on two axes with a different period per
-   star so the field never moves in lockstep. Uses `translate` (composited)
-   rather than margin, so nothing reflows. */
+/* Float — Entire star floats together as ONE celestial object */
 .universe__node--float {
   animation: nodeEnter var(--dur-l) var(--ease) both, nodeFloat var(--float-dur) ease-in-out infinite;
   animation-delay: var(--enter-delay, 0ms), var(--float-delay, 0s);
 }
+
+@keyframes nodeEnter {
+  from { opacity: 0; transform: translate(-50%, -50%) scale(0.85); }
+  to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+
 @keyframes nodeFloat {
   0%, 100% { translate: 0 0; }
-  24% { translate: 2px -3px; }
-  52% { translate: -1px -6px; }
-  78% { translate: -3px -2.5px; }
+  50% { translate: 0 -3.5px; }
+}
+
+/* Connected Star State (adjacent to hovered/active/seeking) */
+.universe__node.is-connected {
+  filter: none;
+}
+.universe__node.is-connected .universe__node-halo {
+  opacity: 0.92;
+  filter: brightness(1.2);
+}
+.universe__node.is-connected .universe__node-core {
+  border-color: rgba(var(--node-rgb), 0.7);
+  box-shadow: 0 0 14px 2px rgba(var(--node-rgb), 0.45);
+}
+.universe__node.is-connected .universe__node-label {
+  color: #fffaf0;
+  text-shadow: 0 0 10px rgba(var(--node-rgb), 0.55), 0 1px 3px rgba(4, 5, 12, 0.95);
+}
+
+/* Dimmed Star State — uses filter to bypass nodeEnter animation fill */
+.universe__node.is-dimmed {
+  filter: opacity(0.28) saturate(0.6);
+  transition: filter var(--dur-m) var(--ease);
+}
+
+/* Seeking Anticipation State (for Surprise Me traversal) */
+.universe__node.is-seeking {
+  z-index: 8;
+  scale: 1.14;
+  filter: none !important;
+  animation: nodeGlowPulse 220ms ease-out;
+}
+.universe__node.is-seeking::before {
+  opacity: 0.9;
+  transform: translate(-50%, -50%) scale(1.25) rotate(30deg);
+}
+.universe__node.is-seeking .universe__node-halo {
+  opacity: 1;
+  filter: brightness(1.5);
+  transform: translate(-50%, -50%) scale(1.22);
+}
+.universe__node.is-seeking .universe__node-core {
+  border-color: rgba(255, 232, 185, 0.95);
+  box-shadow:
+    0 0 18px 2px rgba(255, 232, 185, 0.7),
+    inset 0 0 8px rgba(255, 232, 185, 0.6);
+}
+.universe__node.is-seeking .universe__node-core > svg {
+  color: #ffffff;
+  filter: drop-shadow(0 0 8px rgba(255, 232, 185, 1));
+}
+.universe__node.is-seeking .universe__node-label {
+  color: #ffffff;
+  text-shadow: 0 0 14px rgba(255, 232, 185, 0.75), 0 1px 3px rgba(4, 5, 12, 0.98);
+}
+
+.universe__node:disabled { cursor: default; }
+
+/* ==========================================================================
+   Celestial Node Personalities
+   ========================================================================== */
+
+/* 1. Memories (Memory Museum) — Discovery / Reveal */
+.universe__node--museum {
+  --node-rgb: 218, 186, 226;
+  --ring-roll: 14deg;
+  --ring-tilt: 72deg;
+  --ring-dur: 38s;
+  --float-dur: 10.2s;
+}
+
+/* 2. Letter — Intimate / Slow */
+.universe__node--letter {
+  --node-rgb: 236, 178, 188;
+  --ring-roll: -26deg;
+  --ring-tilt: 68deg;
+  --ring-dur: 44s;
+  --float-dur: 12.5s;
+}
+
+/* 3. Future — Forward Movement */
+.universe__node--future {
+  --node-rgb: 246, 212, 142;
+  --ring-roll: -34deg;
+  --ring-tilt: 62deg;
+  --ring-dur: 28s;
+  --float-dur: 8.6s;
+}
+
+/* 4. Soundtrack — Atmospheric / Audio Response */
+.universe__node--soundtrack {
+  --node-rgb: 202, 190, 246;
+  --ring-roll: 24deg;
+  --ring-tilt: 70deg;
+  --ring-dur: 36s;
+  --float-dur: 9.0s;
+}
+
+/* 5. Open When — Secret / Anticipation */
+.universe__node--openwhen {
+  --node-rgb: 224, 172, 202;
+  --ring-roll: 8deg;
+  --ring-tilt: 74deg;
+  --ring-dur: 40s;
+  --float-dur: 10.4s;
+}
+
+/* 6. Surprise Me — Playful Anticipation */
+.universe__node--surprise {
+  --node-rgb: 250, 218, 134;
+  --ring-roll: -6deg;
+  --ring-tilt: 68deg;
+  --ring-dur: 26s;
+  --float-dur: 7.8s;
+}
+
+/* 7. The Beginning — Primordial Genesis */
+.universe__node--beginning {
+  --node-rgb: 242, 200, 131;
+  --ring-roll: -20deg;
+  --ring-tilt: 71deg;
+  --ring-dur: 34s;
+  --float-dur: 9.2s;
+}
+
+/* 8. Things I Don't Say Enough — Delicate Whisper */
+.universe__node--unsaid {
+  --node-rgb: 232, 182, 194;
+  --ring-roll: 22deg;
+  --ring-tilt: 72deg;
+  --ring-dur: 38s;
+  --float-dur: 11.0s;
+}
+
+/* 9. How Well Do You Know Us — Inquisitive Curiosity */
+.universe__node--quiz {
+  --node-rgb: 208, 196, 238;
+  --ring-roll: -14deg;
+  --ring-tilt: 70deg;
+  --ring-dur: 33s;
+  --float-dur: 9.6s;
+}
+
+/* 10. One Last Thing — Culmination Beacon */
+.universe__node--final {
+  --node-rgb: 255, 226, 172;
+  --core-size: 36px;
+  --halo-size: 60px;
+  --orbit-size: 52px;
+  --ring-roll: -18deg;
+  --ring-tilt: 70deg;
+  --ring-dur: 44s;
+  --float-dur: 11.6s;
 }
 
 /* --------------------------------------------------------------------------
@@ -3568,22 +3770,11 @@
   33.34% { translate: 14vw 12vh; rotate: 30deg; }
   66.67% { translate: 66vw 26vh; rotate: 15deg; }
 }
-@keyframes uLineFlow { to { stroke-dashoffset: -420; } } /* 70 dash periods of 6px: seamless loop, ~3px/s */
+@keyframes uLineFlow { to { stroke-dashoffset: -420; } }
 @keyframes uLineWave {
-  0%, 100% { stroke-opacity: 0.5; }
-  13% { stroke-opacity: 1; }
-  32% { stroke-opacity: 0.58; }
-}
-@keyframes uHalo {
-  0%, 100% { transform: scale(0.95); }
-  50% { transform: scale(1.07); }
-}
-@keyframes uOrbit {
-  to { transform: rotate(var(--ring-roll)) rotateX(var(--ring-tilt)) rotate(360deg); }
-}
-@keyframes uIgnite {
-  0% { opacity: 0.9; transform: scale(0.6); }
-  100% { opacity: 0; transform: scale(5.5); }
+  0%, 100% { stroke-opacity: 0.4; }
+  13% { stroke-opacity: 0.8; }
+  32% { stroke-opacity: 0.48; }
 }
 
 /* The moment of travel: the whole sky draws a breath in. */
@@ -3593,8 +3784,8 @@
    Smaller screens
    -------------------------------------------------------------------------- */
 @media (max-width: 900px) {
-  .universe__node { --halo: 92px; --core: 34px; --ring: 64px; }
-  .universe__node:nth-of-type(10) { --halo: 104px; --core: 38px; --ring: 72px; }
+  .universe__node { --halo-size: 50px; --core-size: 30px; --orbit-size: 42px; }
+  .universe__node--final { --halo-size: 56px; --core-size: 34px; --orbit-size: 48px; }
   .universe__field::after { display: none; }
 }
 
@@ -3629,68 +3820,57 @@
     left: var(--mx, var(--x));
     top: var(--my, var(--y));
     transform: translate(-50%, -50%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 4px;
-    padding: 6px;
-    min-width: 48px;
-    min-height: 48px;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    min-width: 44px;
+    min-height: 44px;
     border-radius: 50%;
-    border-bottom: none;
-    --halo: 68px;
-    --core: 28px;
-    --ring: 48px;
+    --core-size: 28px;
+    --halo-size: 46px;
+    --orbit-size: 38px;
   }
-  .universe__node:nth-of-type(10) {
-    --halo: 78px;
-    --core: 32px;
-    --ring: 56px;
+  .universe__node--final {
+    --core-size: 32px;
+    --halo-size: 52px;
+    --orbit-size: 44px;
   }
 
-  .universe__node > svg {
-    width: 17px;
-    height: 17px;
-    filter: drop-shadow(0 0 4px rgba(var(--node-rgb), 0.6));
+  .universe__node-core > svg {
+    width: 14px;
+    height: 14px;
   }
 
   .universe__node-label {
+    top: calc(50% + 18px);
     font-size: 0.68rem;
-    max-width: 82px;
-    line-height: 1.15;
+    max-width: 90px;
+    line-height: 1.16;
     text-align: center;
     color: rgba(229, 233, 246, 0.88);
   }
 
-  .universe__node-glow {
-    display: block;
-    top: 15px;
-  }
-  .universe__node-glow::before {
-    display: block;
-  }
-  .universe__node-glow::after {
-    display: block;
+  .universe__node::before {
+    width: 88px;
+    height: 88px;
   }
 
   .universe__node:hover:not(:disabled),
   .universe__node:focus-visible {
-    transform: translate(-50%, -50%) scale(1.06);
+    transform: translate(-50%, -50%);
     background: none;
   }
   .universe__node.is-active {
     background: none;
-    scale: 1.15;
   }
   .universe__node.is-dimmed {
-    filter: opacity(0.36) saturate(0.7);
+    filter: opacity(0.32) saturate(0.65);
   }
 }
 
 /* --------------------------------------------------------------------------
    Reduced motion — layers stay (static, still atmospheric); nothing drifts,
-   orbits, pulses or flies. (OS preference here; the site owner's
-   `reducedParticles` switch is handled by the :has() rule just below.)
+   orbits, pulses or flies.
    -------------------------------------------------------------------------- */
 @media (prefers-reduced-motion: reduce) {
   .universe .starfield::before,
@@ -3700,15 +3880,18 @@
   .universe__field::before,
   .universe__field::after,
   .universe__line,
-  .universe__node-glow,
-  .universe__node-glow::before {
+  .universe__node,
+  .universe__node-halo,
+  .universe__node-orbit,
+  .universe__node-core,
+  .universe__node-core > svg,
+  .universe__node::before,
+  .universe__node::after {
     animation: none !important;
   }
-  .universe__line { stroke-opacity: 0.8; }
+  .universe__line { stroke-opacity: 0.6; }
 }
-/* Same treatment when JS reports reduced motion via settings.reducedParticles
-   (in that mode the nodes are rendered without the --float class). Kept as its
-   own rule so browsers without :has() simply ignore it. */
+
 .universe:has(.universe__node:not(.universe__node--float)) .starfield::before,
 .universe:has(.universe__node:not(.universe__node--float)) .starfield::after,
 .universe:has(.universe__node:not(.universe__node--float)) .starfield canvas,
@@ -3716,8 +3899,9 @@
 .universe:has(.universe__node:not(.universe__node--float)) .universe__field::before,
 .universe:has(.universe__node:not(.universe__node--float)) .universe__field::after,
 .universe:has(.universe__node:not(.universe__node--float)) .universe__line,
-.universe:has(.universe__node:not(.universe__node--float)) .universe__node-glow,
-.universe:has(.universe__node:not(.universe__node--float)) .universe__node-glow::before {
+.universe:has(.universe__node:not(.universe__node--float)) .universe__node-halo,
+.universe:has(.universe__node:not(.universe__node--float)) .universe__node-orbit,
+.universe:has(.universe__node:not(.universe__node--float)) .universe__node-core > svg {
   animation: none;
 }
 /* ==========================================================================
@@ -4796,57 +4980,24 @@ a.pill-tag:active { scale: 0.95; transition-duration: var(--dur-xs); }
     uCometAim 114s step-end -20s infinite;
 }
 
-/* Universe node breathing — staggered intervals per node */
-.universe__node:nth-of-type(2n) .universe__node-glow {
-  animation-duration: 5.8s;
-}
-.universe__node:nth-of-type(3n) .universe__node-glow {
-  animation-duration: 4.2s;
-  animation-delay: -1.4s;
-}
-.universe__node:nth-of-type(5n) .universe__node-glow {
-  animation-duration: 6.5s;
-  animation-delay: -2.8s;
-}
-.universe__node:nth-of-type(7n) .universe__node-glow {
-  animation-duration: 3.8s;
-  animation-delay: -0.6s;
-}
-
 /* Constellation line glow when node is active */
 .universe__line {
-  transition: stroke 500ms var(--ease), opacity 500ms var(--ease), stroke-width 500ms var(--ease);
+  transition: stroke 420ms var(--ease), opacity 420ms var(--ease), stroke-width 420ms var(--ease);
 }
 .universe.has-active .universe__line {
-  opacity: 0.06;
+  opacity: 0.05;
 }
 .universe.has-active .universe__line.is-connected {
-  opacity: 0.45;
-  stroke: rgba(var(--rgb-gold-hi), 0.6);
-  stroke-width: 1.5px;
-  filter: drop-shadow(0 0 4px rgba(var(--rgb-gold), 0.3));
+  opacity: 0.55;
+  stroke: rgba(var(--rgb-gold-hi), 0.7);
+  stroke-width: 1.25px;
+  filter: drop-shadow(0 0 4px rgba(var(--rgb-gold), 0.35));
 }
 
 /* ==========================================================================
    NODE EXPERIENCE ARCHITECTURE — UNIQUE DISCOVERY BEHAVIORS
    ========================================================================== */
 
-/* --------------------------------------------------------------------------
-   1. Universe — Seeking anticipation ripple
-   -------------------------------------------------------------------------- */
-.universe__node.is-seeking {
-  z-index: 6;
-  color: var(--c-star-bright);
-}
-.universe__node.is-seeking .universe__node-glow {
-  opacity: 1;
-  scale: 1.6;
-  filter: brightness(1.8);
-  transition: all 220ms var(--ease);
-}
-.universe__node.is-seeking .universe__node-glow::before {
-  border-color: rgba(var(--rgb-gold-hi), 0.9);
-}
 
 /* --------------------------------------------------------------------------
    2. Memory Museum — Keepsake Constellation Navigation
