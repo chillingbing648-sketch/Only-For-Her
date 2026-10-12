@@ -6,8 +6,7 @@ export default function SmartImage({ src, alt = '', label, className = '' }) {
 
   if (failed) {
     return (
-      <div className={`image-frame image-placeholder ${className}`}>
-        {label || 'A photo goes here'}
+      <div className={`image-frame image-placeholder ${className}`} role="img" aria-label={label || 'Image unavailable'}>
       </div>
     )
   }

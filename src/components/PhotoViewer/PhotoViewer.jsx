@@ -1,9 +1,12 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { assetUrl } from '../../utils/assetUrl'
 
 export default function PhotoViewer({ images, index, onClose, onChange }) {
   const touchStart = useRef(null)
   const current = images[index]
+  const [mediaFailed, setMediaFailed] = useState(false)
+
+  useEffect(() => setMediaFailed(false), [index, current?.src, current?.video])
 
   useEffect(() => {
     function onKey(e) {
@@ -54,22 +57,27 @@ export default function PhotoViewer({ images, index, onClose, onChange }) {
       )}
 
       <figure className="photo-viewer__figure scale-in" key={index}>
-        {current.video ? (
+        {mediaFailed ? (
+          <div className="image-placeholder" role="img" aria-label="Media unavailable" style={{ width: '70vw', maxWidth: 480, aspectRatio: '4/3' }}>
+            Media unavailable
+          </div>
+        ) : current.video ? (
           <video
             src={assetUrl(current.video)}
             controls
             playsInline
             preload="metadata"
             style={{ width: '100%', height: 'auto', display: 'block' }}
+            onError={() => setMediaFailed(true)}
           />
         ) : current.src ? (
-          <img src={assetUrl(current.src)} alt={current.caption || ''} />
+          <img src={assetUrl(current.src)} alt={current.caption || ''} onError={() => setMediaFailed(true)} />
         ) : (
           <div
             className="image-placeholder"
             style={{ width: '70vw', maxWidth: 480, aspectRatio: '4/3' }}
           >
-            A photo goes here
+            Photo unavailable
           </div>
         )}
         {current.caption && <figcaption>{current.caption}</figcaption>}

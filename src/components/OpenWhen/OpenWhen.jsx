@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { giftData, settings } from '../../data/giftData'
 import { EmptySection } from '../Timeline/Timeline'
 import { useEscapeToClose } from '../../hooks/useEscapeToClose'
@@ -6,9 +6,14 @@ import { useEscapeToClose } from '../../hooks/useEscapeToClose'
 function isLocked(item) {
   if (!settings.enableDateLocks) return false
   if (!item.unlockDate) return false
-  const target = new Date(item.unlockDate + 'T00:00:00')
-  if (Number.isNaN(target.getTime())) return false
-  return new Date() < target
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(item.unlockDate)) return false
+  const [year, month, day] = item.unlockDate.split('-').map(Number)
+  const target = new Date(year, month - 1, day)
+  if (target.getFullYear() !== year || target.getMonth() !== month - 1 || target.getDate() !== day) return false
+
+  const now = new Date()
+  const localToday = [now.getFullYear(), String(now.getMonth() + 1).padStart(2, '0'), String(now.getDate()).padStart(2, '0')].join('-')
+  return localToday < item.unlockDate
 }
 
 export default function OpenWhen() {
@@ -16,6 +21,14 @@ export default function OpenWhen() {
   const recipient = giftData.recipientName || 'You'
   const [openIndex, setOpenIndex] = useState(null)
   const [unsealingIndex, setUnsealingIndex] = useState(null)
+  const [dateCheck, setDateCheck] = useState(0)
+
+  useEffect(() => {
+    const now = new Date()
+    const nextLocalMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1)
+    const timer = window.setTimeout(() => setDateCheck((check) => check + 1), nextLocalMidnight - now + 25)
+    return () => window.clearTimeout(timer)
+  }, [dateCheck])
 
   const active = openIndex !== null ? items[openIndex] : null
   const locked = active ? isLocked(active) : false

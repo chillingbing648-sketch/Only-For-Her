@@ -10,11 +10,9 @@ export default function Opening({ onEnter }) {
   const reduced = useReducedMotion()
   const [stage, setStage] = useState(reduced ? STAGE_DELAYS_MS.length : 0)
   const [convergencePhase, setConvergencePhase] = useState('idle') // 'idle' | 'waking-you' | 'waking-me' | 'traveling' | 'converged' | 'portal'
-  const [hoveredStar, setHoveredStar] = useState(null) // 'you' | 'me' | null
 
   const containerRef = useRef(null)
-  const pointerRef = useRef({ x: 0, y: 0 })
-  const rafRef = useRef(null)
+  const pointerRef = useRef({ x: 0, y: 0, targetX: 0, targetY: 0 })
   const timersRef = useRef([])
 
   /* Safely record a timeout for automatic cleanup on unmount */
@@ -42,30 +40,34 @@ export default function Opening({ onEnter }) {
     const el = containerRef.current
     if (!el) return
     let destroyed = false
+    let pointerFrame = null
 
     function onPointerMove(e) {
       const w = window.innerWidth
       const h = window.innerHeight
-      pointerRef.current.x = ((e.clientX / w) - 0.5) * 2
-      pointerRef.current.y = ((e.clientY / h) - 0.5) * 2
+      pointerRef.current.targetX = ((e.clientX / w) - 0.5) * 2
+      pointerRef.current.targetY = ((e.clientY / h) - 0.5) * 2
+      if (pointerFrame === null) pointerFrame = requestAnimationFrame(tick)
     }
 
     function tick() {
+      pointerFrame = null
       if (destroyed) return
-      const px = pointerRef.current.x
-      const py = pointerRef.current.y
-      el.style.setProperty('--px', px.toFixed(3))
-      el.style.setProperty('--py', py.toFixed(3))
-      rafRef.current = requestAnimationFrame(tick)
+      const pointer = pointerRef.current
+      pointer.x += (pointer.targetX - pointer.x) * 0.18
+      pointer.y += (pointer.targetY - pointer.y) * 0.18
+      el.style.setProperty('--px', pointer.x.toFixed(3))
+      el.style.setProperty('--py', pointer.y.toFixed(3))
+      if (Math.abs(pointer.targetX - pointer.x) > 0.003 || Math.abs(pointer.targetY - pointer.y) > 0.003) {
+        pointerFrame = requestAnimationFrame(tick)
+      }
     }
 
     window.addEventListener('pointermove', onPointerMove, { passive: true })
-    rafRef.current = requestAnimationFrame(tick)
-
     return () => {
       destroyed = true
       window.removeEventListener('pointermove', onPointerMove)
-      if (rafRef.current) cancelAnimationFrame(rafRef.current)
+      if (pointerFrame !== null) cancelAnimationFrame(pointerFrame)
     }
   }, [reduced])
 
@@ -179,8 +181,6 @@ export default function Opening({ onEnter }) {
         type="button"
         className={`opening__star opening__star--me ${stage >= 2 ? 'is-visible' : ''} ${isWakingMe ? 'is-waking' : ''} ${isTraveling ? 'is-traveling' : ''} ${isConverged ? 'is-merged' : ''}`}
         onClick={triggerConvergence}
-        onPointerEnter={() => setHoveredStar('me')}
-        onPointerLeave={() => setHoveredStar(null)}
         disabled={isEngaged}
         aria-label="Me star. Click to converge with You."
       >
@@ -200,8 +200,6 @@ export default function Opening({ onEnter }) {
         type="button"
         className={`opening__star opening__star--you ${stage >= 2 ? 'is-visible' : ''} ${isWakingAny ? 'is-waking' : ''} ${isTraveling ? 'is-traveling' : ''} ${isConverged ? 'is-merged' : ''}`}
         onClick={triggerConvergence}
-        onPointerEnter={() => setHoveredStar('you')}
-        onPointerLeave={() => setHoveredStar(null)}
         disabled={isEngaged}
         aria-label={`${giftData.opening.starLabel} star. Click to converge with Me.`}
       >

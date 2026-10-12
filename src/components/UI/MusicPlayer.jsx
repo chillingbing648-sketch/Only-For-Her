@@ -55,6 +55,7 @@ export default function MusicPlayer() {
         onEnded={() => setPlaying(false)}
         onError={() => {
           setPlaying(false)
+          setAvailable(false)
         }}
       />
 

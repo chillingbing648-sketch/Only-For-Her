@@ -46,7 +46,10 @@ function StarField({ density = 1, respondToPointer = true }) {
       ? Math.min(Math.max(1, baseDpr), 1.25)
       : Math.min(Math.max(1, baseDpr), 1.5)
 
-    let particles = []
+    let dustAndStars = []
+    let crossTwinkles = []
+    let starbursts = []
+    let heartStars = []
     let pointer = { x: 0.5, y: 0.5 }
     let targetPointer = { x: 0.5, y: 0.5 }
 
@@ -190,7 +193,10 @@ function StarField({ density = 1, respondToPointer = true }) {
         })
       }
 
-      particles = generated
+      dustAndStars = generated.filter((p) => p.type === TYPE_DUST || p.type === TYPE_STAR)
+      crossTwinkles = generated.filter((p) => p.type === TYPE_CROSS)
+      starbursts = generated.filter((p) => p.type === TYPE_BURST)
+      heartStars = generated.filter((p) => p.type === TYPE_HEART)
     }
 
     function resize() {
@@ -332,7 +338,7 @@ function StarField({ density = 1, respondToPointer = true }) {
       ctx.restore()
     }
 
-    function drawFrame(t) {
+    function drawFrame(t, frameScale = 1) {
       if (destroyed || width <= 0 || height <= 0) return
 
       if (respondToPointer && !reduced) {
@@ -349,14 +355,11 @@ function StarField({ density = 1, respondToPointer = true }) {
 
       const px = (pointer.x - 0.5) * 2
       const py = (pointer.y - 0.5) * 2
-      const len = particles.length
-
       // Pass 1: Cosmic dust & normal stars
       let activeColor = -1
 
-      for (let i = 0; i < len; i++) {
-        const p = particles[i]
-        if (p.type !== TYPE_DUST && p.type !== TYPE_STAR) continue
+      for (let i = 0; i < dustAndStars.length; i++) {
+        const p = dustAndStars[i]
 
         if (p.colorIdx !== activeColor) {
           activeColor = p.colorIdx
@@ -364,8 +367,8 @@ function StarField({ density = 1, respondToPointer = true }) {
         }
 
         if (!reduced) {
-          p.x += p.driftX
-          p.y += p.driftY
+          p.x += p.driftX * frameScale
+          p.y += p.driftY * frameScale
           if (p.x < 0) p.x += 1
           else if (p.x > 1) p.x -= 1
           if (p.y < 0) p.y += 1
@@ -387,13 +390,12 @@ function StarField({ density = 1, respondToPointer = true }) {
       }
 
       // Pass 2: Medium 4-point cross-twinkles (Ref 2 & 3)
-      for (let i = 0; i < len; i++) {
-        const p = particles[i]
-        if (p.type !== TYPE_CROSS) continue
+      for (let i = 0; i < crossTwinkles.length; i++) {
+        const p = crossTwinkles[i]
 
         if (!reduced) {
-          p.x += p.driftX
-          p.y += p.driftY
+          p.x += p.driftX * frameScale
+          p.y += p.driftY * frameScale
           if (p.x < 0) p.x += 1
           else if (p.x > 1) p.x -= 1
           if (p.y < 0) p.y += 1
@@ -413,13 +415,12 @@ function StarField({ density = 1, respondToPointer = true }) {
       }
 
       // Pass 3: Large luminous starbursts (Ref 3)
-      for (let i = 0; i < len; i++) {
-        const p = particles[i]
-        if (p.type !== TYPE_BURST) continue
+      for (let i = 0; i < starbursts.length; i++) {
+        const p = starbursts[i]
 
         if (!reduced) {
-          p.x += p.driftX
-          p.y += p.driftY
+          p.x += p.driftX * frameScale
+          p.y += p.driftY * frameScale
           if (p.x < 0) p.x += 1
           else if (p.x > 1) p.x -= 1
           if (p.y < 0) p.y += 1
@@ -440,13 +441,12 @@ function StarField({ density = 1, respondToPointer = true }) {
       }
 
       // Pass 4: Glowing outlined celestial hearts (Ref 2)
-      for (let i = 0; i < len; i++) {
-        const p = particles[i]
-        if (p.type !== TYPE_HEART) continue
+      for (let i = 0; i < heartStars.length; i++) {
+        const p = heartStars[i]
 
         if (!reduced) {
-          p.x += p.driftX
-          p.y += p.driftY
+          p.x += p.driftX * frameScale
+          p.y += p.driftY * frameScale
           if (p.x < 0) p.x += 1
           else if (p.x > 1) p.x -= 1
           if (p.y < 0) p.y += 1
@@ -467,6 +467,7 @@ function StarField({ density = 1, respondToPointer = true }) {
       ctx.globalAlpha = 1
     }
 
+    let lastFrameTime = null
     function loop(t) {
       if (destroyed) return
       if (!isVisible) {
@@ -474,7 +475,11 @@ function StarField({ density = 1, respondToPointer = true }) {
         return
       }
 
-      drawFrame(t)
+      const frameScale = lastFrameTime === null
+        ? 1
+        : Math.min(2.5, Math.max(0, (t - lastFrameTime) / (1000 / 60)))
+      lastFrameTime = t
+      drawFrame(t, frameScale)
 
       if (!reduced) {
         raf = requestAnimationFrame(loop)

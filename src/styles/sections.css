@@ -145,7 +145,7 @@
     43px 61px,
     89px 37px;
 
-  opacity: 0.52;
+  opacity: 0.68;
   filter: blur(0.25px);
 
   animation: cosmicDustFloat 20s ease-in-out infinite alternate;
@@ -179,7 +179,7 @@
     );
 
   filter: blur(26px);
-  opacity: 0.9;
+  opacity: 1;
   transform: scaleY(1.15);
 
   animation: cosmicDustBreath 10s ease-in-out infinite alternate;
@@ -273,11 +273,12 @@
   pointer-events: none;
   opacity: 0;
   transition: opacity 2.5s var(--ease);
+  will-change: opacity;
   background:
-    radial-gradient(ellipse 46% 38% at 32% 34%, rgba(var(--rgb-nebula-blush), 0.22), transparent 72%),
-    radial-gradient(ellipse 40% 32% at 70% 50%, rgba(var(--rgb-nebula-glow), 0.16), transparent 70%),
-    radial-gradient(ellipse 32% 26% at 50% 68%, rgba(var(--rgb-nebula-core), 0.12), transparent 72%),
-    radial-gradient(ellipse 36% 30% at 80% 24%, rgba(var(--rgb-nebula-dust), 0.14), transparent 72%);
+    radial-gradient(ellipse 46% 38% at 32% 34%, rgba(var(--rgb-nebula-blush), 0.28), transparent 72%),
+    radial-gradient(ellipse 40% 32% at 70% 50%, rgba(var(--rgb-nebula-glow), 0.21), transparent 70%),
+    radial-gradient(ellipse 32% 26% at 50% 68%, rgba(var(--rgb-nebula-core), 0.16), transparent 72%),
+    radial-gradient(ellipse 36% 30% at 80% 24%, rgba(var(--rgb-nebula-dust), 0.18), transparent 72%);
 }
 .opening__nebula.is-visible { opacity: 1; }
 
@@ -310,8 +311,8 @@
   font-size: 0.72rem;
   color: rgba(var(--rgb-gold-hi), 0.75);
   margin-bottom: 1.2em;
-  text-shadow: 0 0 14px rgba(var(--rgb-gold), 0.7);
-  filter: drop-shadow(0 0 6px rgba(var(--rgb-gold), 0.4));
+  text-shadow: 0 0 18px rgba(var(--rgb-gold), 0.9);
+  filter: drop-shadow(0 0 8px rgba(var(--rgb-gold), 0.56));
   letter-spacing: 0.25em;
 }
 
@@ -327,8 +328,8 @@
   margin: 0 0 0.35em;
   color: #faf7f0;
   text-shadow:
-    0 0 80px rgba(var(--rgb-gold), 0.15),
-    0 0 40px rgba(var(--rgb-lav), 0.12),
+    0 0 80px rgba(var(--rgb-gold), 0.22),
+    0 0 40px rgba(var(--rgb-lav), 0.18),
     0 2px 24px rgba(var(--rgb-night), 0.6);
 }
 
@@ -392,8 +393,8 @@
   content: '';
   width: 1px;
   height: 16px;
-  background: linear-gradient(180deg, transparent, rgba(var(--rgb-gold), 0.22) 60%, rgba(var(--rgb-gold-hi), 0.55) 100%);
-  opacity: 0.65;
+  background: linear-gradient(180deg, transparent, rgba(var(--rgb-gold), 0.32) 60%, rgba(var(--rgb-gold-hi), 0.72) 100%);
+  opacity: 0.8;
 }
 .opening__cue-dot {
   width: 4px;
@@ -401,8 +402,8 @@
   border-radius: 50%;
   background: var(--c-star-bright);
   box-shadow:
-    0 0 8px 2px rgba(var(--rgb-gold), 0.45),
-    0 0 20px 6px rgba(var(--rgb-gold), 0.15);
+    0 0 10px 3px rgba(var(--rgb-gold), 0.62),
+    0 0 24px 8px rgba(var(--rgb-gold), 0.24);
   animation: openingCuePulse 3.2s ease-in-out infinite;
 }
 @keyframes openingCuePulse {
@@ -481,17 +482,17 @@
   margin: -36px 0 0 -36px;
   border-radius: 50%;
   pointer-events: none;
-  opacity: 0.35;
+  opacity: 0.42;
   transition:
     transform 1200ms var(--ease),
     opacity 1200ms var(--ease);
 }
 .opening__star-halo--you {
-  background: radial-gradient(circle, rgba(242, 200, 131, 0.28) 0%, rgba(242, 200, 131, 0.08) 50%, transparent 72%);
+  background: radial-gradient(circle, rgba(242, 200, 131, 0.36) 0%, rgba(242, 200, 131, 0.12) 50%, transparent 72%);
   animation: youHaloBreathe 4.6s ease-in-out infinite;
 }
 .opening__star-halo--me {
-  background: radial-gradient(circle, rgba(216, 204, 238, 0.3) 0%, rgba(198, 176, 204, 0.08) 50%, transparent 72%);
+  background: radial-gradient(circle, rgba(216, 204, 238, 0.38) 0%, rgba(198, 176, 204, 0.12) 50%, transparent 72%);
   animation: meHaloBreathe 5.2s ease-in-out infinite;
   animation-delay: -1.8s;
 }
@@ -513,8 +514,8 @@
   height: 38px;
   margin: -19px 0 0 -19px;
   border-radius: 50%;
-  border: 1px solid rgba(var(--rgb-gold), 0.12);
-  opacity: 0.35;
+  border: 1px solid rgba(var(--rgb-gold), 0.2);
+  opacity: 0.46;
   animation: starOrbitPulse 6s ease-in-out infinite;
   pointer-events: none;
   transition: transform 600ms var(--ease), opacity 600ms var(--ease), border-color 600ms var(--ease);
@@ -526,8 +527,8 @@
 }
 
 @keyframes starOrbitPulse {
-  0%, 100% { transform: scale(1); opacity: 0.25; }
-  50% { transform: scale(1.22); opacity: 0.5; }
+  0%, 100% { transform: scale(1); opacity: 0.34; }
+  50% { transform: scale(1.22); opacity: 0.68; }
 }
 
 /* Hover/Focus Acknowledgements */
