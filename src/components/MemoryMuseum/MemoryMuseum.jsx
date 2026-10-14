@@ -141,7 +141,7 @@ function PolaroidPhoto({ image, video, alt, caption, rotate, onClick }) {
           <video
             controls
             playsInline
-            preload="auto"
+            preload="metadata"
             controlsList="nodownload"
             aria-label={alt || 'Video from this exhibit'}
             style={{ width: '100%', height: 'auto', display: 'block' }}

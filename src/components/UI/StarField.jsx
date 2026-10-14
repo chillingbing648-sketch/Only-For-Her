@@ -42,9 +42,11 @@ function StarField({ density = 1, respondToPointer = true }) {
 
     const isLowPower = checkLowPower()
     const baseDpr = typeof window !== 'undefined' ? window.devicePixelRatio || 1 : 1
+    const isTouchDevice = Boolean(window.matchMedia?.('(pointer: coarse)').matches)
     const dpr = isLowPower
-      ? Math.min(Math.max(1, baseDpr), 1.25)
+      ? Math.min(Math.max(1, baseDpr), isTouchDevice ? 1.1 : 1.25)
       : Math.min(Math.max(1, baseDpr), 1.5)
+    const frameInterval = isLowPower ? 1000 / 30 : 1000 / 60
 
     let dustAndStars = []
     let crossTwinkles = []
@@ -71,7 +73,7 @@ function StarField({ density = 1, respondToPointer = true }) {
       const powerScale = isLowPower ? 0.48 : 1
       const rawCount = Math.round((area / 5000) * density * powerScale)
       const minCount = isLowPower ? 75 : 140
-      const maxCount = isLowPower ? 140 : 330
+      const maxCount = isLowPower ? 110 : 330
       const totalCount = Math.min(maxCount, Math.max(minCount, rawCount))
 
       const generated = []
@@ -472,6 +474,11 @@ function StarField({ density = 1, respondToPointer = true }) {
       if (destroyed) return
       if (!isVisible) {
         raf = null
+        return
+      }
+
+      if (lastFrameTime !== null && t - lastFrameTime < frameInterval) {
+        raf = requestAnimationFrame(loop)
         return
       }
 

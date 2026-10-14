@@ -295,7 +295,7 @@ video {
 
   .screen:not(.opening) {
     padding-top: calc(72px + env(safe-area-inset-top, 0px));
-    padding-bottom: calc(64px + env(safe-area-inset-bottom, 0px));
+    padding-bottom: calc(132px + env(safe-area-inset-bottom, 0px));
   }
 
   .heading-xl {
@@ -754,6 +754,7 @@ video {
     min-width: 0;
     width: auto;
     max-width: calc(100vw - 24px);
+    bottom: calc(72px + env(safe-area-inset-bottom, 0px));
   }
 
   .music-player__body {
@@ -765,6 +766,21 @@ video {
     min-width: 0;
     overflow: hidden;
     text-overflow: ellipsis;
+  }
+
+  /* Keep the floating controls clear of the chapter dock. The final responsive
+     layer otherwise overrides the dock-aware offsets in sections.css. */
+  .app-shell > .secret-star {
+    bottom: calc(72px + env(safe-area-inset-bottom, 0px));
+  }
+
+  /* Preserve the chapter reveal while avoiding full-screen blur paints on phones. */
+  .section-transition {
+    animation: sectionEnterMobile 240ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+
+  .section-transition__flash {
+    display: none;
   }
 
   /* Dense content becomes single-column and readable. */
@@ -823,6 +839,11 @@ video {
   .soundtrack__row {
     touch-action: manipulation;
   }
+}
+
+@keyframes sectionEnterMobile {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 @media (max-width: 380px) {
