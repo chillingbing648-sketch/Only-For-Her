@@ -264,14 +264,18 @@ export const giftData = {
 
   // ---- The letter ---------------------------------------------------------
   letter: {
-    heading: "A letter for you.",
+    heading: "Happy Birthday, Meri Jaan.",
     paragraphs: [
-      "Meri pyaari babyy, kabhi kabhi sochta hu ki aapko kaise batau how much you mean to me. Aapki smile, aapki cutu harkatein, aur aapka mere saath hona — yeh sab meri life ko itna pyaara bana dete hain. Main har baar perfect words nahi bol pata, but mera pyaar aapke liye hamesha real haiii.",
-      "Aapke saath bitaya hua har chota moment mere liye special hai, chahe hum bas baatein kar rahe ho ya ek dusre ko tang kar rahe ho. Aur agar kabhi aapka din heavy ho, please yaad rakhna ki aapko sab kuch akele handle nahi karna hai. Mujhe bata dena, main sununga, samjhunga, aur jitna ho sake aapke saath rahunga.",
-      "Thank you meri life mein hone ke liye, meri cutuuu. Aap meri favourite person ho, meri comfort ho, aur main aapko har din thoda aur zyada pyaar karta huuu. Hamesha aapka, aur hamesha aapke saath.",
+      "Meri pyaari babyy, meri cutuu patootuu, meri wifey... Happy Birthday! Kabhi kabhi main chupchap baith kar sochta hu ki main itna lucky kaise ho gaya ki aap meri life mein aayi. Ever since 13th October 2022, meri duniya ka centre chupke se badal gaya. Har ek chota sa moment, har ek din, aur har ek thought dheere dheere bas aapke baare mein hone laga. Main shayad har baar world ke sabse perfect words nahi dhundh pata, but ek baat dil se bol raha hu — mera pyaar aapke liye itna real, itna gehra aur itna unfiltered hai ki is pure universe mein uski koi limit nahi hai.",
+      "Aapko yaad hai hamara school wala time, hamara first farewell, aur woh pehli photo jo maine apne wallpaper pe lagayi thi? Us din se lekar aaj tak, aap mere liye sirf ek ladki nahi rahi — you quietly became my safe place, my biggest happiness, and the only person who can instantly make everything feel okay just by existing. Normal se normal din bhi na, jab aap saath hoti ho toh magic jaisa ban jata hai.",
+      "Aur hamara bond sirf peaceful dino ka nahi hai, humne storms bhi dekhe hain. Yaad hai jab Delhi ke baad hum itna lad pade the? Kitna painful tha woh... But jab main wapas aaya aur maine aapko dekha, main doston ko wahi chhod kar bas seedha aapke paas aake baith gaya. Kyunki duniya mein chahe kitni bhi naraazgi ho, mera dil jaanta hai ki meri jagah sirf aapke paas hai. Hum ladte hain, rote hain, par hamesha ek dusre ke paas laut aate hain. That's why I know hum dono ek dusre ke liye hi bane hain.",
+      "Mujhe aapki har ek choti choti cheez se beintehaan pyaar hai babyy — aapki woh beautiful smile jo mera poora din bana deti hai, aapka woh cutu angry-bird pout face (jisko dekh ke main serious banne ki kitni bhi acting karu, andar se bas aapko kas ke hug karne ka mann karta hai), aapki scent jise main door reh kar har pal miss karta hu, aur aapki late-night sleepy voice notes. Kuch bhi hota hai na meri life mein, chahe koi bohot badi baat ho ya ekdum stupid si choti cheez, sabse pehle dil bas aapko batane ke liye daudta hai.",
+      "Babyy, agar kabhi zindagi thodi heavy lage, ya koi din bohot frustrating ho, please promise me ki aap akele sab kuch bear nahi karogi. Main hamesha yahin hu — aapki har baat sunne ke liye, aapke aansu pochne ke liye, aur aapko itna zor se hug karne ke liye ki aapke saare dukh gayab ho jayein. Aapko mere saamne strong banne ki zaroorat nahi hai, you can just be my baby and rest in my arms.",
+      "Aur hume toh abhi kitna kuch saath jeena hai! Lantern-lit alleys mein Japan mein befikr ghumna aur wrong station exits lena, photobooth ke curtain ke peeche 3-2-1 countdown pe cute silly faces banana (aur 4th frame pe camera chhod ke aapke gaal pe kiss chura lena), kitchen mein saath cook karte waqt aapke naak pe flour lagana, aur rainy hill cabin mein oversized hoodies pehen ke ek hi blanket mein cuddle karna... Yeh saare sapne sirf sapne nahi hain, yeh hamara aane wala kal hain jo main sirf aapke saath dekhna chahta hu.",
+      "On this birthday of yours, I just want you to pause for a moment, take a deep breath, and remember how deeply, completely, and unconditionally loved you truly are. Thank you for walking into my world and turning ordinary days into something so incredibly rare and breathtaking. Thank you for your gentle heart, your goofy laughter that can heal parts of me I never even knew were hurting, and the pure warmth you bring everywhere you go. If I had to live this life a thousand times over—across every timeline, in every universe, and under every starry sky—I would still spend every single lifetime searching for you just to love you all over again. You are not just a chapter in my story, meri babyy; you are the whole book, my safest home, and forever my wifey. Happy Birthday to the girl who owns my entire heart. You were, you are, and you will always be my ONLY CRUSH. I love you more than words will ever be capable of holding. Mwaaahhh!",
     ],
-    signOff: "With love,",
-    sender: "Harshit",
+    signOff: "Hamesha sirf aur sirf aapka, with all my love & infinite kisses,",
+    sender: "Harshit ♡",
   },
 
   // ---- Open When... letters ------------------------------------------------
@@ -316,23 +320,88 @@ export const giftData = {
   ],
 
   // ---- How well do you know us: quiz --------------------------------------
-  // "myAnswer" is what you reveal after she answers, with a short reason.
+  // "myAnswer" is what you reveal after she answers, with a flirty reason.
   quiz: [
     {
-      question: "Which song is part of our soundtrack?",
-      options: ["Zaalima", "Tum Hi Ho", "Kesariya", "Raabta"],
-      myAnswer: "Zaalima",
-      reason: "You picked it for this collection and said it was one of your schooltime favourites.",
+      question: "What is Harshit’s undisputed, number-one absolute favourite view in the entire universe?",
+      options: [
+        "Lantern-lit Tokyo streets at night",
+        "A rainy cabin view in the green misty hills",
+        "You, looking right at me with that shy little blush",
+        "A quiet golden hour sunset by the ocean",
+      ],
+      myAnswer: "You, looking right at me with that shy little blush",
+      reason: "Nice try looking at the travel destinations, cutie! Nature is pretty, but nothing in this universe comes close to you looking up at me with that smile. My eyes literally have no other focus.",
     },
     {
-      question: "Which other song can you play in the soundtrack?",
-      options: ["Mahi Aaja", "Perfect", "Yellow", "Until I Found You"],
-      myAnswer: "Mahi Aaja",
-      reason: "It's here because you chose it for this collection.",
+      question: "What is secretly going through my mind when you make that cutu angry-bird pout face at me?",
+      options: [
+        "‘Darr lag raha hai, sorry bol deta hu fatatafat’",
+        "‘How is it physically possible for someone to be this illegally cute?’",
+        "‘I need to prepare a logical 5-point defense’",
+        "‘Let’s see how long she can stay serious without laughing’",
+      ],
+      myAnswer: "‘How is it physically possible for someone to be this illegally cute?’",
+      reason: "I pretend to be serious and scared, but on the inside I am melting into a puddle. That little pout is totally unfair, babyy — you win every single argument automatically without even trying.",
+    },
+    {
+      question: "Let’s settle this forever: between the two of us, who actually fell harder?",
+      options: [
+        "You, obviously — you were enchanted from day one",
+        "Me, because I built an entire private galaxy just for your birthday",
+        "It was a mutual 50-50 simultaneous collision",
+        "Neither, it was just pure starlight destiny",
+      ],
+      myAnswer: "Me, because I built an entire private galaxy just for your birthday",
+      reason: "You might think you fell first, but look around you, wifey! I fell so ridiculously deep in love that a normal gift wasn’t enough — I had to map out stars, secrets, and future dates just to show you a fraction of how crazy I am about you.",
+    },
+    {
+      question: "When we finally take that photobooth date, what happens on the 4th photo countdown?",
+      options: [
+        "We both pose with peace signs like normal tourists",
+        "We make the silliest chaos faces possible",
+        "I turn away from the camera just to steal a kiss on your cheek",
+        "We run out of time and laugh at the blank photo",
+      ],
+      myAnswer: "I turn away from the camera just to steal a kiss on your cheek",
+      reason: "The camera can capture three nice photos for the fridge, but frame #4 belongs to me. A stolen kiss on your cheek while you’re laughing is the only keepsake I really care about.",
+    },
+    {
+      question: "When I returned from Delhi and saw you after our fight, why did I leave my friends and sit with you?",
+      options: [
+        "Because there were no other empty chairs in the room",
+        "Because my friends were being completely boring",
+        "Because the moment I saw you, nowhere else in the world made any sense",
+        "Because I wanted to inspect your angry face up close",
+      ],
+      myAnswer: "Because the moment I saw you, nowhere else in the world made any sense",
+      reason: "I didn't care about anything or anyone else in that room. The second you were in sight, gravity pulled me straight to you. You are my home, babyy, and you always will be.",
+    },
+    {
+      question: "What is my absolute single biggest weakness when it comes to you?",
+      options: [
+        "Your sleepy whispers on late night voice notes",
+        "When you hold my hand a little tighter in public",
+        "Your sweet scent when you hug me and bury your face",
+        "Literally all of the above — I have zero defenses against you",
+      ],
+      myAnswer: "Literally all of the above — I have zero defenses against you",
+      reason: "Tricked you with the multiple choices! Did you really think I could pick just one? From your sleepy voice to the way you hold my fingers, you have me completely wrapped around your pinky finger, meri cutuu.",
+    },
+    {
+      question: "Out of all the songs in our universe, which one is my real official favourite?",
+      options: [
+        "Zaalima — because it reminds me of school memories",
+        "Mahi Aaja — because of the lyrics you picked",
+        "Sanam Re — playing in the starry background",
+        "Any song in the world, as long as you’re slow-dancing in my arms",
+      ],
+      myAnswer: "Any song in the world, as long as you’re slow-dancing in my arms",
+      reason: "The music doesn’t matter at all, sweetheart. Put on any song, dim the lights, pull me close, and resting your head against my chest makes it the best song ever composed. Deal?",
     },
   ],
   // Shown at the end of the quiz, regardless of score.
-  quizResult: "Apparently you remember us better than I do.",
+  quizResult: "Score doesn’t even matter, meri babyy... You scored 100% of my heart anyway. Now please come here and claim your reward: unlimited hugs, forehead kisses, and your boy forever. Happy Birthday, cutuu patootuu ♡",
   // If you'd rather show a real percentage score, set this to true.
   quizShowScore: false,
 

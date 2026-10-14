@@ -39,6 +39,9 @@ export default function PhotoViewer({ images, index, onClose, onChange }) {
       role="dialog"
       aria-modal="true"
       aria-label={current.caption || 'Media'}
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose()
+      }}
       onTouchStart={onTouchStart}
       onTouchEnd={onTouchEnd}
     >

@@ -285,7 +285,7 @@
 /* Copy container */
 .opening__copy {
   position: relative;
-  z-index: 2;
+  z-index: 6;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1536,11 +1536,11 @@
   text-wrap: pretty;
   text-indent: 1.2em;
 }
-.letter__paragraph:first-child {
+.letter__paragraph:first-of-type {
   text-indent: 0;
 }
 /* Drop cap feel on first letter */
-.letter__paragraph:first-child::first-letter {
+.letter__paragraph:first-of-type::first-letter {
   font-size: 2.6em;
   float: left;
   line-height: 0.85;
@@ -1739,8 +1739,11 @@
   line-height: 1.35;
   color: #f7f5ee;
 }
-.quiz__options { display: flex; flex-direction: column; gap: 12px; }
 .quiz__option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
   padding: 1em 1.25em;
   border: 1px solid var(--edge);
   border-radius: var(--radius-m);
@@ -1757,6 +1760,23 @@
     box-shadow var(--dur-m) var(--ease-out),
     translate var(--dur-m) var(--ease-out);
 }
+.quiz__option-text {
+  flex: 1;
+}
+.quiz__option-tag {
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: rgba(var(--rgb-gold), 0.22);
+  color: var(--c-star-bright);
+  white-space: nowrap;
+}
+.quiz__option-tag--pick {
+  background: rgba(220, 168, 176, 0.2);
+  color: var(--c-blush-bright);
+}
 .quiz__option:hover:not(:disabled):not(.is-answer) {
   border-color: var(--edge-warm);
   translate: 0 -2px;
@@ -1767,6 +1787,10 @@
   background: rgba(30, 37, 62, 0.96);
   box-shadow: var(--rim-hi), var(--elev-2), 0 0 0 1px rgba(var(--rgb-lav), 0.22);
   animation: optionPop 320ms var(--ease);
+}
+.quiz__option.is-wrong {
+  border-color: rgba(220, 168, 176, 0.45);
+  background: rgba(220, 168, 176, 0.08);
 }
 .quiz__option.is-answer {
   border-color: rgba(var(--rgb-gold), 0.7);
@@ -2314,8 +2338,11 @@
   z-index: 1;
   width: 100%;
   max-width: 620px;
-  max-height: 90vh;
+  max-height: min(90vh, 90dvh);
   overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
   background:
     radial-gradient(120% 90% at 50% 0%, rgba(var(--adv-glow, 242, 200, 131), 0.12) 0%, rgba(18, 14, 24, 0.97) 55%, rgba(10, 8, 14, 0.99) 100%);
   border: 1px solid rgba(var(--adv-glow, 242, 200, 131), 0.32);
@@ -3172,7 +3199,7 @@
 .universe__field::after {
   content: '';
   position: absolute;
-  inset: -70vh -1100px -1100px -10vw;
+  inset: -15%;
   z-index: 1;
   pointer-events: none;
   background-image:
@@ -3181,7 +3208,7 @@
     radial-gradient(circle at 78% 71%, rgba(var(--u-gold), 0.07) 0, rgba(var(--u-gold), 0.03) 6px, transparent 12px),
     radial-gradient(circle at 34% 84%, rgba(var(--u-blush), 0.07) 0, rgba(var(--u-blush), 0.03) 6px, transparent 13px),
     radial-gradient(circle at 90% 44%, rgba(255, 238, 214, 0.06) 0, transparent 9px);
-  background-size: 1100px 1100px;
+  background-size: 540px 540px;
   animation: uMotes 170s linear infinite;
   will-change: transform;
 }
@@ -4681,8 +4708,100 @@ a.pill-tag:active { scale: 0.95; transition-duration: var(--dur-xs); }
   .music-player input[type="range"]::-moz-range-thumb { height: 14px; }
 }
 
+/* ==========================================================================
+   Cinematic Story Navigation Dock
+   - Desktop & Tablet: Floating frosted celestial pill dock at bottom center
+   - Mobile: Fluid safe-area anchored navigation bar
+   ========================================================================== */
 .bottom-nav {
-  display: none;
+  display: flex;
+  position: fixed;
+  left: 50%;
+  bottom: calc(18px + env(safe-area-inset-bottom, 0px));
+  transform: translateX(-50%);
+  z-index: 28;
+  justify-content: center;
+  align-items: center;
+  padding: 5px 12px;
+  background: rgba(12, 10, 20, 0.82);
+  border: 1px solid rgba(242, 235, 240, 0.12);
+  border-radius: 999px;
+  box-shadow: 0 10px 30px -4px rgba(4, 5, 12, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.04);
+  -webkit-backdrop-filter: blur(16px) saturate(1.3);
+  backdrop-filter: blur(16px) saturate(1.3);
+  pointer-events: auto;
+  transition: transform var(--dur-m) var(--ease), opacity var(--dur-m) var(--ease);
+}
+
+.bottom-nav__container {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.bottom-nav__item {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  min-height: 34px;
+  border-radius: 999px;
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--c-text-dim);
+  cursor: pointer;
+  touch-action: manipulation;
+  transition: all var(--dur-s) var(--ease);
+}
+
+.bottom-nav__item:hover,
+.bottom-nav__item:focus-visible {
+  color: var(--c-text);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.bottom-nav__dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: rgba(183, 174, 214, 0.35);
+  transition: all var(--dur-s) var(--ease);
+}
+
+.bottom-nav__label {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: inherit;
+  white-space: nowrap;
+  transition: color var(--dur-s) var(--ease), text-shadow var(--dur-s) var(--ease);
+}
+
+.bottom-nav__item.is-active,
+.bottom-nav__item[aria-current="page"] {
+  color: var(--c-star-bright);
+  background: rgba(242, 200, 131, 0.1);
+  border-color: rgba(242, 200, 131, 0.3);
+  box-shadow: 0 0 14px -2px rgba(var(--rgb-gold), 0.35);
+}
+
+.bottom-nav__item.is-active .bottom-nav__dot,
+.bottom-nav__item[aria-current="page"] .bottom-nav__dot {
+  background: var(--c-star-bright);
+  box-shadow: 0 0 8px 2px rgba(var(--rgb-gold), 0.8);
+  transform: scale(1.3);
+}
+
+.bottom-nav__item.is-active .bottom-nav__label,
+.bottom-nav__item[aria-current="page"] .bottom-nav__label {
+  color: var(--c-star-bright);
+  text-shadow: 0 0 12px rgba(var(--rgb-gold), 0.4);
+}
+
+.bottom-nav__item:active {
+  transform: scale(0.96);
 }
 
 @media (max-width: 640px) {
@@ -4696,16 +4815,14 @@ a.pill-tag:active { scale: 0.95; transition-duration: var(--dur-xs); }
     padding-bottom: calc(var(--gap-page) + 112px + var(--safe-b));
   }
 
-  /* Cinematic Story Navigation Bar */
+  /* Mobile Story Navigation Bar */
   .bottom-nav {
-    display: flex;
-    position: fixed;
     left: 0;
     right: 0;
     bottom: 0;
+    transform: none;
+    border-radius: 0;
     z-index: 32;
-    justify-content: center;
-    align-items: center;
     padding-top: 10px;
     padding-bottom: max(10px, var(--safe-b));
     padding-left: max(8px, var(--safe-l));
@@ -4718,54 +4835,49 @@ a.pill-tag:active { scale: 0.95; transition-duration: var(--dur-xs); }
   }
 
   .bottom-nav__container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
     width: 100%;
     max-width: 440px;
     margin: 0 auto;
     pointer-events: auto;
     gap: 4px;
+    justify-content: space-between;
   }
 
   .bottom-nav__item {
-    position: relative;
-    display: flex;
     flex-direction: column;
-    align-items: center;
     justify-content: center;
     gap: 3px;
     flex: 1 1 0;
     min-width: 0;
     min-height: 44px;
     padding: 2px 2px;
+    border-radius: 0;
     background: none;
     border: none;
-    cursor: pointer;
-    touch-action: manipulation;
-    transition: transform var(--dur-s) var(--ease), opacity var(--dur-s) var(--ease);
+    box-shadow: none;
+  }
+
+  .bottom-nav__item.is-active,
+  .bottom-nav__item[aria-current="page"] {
+    background: none;
+    border-color: transparent;
+    box-shadow: none;
   }
 
   .bottom-nav__dot {
     width: 4px;
     height: 4px;
-    border-radius: 50%;
     background: transparent;
-    transition: background var(--dur-s) var(--ease), box-shadow var(--dur-s) var(--ease), transform var(--dur-s) var(--ease);
   }
 
   .bottom-nav__label {
-    font-family: var(--font-sans);
     font-size: 0.68rem;
-    font-weight: 500;
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: rgba(183, 174, 214, 0.55);
-    white-space: nowrap;
+    max-width: 100%;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 100%;
-    transition: color var(--dur-s) var(--ease), text-shadow var(--dur-s) var(--ease);
   }
 
   .bottom-nav__item:hover .bottom-nav__label,
@@ -4784,10 +4896,6 @@ a.pill-tag:active { scale: 0.95; transition-duration: var(--dur-xs); }
   .bottom-nav__item[aria-current="page"] .bottom-nav__label {
     color: var(--c-star-bright);
     text-shadow: 0 0 12px rgba(var(--rgb-gold), 0.4);
-  }
-
-  .bottom-nav__item:active {
-    transform: scale(0.94);
   }
 
   /* Compact Ambient Soundtrack Pill */
@@ -5080,10 +5188,61 @@ a.pill-tag:active { scale: 0.95; transition-duration: var(--dur-xs); }
   color: var(--c-star-bright);
 }
 
+.museum__video-container {
+  position: relative;
+  width: 100%;
+}
+.museum__expand-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(8, 10, 18, 0.78);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: var(--c-text);
+  font-size: 1.1rem;
+  cursor: pointer;
+  z-index: 4;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  transition: all var(--dur-s) var(--ease);
+}
+.museum__expand-btn:hover,
+.museum__expand-btn:focus-visible {
+  background: rgba(242, 200, 131, 0.25);
+  border-color: var(--c-star-bright);
+  color: var(--c-star-bright);
+  transform: scale(1.12);
+}
+.museum__photo-hint {
+  display: block;
+  margin-top: 8px;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--c-text-faint);
+  text-align: center;
+  opacity: 0.65;
+  transition: opacity var(--dur-s) var(--ease), color var(--dur-s) var(--ease);
+}
+.museum__photo-btn:hover .museum__photo-hint,
+.museum__photo-btn:focus-visible .museum__photo-hint {
+  opacity: 1;
+  color: var(--c-star-bright);
+}
+
 /* --------------------------------------------------------------------------
    3. Letter — Intimate Candlelight & Progressive Stationery
    -------------------------------------------------------------------------- */
-.letter--intimate {
+.letter.letter--intimate {
+  justify-content: flex-start;
+  align-items: center;
+  padding-top: calc(var(--gap-page) + env(safe-area-inset-top, 0px));
   background: radial-gradient(ellipse 70% 60% at 50% 46%, rgba(242, 200, 131, 0.04), transparent 72%);
 }
 .letter__candlelight {
@@ -5268,6 +5427,43 @@ a.pill-tag:active { scale: 0.95; transition-duration: var(--dur-xs); }
   color: rgba(var(--rgb-gold-hi), 0.75);
 }
 
+.timeline__single-badge-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 1.2em auto 1.8em;
+}
+.timeline__single-orbit-star {
+  font-size: 1.4rem;
+  color: var(--c-star);
+  filter: drop-shadow(0 0 12px rgba(var(--rgb-gold), 0.75));
+  animation: singleStarPulse 3.5s ease-in-out infinite alternate;
+}
+@keyframes singleStarPulse {
+  0% { transform: scale(0.92); opacity: 0.7; }
+  100% { transform: scale(1.18); opacity: 1; }
+}
+.timeline__single-footer {
+  text-align: center;
+  margin-top: 2.2em;
+  padding-top: 1.2em;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+.timeline__single-note {
+  font-size: 0.88rem;
+  font-style: italic;
+  font-family: var(--font-serif);
+  color: var(--c-text-faint);
+  letter-spacing: 0.03em;
+}
+.timeline__progress-indicator {
+  font-size: 0.82rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  color: var(--c-text-dim);
+  padding: 0 0.8em;
+}
+
 /* --------------------------------------------------------------------------
    5. Soundtrack — Vinyl Resonance Experience
    -------------------------------------------------------------------------- */
@@ -5401,6 +5597,9 @@ a.pill-tag:active { scale: 0.95; transition-duration: var(--dur-xs); }
   position: relative;
   max-width: 480px;
   width: 100%;
+  max-height: min(84dvh, 640px);
+  display: flex;
+  flex-direction: column;
   border-radius: 8px;
   background: #faf6eb;
   background-image:
@@ -5413,8 +5612,11 @@ a.pill-tag:active { scale: 0.95; transition-duration: var(--dur-xs); }
   overflow: hidden;
 }
 .openwhen__parchment-inner {
-  padding: clamp(28px, 6vw, 48px);
+  padding: clamp(24px, 5vw, 44px);
   text-align: center;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
 }
 .openwhen__close-btn {
   position: absolute;

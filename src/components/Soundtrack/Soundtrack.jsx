@@ -85,7 +85,10 @@ function SongRow({ song, delay, isPlayingGlobal, onPlayStateChange }) {
     } else {
       audio
         .play()
-        .then(() => onPlayStateChange(true))
+        .then(() => {
+          window.dispatchEvent(new CustomEvent('ofh:track-play'))
+          onPlayStateChange(true)
+        })
         .catch(() => setAvailable(false))
     }
   }
@@ -110,7 +113,7 @@ function SongRow({ song, delay, isPlayingGlobal, onPlayStateChange }) {
         aria-label={isPlayingGlobal ? `Pause ${song.title}` : `Play ${song.title}`}
       >
         <span className="soundtrack__disc-groove">
-          <SmartImage src={assetUrl(song.cover)} alt="" className="soundtrack__cover" label="♪" />
+          <SmartImage src={song.cover} alt="" className="soundtrack__cover" label="♪" />
         </span>
         <span className="soundtrack__disc-center" aria-hidden="true" />
       </button>

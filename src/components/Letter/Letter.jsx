@@ -11,10 +11,14 @@ export default function Letter() {
     if (phase !== 'closed') return
     if (reduced) {
       setPhase('open')
+      window.scrollTo({ top: 0, behavior: 'smooth' })
       return
     }
     setPhase('opening')
-    setTimeout(() => setPhase('open'), 950)
+    setTimeout(() => {
+      setPhase('open')
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    }, 950)
   }
 
   function handleClose() {

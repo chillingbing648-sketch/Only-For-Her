@@ -12,7 +12,7 @@
 
   --c-text: #eceef6;
   --c-text-dim: #a6abbd;
-  --c-text-faint: #797f96;
+  --c-text-faint: #8e94ad;
 
   --c-star: #f2c883;
   --c-star-bright: #ffe3ad;
@@ -126,15 +126,10 @@ ul { margin: 0; padding: 0; list-style: none; }
 }
 
 /* Leave room at the top for the fixed back/menu controls, and at the
-   bottom for the mobile tab bar, on every screen except the opening
-   (which has no nav) and the universe (whose intro already accounts for it). */
+   bottom for the floating/docked story navigation on every screen except the opening. */
 .screen:not(.opening) {
   padding-top: calc(max(var(--gap-page), 78px) + env(safe-area-inset-top, 0px));
-}
-@media (max-width: 640px) {
-  .screen:not(.opening) {
-    padding-bottom: calc(var(--gap-page) + 64px + env(safe-area-inset-bottom, 0px));
-  }
+  padding-bottom: calc(var(--gap-page) + 68px + env(safe-area-inset-bottom, 0px));
 }
 
 .screen__inner {
@@ -459,8 +454,6 @@ ul { margin: 0; padding: 0; list-style: none; }
   transition: color var(--dur-s) var(--ease);
 }
 .menu-list button:hover, .menu-list button:focus-visible { color: var(--c-star); }
-
-.bottom-nav { display: none; }
 
 /* ==========================================================================
    Motion helpers

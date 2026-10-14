@@ -26,22 +26,28 @@ export default function Timeline() {
           <h1 className="heading-l timeline__main-heading">Where It All Started</h1>
         </header>
 
-        {/* Orbit Trajectory Map */}
-        <nav className="timeline__orbit-track" aria-label="Journey waypoints">
-          <div className="timeline__orbit-line" aria-hidden="true" />
-          {entries.map((item, i) => (
-            <button
-              key={i}
-              className={`timeline__orbit-point ${i === index ? 'is-active' : ''} ${i < index ? 'is-passed' : ''}`}
-              onClick={() => setIndex(i)}
-              aria-label={`Travel to milestone ${i + 1}: ${item.title || item.date}`}
-              aria-current={i === index ? 'step' : undefined}
-            >
-              <span className="timeline__orbit-dot" />
-              <span className="timeline__orbit-label">0{i + 1}</span>
-            </button>
-          ))}
-        </nav>
+        {/* Orbit Trajectory Map (shown for multi-milestones or single milestone) */}
+        {entries.length > 1 ? (
+          <nav className="timeline__orbit-track" aria-label="Journey waypoints">
+            <div className="timeline__orbit-line" aria-hidden="true" />
+            {entries.map((item, i) => (
+              <button
+                key={i}
+                className={`timeline__orbit-point ${i === index ? 'is-active' : ''} ${i < index ? 'is-passed' : ''}`}
+                onClick={() => setIndex(i)}
+                aria-label={`Travel to milestone ${i + 1}: ${item.title || item.date}`}
+                aria-current={i === index ? 'step' : undefined}
+              >
+                <span className="timeline__orbit-dot" />
+                <span className="timeline__orbit-label">0{i + 1}</span>
+              </button>
+            ))}
+          </nav>
+        ) : (
+          <div className="timeline__single-badge-wrap" aria-hidden="true">
+            <span className="timeline__single-orbit-star">✦</span>
+          </div>
+        )}
 
         {/* Destination Waypoint Station */}
         <article className="timeline__station scale-in" key={index}>
@@ -67,22 +73,33 @@ export default function Timeline() {
           )}
         </article>
 
-        <div className="timeline__controls">
-          <button
-            className="btn btn--ghost timeline__step-btn"
-            onClick={() => go(-1)}
-            disabled={index === 0}
-          >
-            ← Earlier Station
-          </button>
-          <button
-            className="btn btn--ghost timeline__step-btn"
-            onClick={() => go(1)}
-            disabled={index === entries.length - 1}
-          >
-            Next Station →
-          </button>
-        </div>
+        {entries.length > 1 ? (
+          <div className="timeline__controls">
+            <button
+              className="btn btn--ghost timeline__step-btn"
+              onClick={() => go(-1)}
+              disabled={index === 0}
+            >
+              ← Earlier Station
+            </button>
+            <span className="timeline__progress-indicator">
+              {index + 1} / {entries.length}
+            </span>
+            <button
+              className="btn btn--ghost timeline__step-btn"
+              onClick={() => go(1)}
+              disabled={index === entries.length - 1}
+            >
+              Next Station →
+            </button>
+          </div>
+        ) : (
+          <div className="timeline__single-footer">
+            <p className="timeline__single-note">
+              ✦ The first milestone of our universe. Many more to create together.
+            </p>
+          </div>
+        )}
       </div>
     </div>
   )

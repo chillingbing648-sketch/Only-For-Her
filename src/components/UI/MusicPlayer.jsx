@@ -17,6 +17,17 @@ export default function MusicPlayer() {
     if (audioRef.current) audioRef.current.volume = volume
   }, [volume])
 
+  useEffect(() => {
+    const onOtherTrackPlay = () => {
+      if (audioRef.current && !audioRef.current.paused) {
+        audioRef.current.pause()
+        setPlaying(false)
+      }
+    }
+    window.addEventListener('ofh:track-play', onOtherTrackPlay)
+    return () => window.removeEventListener('ofh:track-play', onOtherTrackPlay)
+  }, [])
+
   if (!settings.musicEnabled || !music?.enabled || !music?.src || !available) return null
 
   function toggle() {

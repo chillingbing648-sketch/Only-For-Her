@@ -80,14 +80,18 @@ export default function Quiz() {
             {q.options.map((opt) => {
               const isChosen = selected === opt
               const isAnswer = revealed && opt === q.myAnswer
+              const isWrongChoice = revealed && isChosen && !isAnswer
               return (
                 <button
                   key={opt}
-                  className={`quiz__option ${isChosen ? 'is-chosen' : ''} ${isAnswer ? 'is-answer glow-gold' : ''}`}
+                  type="button"
+                  className={`quiz__option ${isChosen ? 'is-chosen' : ''} ${isAnswer ? 'is-answer glow-gold' : ''} ${isWrongChoice ? 'is-wrong' : ''}`}
                   onClick={() => choose(opt)}
                   disabled={revealed}
                 >
-                  {opt}
+                  <span className="quiz__option-text">{opt}</span>
+                  {isAnswer && <span className="quiz__option-tag">✦ Match</span>}
+                  {isWrongChoice && <span className="quiz__option-tag quiz__option-tag--pick">Your pick</span>}
                 </button>
               )
             })}
@@ -96,11 +100,11 @@ export default function Quiz() {
           {revealed && (
             <div className="quiz__reveal fade-in">
               <p className="body-text">
-                <strong>My answer:</strong> {q.myAnswer}
+                <strong>{giftData.senderName ? `${giftData.senderName}’s answer:` : 'My answer:'}</strong> {q.myAnswer}
               </p>
               <p className="body-text body-text--soft">{q.reason}</p>
-              <button className="btn btn--primary" onClick={next}>
-                {step === questions.length - 1 ? 'See the result' : 'Next question'}
+              <button className="btn btn--primary" type="button" onClick={next}>
+                {step === questions.length - 1 ? 'See the result' : 'Next question →'}
               </button>
             </div>
           )}

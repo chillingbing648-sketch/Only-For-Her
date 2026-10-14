@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { giftData } from '../../data/giftData'
 import SmartImage from '../UI/SmartImage'
 import PhotoViewer from '../PhotoViewer/PhotoViewer'
@@ -10,6 +10,7 @@ export default function MemoryMuseum() {
   const exhibits = giftData.exhibits
   const [index, setIndex] = useState(0)
   const [viewerOpen, setViewerOpen] = useState(false)
+  const tokenListRef = useRef(null)
 
   if (!exhibits?.length) return <EmptySection title="Our Memory Museum" />
 
@@ -29,6 +30,15 @@ export default function MemoryMuseum() {
     if (e.key === 'ArrowRight') go(1)
     if (e.key === 'ArrowLeft') go(-1)
   }
+
+  // Auto-scroll active memory token into view horizontally
+  useEffect(() => {
+    if (!tokenListRef.current) return
+    const activeBtn = tokenListRef.current.querySelector('.museum__token.is-active')
+    if (activeBtn) {
+      activeBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' })
+    }
+  }, [index])
 
   return (
     <div className="screen museum" onKeyDown={onKeyDown} tabIndex={-1}>
@@ -68,7 +78,7 @@ export default function MemoryMuseum() {
           >
             ‹
           </button>
-          <div className="museum__tokens" role="tablist">
+          <div className="museum__tokens" role="tablist" ref={tokenListRef}>
             {exhibits.map((ex, i) => (
               <button
                 key={ex.id || i}
@@ -105,7 +115,7 @@ export default function MemoryMuseum() {
 }
 
 function isVideoPath(path) {
-  return typeof path === 'string' && /\\.mp4(?:$|[?#])/i.test(path)
+  return typeof path === 'string' && /\.mp4(?:$|[?#])/i.test(path)
 }
 
 function PolaroidPhoto({ image, video, alt, caption, rotate, onClick }) {
@@ -126,32 +136,58 @@ function PolaroidPhoto({ image, video, alt, caption, rotate, onClick }) {
     ref.current.style.setProperty('--tilt-y', '0deg')
   }
 
+  if (video) {
+    return (
+      <div className="museum__polaroid-wrap">
+        <div
+          ref={ref}
+          className="museum__photo-btn polaroid museum__photo-btn--video"
+          style={{ '--rotate': `${rotate}deg` }}
+          onMouseMove={onMove}
+          onMouseLeave={onLeave}
+        >
+          <div className="museum__video-container">
+            <video
+              controls
+              playsInline
+              preload="metadata"
+              controlsList="nodownload"
+              aria-label={alt || 'Video from this exhibit'}
+              style={{ width: '100%', height: 'auto', display: 'block' }}
+            >
+              <source src={assetUrl(video)} type="video/mp4" />
+              Your browser does not support MP4 video playback.
+            </video>
+            <button
+              type="button"
+              className="museum__expand-btn"
+              onClick={onClick}
+              aria-label={`Open fullscreen viewer for ${alt || 'video'}`}
+              title="Open in Lightbox"
+            >
+              ⤢
+            </button>
+          </div>
+          {caption && <span className="polaroid__caption">{caption}</span>}
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="museum__polaroid-wrap">
       <button
         ref={ref}
+        type="button"
         className="museum__photo-btn polaroid"
         style={{ '--rotate': `${rotate}deg` }}
         onMouseMove={onMove}
         onMouseLeave={onLeave}
         onClick={onClick}
-        aria-label={`View photo: ${alt}`}
+        aria-label={`View photo: ${alt}. Click to enlarge.`}
       >
-        {video ? (
-          <video
-            controls
-            playsInline
-            preload="metadata"
-            controlsList="nodownload"
-            aria-label={alt || 'Video from this exhibit'}
-            style={{ width: '100%', height: 'auto', display: 'block' }}
-          >
-            <source src={assetUrl(video)} type="video/mp4" />
-            Your browser does not support MP4 video playback.
-          </video>
-        ) : (
-          <SmartImage src={image} alt={alt} label="A photo from this exhibit" />
-        )}
+        <SmartImage src={image} alt={alt} label="A photo from this exhibit" />
+        <span className="museum__photo-hint" aria-hidden="true">✦ Click to enlarge</span>
         {caption && <span className="polaroid__caption">{caption}</span>}
       </button>
     </div>
